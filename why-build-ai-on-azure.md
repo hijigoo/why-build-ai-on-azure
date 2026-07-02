@@ -393,12 +393,22 @@ flowchart LR
 
 ```mermaid
 flowchart TB
-    subgraph Factory["에이전트 제작"]
-        CS["Copilot Studio<br/>노코드/로우코드<br/>현업·시민 개발자용"]
-        AF["Microsoft Foundry<br/>프로코드/모델 중심<br/>개발자·데이터 과학자용"]
+    KN["회사 지식 · 그라운딩<br/>Ontology (IQ)"]
+    MO["모델<br/>Foundry 모델 카탈로그 · Azure OpenAI"]
+    TL["도구 · 커넥터<br/>업무 시스템 · API 연결"]
+    subgraph MAKE["에이전트 제작"]
+        direction LR
+        CS["Copilot Studio<br/>현업 · 노코드"]
+        AF["Microsoft Foundry<br/>개발자 · 프로코드"]
+        CS ~~~ AF
     end
-    Ontology["Ontology (IQ)"] --> Factory
-    Factory --> Agents["업무용 에이전트"]
+    AG["업무용 에이전트"]
+    KN --> MAKE
+    MO --> MAKE
+    TL --> MAKE
+    MAKE --> AG
+    style AG fill:#1a3d6d,color:#fff
+    style MAKE fill:#eef4fb,stroke:#1a3d6d,stroke-width:2px
 ```
 
 | 도구 | 대상 | 특징 |
