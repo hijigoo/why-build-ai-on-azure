@@ -429,6 +429,12 @@ flowchart LR
 
 **"Agent Grounding" → 에이전트를 생산하는 공장**
 
+> 📌 **먼저 짚고 갑니다 — "Agent Factory"는 단일 제품명이 아닙니다.**
+> 이 문서의 **아키텍처 계층**이자, Microsoft가 제시하는 **에이전트 확산 전략**을 가리킵니다.
+> 이 계층 안에서 **Copilot Studio와 Microsoft Foundry가 상호 운용**되며, 일반적으로
+> **현업·IT·시민 개발자는 Copilot Studio**(노코드/로우코드)를, **개발자·데이터 과학자는 Microsoft Foundry**(프로코드)를 사용합니다.
+> ("Agent Factory"는 클릭해서 여는 하나의 빌드 도구가 아니라, 이 둘을 아우르는 개념으로 읽어 주세요.)
+
 ```mermaid
 flowchart TB
     subgraph Factory["Agent Factory"]
@@ -448,7 +454,7 @@ flowchart TB
 → 현업(Low-Code)과 개발자(Pro-Code)가 **각자의 방식**으로 같은 플랫폼에서 에이전트를 만든다.
 
 **💡 비즈니스 가치:** 현업·개발자 **모두**가 에이전트를 만들 수 있어 전사 확산 가속
-**💠 Azure 서비스:** **Microsoft Copilot Studio**, **Azure AI Foundry(Microsoft Foundry)** — 모델 카탈로그·**Azure OpenAI**·Agent Service·평가/추적
+**💠 Azure 서비스:** **Microsoft Copilot Studio**, **Microsoft Foundry(구 Azure AI Foundry)** — 모델 카탈로그·**Azure OpenAI**·Agent Service·평가/추적
 
 ---
 
@@ -524,7 +530,7 @@ flowchart LR
     GC --> GE["GitHub Enterprise<br/>버전 관리"]
     GE --> GAS["Advanced Security<br/>보안 검사"]
     GAS --> GA["GitHub Actions<br/>자동 배포"]
-    GA --> Deploy["Agent Factory로 배포"]
+    GA --> Deploy["Foundry Agent Service /<br/>Copilot Studio로 게시·배포"]
 ```
 
 - 에이전트 개발 → 검증 → 배포까지 **자동화 설계 가능한 파이프라인**
@@ -608,7 +614,7 @@ flowchart TB
 |------|------|--------------------------|
 | **AI Experience** | 사용자 접점 | Microsoft 365 Copilot · Microsoft Teams |
 | **Agents / AI App** | 업무 수행 에이전트 | M365 Copilot · Copilot Studio 에이전트 · Azure AI Foundry Agent Service |
-| **Agent Factory** | 에이전트 제작 | Microsoft Copilot Studio · **Azure AI Foundry(Microsoft Foundry)** · Azure OpenAI |
+| **Agent Factory**<br/>*(계층/전략)* | 에이전트 제작 | **Copilot Studio**(현업·IT) · **Microsoft Foundry**(개발자, 모델·런타임으로 Azure OpenAI 활용) |
 | **Ontology** | 의미·지식 계층 | Fabric IQ · Work IQ · Foundry IQ · **Azure AI Search** |
 | **OneLake** | 통합 데이터 레이크 | **Microsoft Fabric — OneLake** |
 | **Existing Data** | 원본 연결 | Fabric Shortcut/Mirroring · Azure Data Factory |
@@ -651,18 +657,24 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    P1["에이전트 빌더<br/>(Agent Builder)"] --> Factory["Copilot Studio"]
-    P2["엔지니어<br/>(Engineer)"] --> DevOps["GitHub + Microsoft Foundry"]
+    P1["에이전트 빌더<br/>(현업·IT·시민 개발자)"] --> Factory["Copilot Studio<br/>(노코드/로우코드)"]
+    P2["엔지니어<br/>(개발자·데이터 과학자)"] --> DevOps["GitHub + Microsoft Foundry<br/>(프로코드)"]
     P3["거버넌스 담당<br/>(Governance)"] --> Gov["Purview·Entra·Defender"]
     P4["현업 직원<br/>(Employees)"] --> Exp["M365 Copilot + Teams"]
 ```
 
-| 역할 | 주로 사용하는 계층 | 하는 일 |
+| 역할 | 주로 사용하는 도구 | 하는 일 |
 |------|--------------------|---------|
-| **에이전트 빌더** | Agent Factory | 노코드로 업무 에이전트 제작 |
-| **엔지니어** | Agentic DevOps / Microsoft Foundry | 커스텀 에이전트 개발·배포 |
-| **거버넌스 & 보안** | Governance | 정책·접근·컴플라이언스 관리 |
-| **현업 & 전직원** | AI Experience | 에이전트로 일상 업무 수행 |
+| **에이전트 빌더** | **Copilot Studio** | 현업·IT가 노코드/로우코드로 업무 에이전트 제작 |
+| **엔지니어** | **GitHub + Microsoft Foundry** | 프로코드로 커스텀·고급 에이전트 개발·배포 |
+| **거버넌스 & 보안** | Purview·Entra·Defender | 정책·접근·컴플라이언스 관리 |
+| **현업 & 전직원** | M365 Copilot + Teams | 에이전트로 일상 업무 수행 |
+
+> **누가 무엇으로 만드나? (헷갈리기 쉬운 부분 — 명확히)**
+> - **현업·IT / 시민 개발자 → Copilot Studio** : M365·Power Platform 기반 **노코드/로우코드** 업무 에이전트
+> - **개발자·데이터 과학자 / 엔지니어 → Microsoft Foundry** : Azure 기반 **프로코드** 커스텀 에이전트 개발·평가·운영
+> - **Agent Factory** : 위 두 도구를 아우르는 **전략·아키텍처 계층**이지, 별도로 클릭하는 단일 제품이 아님
+> - 두 도구는 **상호 운용**되며, 많은 고객이 **둘 다** 사용합니다. (출처: Microsoft — *"IT·business는 Copilot Studio, 개발자·데이터 과학자는 Foundry를 선호"*)
 
 ---
 
@@ -933,7 +945,7 @@ flowchart LR
 - **신뢰:** 평가·관측·안전이 **처음부터 내장** → 믿고 확장
 
 **💡 비즈니스 가치:** AI를 **한 번의 데모가 아닌 지속 가능한 자산**으로 만든다
-**💠 Azure 서비스:** **Azure AI Foundry(Microsoft Foundry)** — 모델 카탈로그 · **Azure OpenAI** · Agent Service · Evaluation/Observability · **Azure AI Content Safety**
+**💠 Azure 서비스:** **Microsoft Foundry(구 Azure AI Foundry)** — 모델 카탈로그 · **Azure OpenAI** · Agent Service · Evaluation/Observability · **Azure AI Content Safety**
 
 > 좋은 모델 하나가 아니라, **모델을 제품으로 만드는 공정 전체**가 경쟁력입니다.
 
