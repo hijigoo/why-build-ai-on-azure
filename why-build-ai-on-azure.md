@@ -251,7 +251,7 @@ flowchart TB
 | **② 데이터 IQ Layer** | 비즈니스 맥락을 이해한 자율 업무 수행 | **비즈니스를 아는 숙련된 직원** |
 | **③ 보안·거버넌스** | 에이전트가 제대로 일하는지 관리 | **에이전트의 HR 시스템** |
 
-- **채용(개발):** Agent Factory에서 에이전트를 채용
+- **채용(개발):** 에이전트 제작 계층에서 에이전트를 채용
 - **교육(그라운딩):** Ontology(IQ)로 회사 지식을 학습
 - **근무(실행):** Agents 계층에서 실제 업무 수행
 - **인사관리(거버넌스):** Agent 365 *[GA · 2026.5]* + Entra + Purview + Defender로 관리·감사
@@ -262,7 +262,7 @@ flowchart TB
 
 | 전략 축 | 대응 플랫폼 계층 | 핵심 구성요소 |
 |---------|------------------|----------------|
-| **① Agent 전사 Scale** | Agent Factory + Agents + Experience | Copilot Studio · Microsoft Foundry · M365 Copilot + Teams<br/>*(Foundry→M365/Teams 게시는 Early Access Preview)* |
+| **① Agent 전사 Scale** | 에이전트 제작 + Agents + Experience | Copilot Studio · Microsoft Foundry · M365 Copilot + Teams<br/>*(Foundry→M365/Teams 게시는 Early Access Preview)* |
 | **② 데이터 IQ Layer** | OneLake + Ontology | Microsoft Fabric · Fabric IQ + Work IQ + Foundry IQ *[Preview·확인 필요]* |
 | **③ 보안·거버넌스** | Governance (전 계층 관통) | Agent 365 *[GA · 2026.5]* · Purview · Entra ID · Defender |
 | **(공통) 개발 생산성** | Agentic DevOps | GitHub Enterprise·Actions·Copilot·Secret Protection·Code Security |
@@ -285,7 +285,7 @@ flowchart TB
 > 📌 위 그림의 **AI Foundry**는 현재 **Microsoft Foundry**로 명칭이 변경되었습니다.
 
 **읽는 법**
-- **가운데(세로):** 데이터 → OneLake → Ontology → Agent Factory → Agents → AI Experience (아래→위로 가치 상승, 각 단계 사이 ▲는 전환 과정)
+- **가운데(세로):** 데이터 → OneLake → Ontology → 에이전트 제작 → Agents → AI Experience (아래→위로 가치 상승, 각 단계 사이 ▲는 전환 과정)
 - **왼쪽 세로축:** Agentic DevOps (GitHub Enterprise·Actions·Copilot·Secret Protection·Code Security) — 에이전트를 만든다
 - **오른쪽 세로축:** Governance (Agent 365·Purview·Entra ID·Defender) — 모든 계층을 통제한다
 - **바깥 인물:** 에이전트 빌더·엔지니어(왼쪽), 거버넌스&보안 담당(오른쪽), 현업 전직원(위)
@@ -387,18 +387,13 @@ flowchart LR
 
 ---
 
-## 계층 4 — Agent Factory
+## 계층 4 — 에이전트 제작
 
 **Agent Grounding → 에이전트를 생산하는 공장**
 
-> 📌 **먼저 짚고 갑니다 — "Agent Factory"는 두 도구를 합쳐 부르는 별칭이 아닙니다.**
-> 에이전트를 **실제로 만드는 도구는 두 가지** — **Copilot Studio**(현업·IT·시민 개발자 · 노코드/로우코드)와 **Microsoft Foundry**(개발자·데이터 과학자 · 프로코드)이며, 이 둘은 **상호 운용**됩니다.
-> **"Microsoft Agent Factory"**는 이 두 도구를 **하나의 구매 플랜으로 함께 쓰도록** Microsoft가 2025 Ignite에서 발표한 **공식 프로그램**입니다(단일 pre-purchase/미터드 플랜 + 모범사례·지원). 이 문서에서는 그 취지대로 **에이전트를 만드는 계층**을 가리키는 이름으로 사용합니다.
-> 즉 클릭해서 여는 **단일 빌드 도구가 아니라**, 두 도구로 에이전트를 만들어 전사로 확장하는 **계층·프로그램** 개념으로 읽어 주세요.
-
 ```mermaid
 flowchart TB
-    subgraph Factory["Agent Factory"]
+    subgraph Factory["에이전트 제작"]
         CS["Copilot Studio<br/>노코드/로우코드<br/>현업·시민 개발자용"]
         AF["Microsoft Foundry<br/>프로코드/모델 중심<br/>개발자·데이터 과학자용"]
     end
@@ -569,7 +564,7 @@ AI 도입의 가장 큰 장벽은 기술이 아니라 **신뢰와 규정 준수*
 |------|------|--------------------------|
 | **AI Experience** | 사용자 접점 | Microsoft 365 Copilot · Microsoft Teams |
 | **Agents / AI App** | 업무 수행 에이전트 | M365 Copilot · Copilot Studio 에이전트 · Microsoft Foundry Agent Service |
-| **Agent Factory**<br/>*(제작 계층·프로그램)* | 에이전트 제작 | **Copilot Studio**(현업·IT) · **Microsoft Foundry**(개발자, 모델·런타임으로 Azure OpenAI 활용) |
+| **에이전트 제작** | 두 도구로 제작 | **Copilot Studio**(현업·IT) · **Microsoft Foundry**(개발자, 모델·런타임으로 Azure OpenAI 활용) |
 | **Ontology** | 의미·지식 계층 | Fabric IQ · Work IQ · Foundry IQ · **Azure AI Search** |
 | **OneLake** | 통합 데이터 레이크 | **Microsoft Fabric — OneLake** |
 | **Existing Data** | 원본 연결 | Fabric Shortcut/Mirroring · Azure Data Factory |
@@ -640,7 +635,6 @@ flowchart LR
 > **누가 무엇으로 만드나? (헷갈리기 쉬운 부분 — 명확히)**
 > - **현업·IT / 시민 개발자 → Copilot Studio** : M365·Power Platform 기반 **노코드/로우코드** 업무 에이전트
 > - **개발자·데이터 과학자 / 엔지니어 → Microsoft Foundry** : Azure 기반 **프로코드** 커스텀 에이전트 개발·평가·운영
-> - **Agent Factory** : 두 도구를 **하나의 플랜으로 함께 쓰게 하는 Microsoft 공식 프로그램**(단일 구매 플랜)이자, 이 문서의 **에이전트 제작 계층** 이름 — 별도로 클릭하는 단일 빌드 도구가 아님
 > - 두 도구는 **상호 운용**되며, 많은 고객이 **둘 다** 사용합니다. (출처: Microsoft — *"IT·business는 Copilot Studio, 개발자·데이터 과학자는 Foundry를 선호"*)
 
 ---
