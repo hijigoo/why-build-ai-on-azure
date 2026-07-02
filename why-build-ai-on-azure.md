@@ -163,7 +163,7 @@ AI 도입의 가장 큰 장벽은 기술이 아니라 **신뢰**입니다.
 ## ③ End-to-End 완결 스택
 
 ```mermaid
-flowchart LR
+flowchart TD
     D["데이터<br/>Fabric·OneLake"] --> M["의미·모델<br/>Foundry·AI Search"]
     M --> A["에이전트<br/>Copilot Studio·Foundry"]
     A --> E["경험<br/>M365 Copilot·Teams"]
@@ -329,7 +329,7 @@ flowchart TB
 원본 데이터가 어떻게 "실행 가능한 에이전트"가 되는가:
 
 ```mermaid
-flowchart LR
+flowchart TD
     A["원본 데이터<br/>Snowflake·SAP<br/>Salesforce·오브젝트 스토리지"]
       -->|"이기종 데이터를<br/>하나의 레이크로 연결"| B["OneLake<br/>통합 데이터 레이크"]
     B -->|"데이터 → 비즈니스<br/>의미 구조로 변환"| C["Ontology<br/>Fabric/Work/Foundry IQ"]
@@ -520,7 +520,7 @@ flowchart LR
 ## Agentic DevOps 흐름
 
 ```mermaid
-flowchart LR
+flowchart TD
     Dev["개발자/엔지니어"] --> GC["GitHub Copilot<br/>코드 작성 가속"]
     GC --> GE["GitHub Enterprise<br/>버전 관리"]
     GE --> GAS["Advanced Security<br/>보안 검사"]
@@ -694,7 +694,7 @@ flowchart LR
 각 역할이 실제로 어떻게 이 플랫폼을 사용하는지 6가지 시나리오로 보여줍니다.
 
 ```mermaid
-flowchart LR
+flowchart TD
     D1["#1 현업 전직원<br/>에이전트 빌더"] --> D2["#2 엔지니어<br/>Agentic DevOps"]
     D2 --> D3["#3 데이터 엔지니어<br/>이기종 데이터 통합"]
     D3 --> D4["#4 거버넌스<br/>에이전트 ID 통제"]
@@ -709,7 +709,7 @@ flowchart LR
 **"코딩 없이 빠르게 나만의 AI Agent"** (Copilot Studio)
 
 ```mermaid
-flowchart LR
+flowchart TD
     A["자연어로 요청"] --> B["데이터 연결"] --> C["Agent 초안 생성/구성"]
     C --> D["테스트 & 배포"] --> E["Teams에서 사용"]
 ```
@@ -735,7 +735,7 @@ flowchart LR
 ## 단계별 도입 로드맵
 
 ```mermaid
-flowchart LR
+flowchart TD
     S1["1단계<br/>데이터 통합<br/>OneLake · GA"] --> S2["2단계<br/>의미 계층<br/>Azure AI Search(GA)<br/>+ Fabric IQ(Preview)"]
     S2 --> S3["3단계<br/>에이전트 제작<br/>Copilot Studio/Foundry · GA"]
     S3 --> S4["4단계<br/>확산 & 거버넌스<br/>Purview·Entra(GA)<br/>+ Agent 365(Preview)"]
@@ -917,7 +917,7 @@ flowchart TB
 Copilot Studio가 현업을 위한 "쉬운 입구"라면, **Microsoft Foundry**는 개발자·데이터 과학자가 **프로덕션급 AI**를 만드는 엔진입니다. 흩어진 도구를 모아 **실험이 아니라 운영**으로 넘어가게 해줍니다.
 
 ```mermaid
-flowchart LR
+flowchart TB
     subgraph MF["Microsoft Foundry — 통합 플랫폼"]
         M["① 모델 카탈로그<br/>선택의 자유<br/>OpenAI·오픈소스·산업별"]
         A["② 에이전트 개발<br/>Agent Service<br/>도구·지식 연결"]
@@ -970,7 +970,7 @@ flowchart LR
 > 그래서 **확산과 통제를 함께** 설계합니다.
 
 ```mermaid
-flowchart LR
+flowchart TD
     B["누가 만드나<br/>현업·개발자"] --> R["등록·심사<br/>민감도별 승인"]
     R --> D["배포·권한<br/>Entra 신원·최소권한"]
     D --> M["모니터링<br/>성능·비용·감사"]
