@@ -270,10 +270,10 @@ flowchart TB
 
 | 전략 축 | 대응 플랫폼 계층 | 핵심 구성요소 |
 |---------|------------------|----------------|
-| **① Agent 전사 Scale** | Agent Factory + Agents + Experience | Copilot Studio · Microsoft Foundry · M365 Copilot + Teams |
+| **① Agent 전사 Scale** | Agent Factory + Agents + Experience | Copilot Studio · Microsoft Foundry · M365 Copilot + Teams<br/>*(Foundry→M365/Teams 게시는 Early Access Preview)* |
 | **② 데이터 IQ Layer** | OneLake + Ontology | Microsoft Fabric · Fabric IQ + Work IQ + Foundry IQ *[Preview·확인 필요]* |
 | **③ 보안·거버넌스** | Governance (전 계층 관통) | Agent 365 *[Preview·확인 필요]* · Purview · Entra ID · Defender |
-| **(공통) 개발 생산성** | Agentic DevOps | GitHub Enterprise·Action·Copilot·Advanced Security |
+| **(공통) 개발 생산성** | Agentic DevOps | GitHub Enterprise·Actions·Copilot·Secret Protection·Code Security |
 
 > 이어지는 섹션에서 이 3대 전략이 실제 아키텍처로 어떻게 구현되는지 살펴봅니다.
 
@@ -295,7 +295,7 @@ flowchart TB
 
 **읽는 법**
 - **가운데(세로):** 데이터 → OneLake → Ontology → Agent Factory → Agents → AI Experience (아래→위로 가치 상승, 각 단계 사이 ▲는 전환 과정)
-- **왼쪽 세로축:** Agentic DevOps (GitHub Enterprise·Action·Copilot·Advanced Security) — 에이전트를 만든다
+- **왼쪽 세로축:** Agentic DevOps (GitHub Enterprise·Actions·Copilot·Secret Protection·Code Security) — 에이전트를 만든다
 - **오른쪽 세로축:** Governance (Agent 365·Purview·Entra ID·Defender) — 모든 계층을 통제한다
 - **바깥 인물:** 에이전트 빌더·엔지니어(왼쪽), 거버넌스&보안 담당(오른쪽), 현업 전직원(위)
 
@@ -340,7 +340,7 @@ flowchart TD
 | **오브젝트 스토리지 · DB** | 파일 · Database | 로그, 문서, 트랜잭션 |
 
 **💡 비즈니스 가치:** 흩어진 데이터를 **옮기지 않고** 그대로 활용 → 이관 비용·리스크 최소화
-**💠 Azure 서비스:** Microsoft Fabric **Shortcut / Mirroring**, **Azure Data Factory** (200+ 커넥터)
+**💠 Azure 서비스:** Microsoft Fabric **Shortcut / Mirroring**, **Azure Data Factory** (100+ 커넥터)
 
 - 기업 데이터는 이미 **여러 클라우드/SaaS에 분산**되어 있음
 - Azure는 멀티클라우드·이기종 데이터를 **있는 그대로** 연결
@@ -488,7 +488,7 @@ flowchart LR
 | **GitHub Enterprise** | 소스코드·협업의 중심 | 소스코드 관리 및 협업 |
 | **GitHub Actions** | CI/CD 자동화 | CI/CD 및 DevOps 워크플로우 |
 | **GitHub Copilot** | AI 페어 프로그래머 | 코드 작성·테스트·문서화·코드 리뷰 |
-| **GitHub Advanced Security** | 코드 보안 | 코드 스캔·비밀키 탐지·오픈소스 취약점 분석 |
+| **GitHub Secret Protection · Code Security**<br/>*(구 Advanced Security)* | 코드 보안 | 비밀키 탐지·푸시 보호(Secret Protection) + 코드 스캔·의존성 취약점 분석(Code Security) |
 
 **핵심:** AI로 AI를 만든다. Copilot이 에이전트 개발 속도를 가속.
 
@@ -500,7 +500,7 @@ flowchart LR
 flowchart TD
     Dev["개발자/엔지니어"] --> GC["GitHub Copilot<br/>코드 작성 가속"]
     GC --> GE["GitHub Enterprise<br/>버전 관리"]
-    GE --> GAS["Advanced Security<br/>보안 검사"]
+    GE --> GAS["Secret Protection·Code Security<br/>보안 검사"]
     GAS --> GA["GitHub Actions<br/>자동 배포"]
     GA --> Deploy["Foundry Agent Service /<br/>Copilot Studio로 게시·배포"]
 ```
@@ -590,7 +590,7 @@ flowchart TB
 | **Ontology** | 의미·지식 계층 | Fabric IQ · Work IQ · Foundry IQ · **Azure AI Search** |
 | **OneLake** | 통합 데이터 레이크 | **Microsoft Fabric — OneLake** |
 | **Existing Data** | 원본 연결 | Fabric Shortcut/Mirroring · Azure Data Factory |
-| **Agentic DevOps** | 개발·운영 | GitHub Enterprise · Actions · Copilot · Advanced Security |
+| **Agentic DevOps** | 개발·운영 | GitHub Enterprise · Actions · Copilot · Secret Protection · Code Security |
 | **Governance** | 신뢰·보안 | Agent 365 · Microsoft Purview · Microsoft Entra ID · Microsoft Defender · Azure AI Content Safety |
 
 > 🏷️ **성숙도 표기 (정독 시 참고):**
@@ -616,7 +616,7 @@ flowchart TB
     GH --> AF
     CS <-->|"서로 호출 · 멀티에이전트"| AF
     CS -->|"기본 배포"| UX
-    AF -->|"함께 배포"| UX
+    AF -->|"함께 배포 (Preview)"| UX
     ENT -.전 계층 통제.-> F & CS & AF & UX
 
     style UX fill:#1a3d6d,color:#fff
@@ -624,7 +624,7 @@ flowchart TB
 ```
 
 - **두 제작 도구가 서로 연동** — Copilot Studio(현업·노코드)와 Microsoft Foundry(개발자·프로코드)가 **서로 에이전트를 호출**하며 멀티에이전트로 확장됩니다.
-- **같은 접점으로 배포** — Copilot Studio는 원래 **Microsoft 365 Copilot·Teams**로 바로 배포됩니다. 여기에 Microsoft Foundry 에이전트도 **같은 접점으로 배포**할 수 있어, 직원은 늘 쓰던 자리에서 두 종류의 에이전트를 함께 사용합니다.
+- **같은 접점으로 배포** — Copilot Studio는 원래 **Microsoft 365 Copilot·Teams**로 바로 배포됩니다(GA). 여기에 Microsoft Foundry 에이전트도 **같은 접점으로 게시**할 수 있어(현재 *Early Access Preview*), 직원은 늘 쓰던 자리에서 두 종류의 에이전트를 함께 사용하게 됩니다.
 - **하나의 신원·거버넌스·보안** — Entra·Purview·Defender로 데이터부터 접점까지 전 계층을 한 번에 통제합니다.
 - 통합 부담과 운영 복잡도를 **줄여** 고객은 비즈니스에 더 집중할 수 있습니다.
 
@@ -859,7 +859,7 @@ flowchart LR
 - 그래서 파일럿 단계에서 **소규모로 실제 비용·성능을 검증**한 뒤 확장합니다.
 
 **💡 비즈니스 가치:** 기존 투자를 **버리지 않고** AI를 시작 → 초기 리스크·비용 최소화
-**💠 Azure 서비스:** Fabric **Shortcut / Mirroring**, **Azure Data Factory**(200+ 커넥터), OneLake
+**💠 Azure 서비스:** Fabric **Shortcut / Mirroring**, **Azure Data Factory**(100+ 커넥터), OneLake
 
 ---
 
