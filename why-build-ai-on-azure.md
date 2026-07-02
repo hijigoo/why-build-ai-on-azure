@@ -262,7 +262,7 @@ flowchart TB
 - **채용(개발):** Agent Factory에서 에이전트를 채용
 - **교육(그라운딩):** Ontology(IQ)로 회사 지식을 학습
 - **근무(실행):** Agents 계층에서 실제 업무 수행
-- **인사관리(거버넌스):** Agent 365 *[Preview·확인 필요]* + Entra + Purview + Defender로 관리·감사
+- **인사관리(거버넌스):** Agent 365 *[GA · 2026.5]* + Entra + Purview + Defender로 관리·감사
 
 ---
 
@@ -272,7 +272,7 @@ flowchart TB
 |---------|------------------|----------------|
 | **① Agent 전사 Scale** | Agent Factory + Agents + Experience | Copilot Studio · Microsoft Foundry · M365 Copilot + Teams<br/>*(Foundry→M365/Teams 게시는 Early Access Preview)* |
 | **② 데이터 IQ Layer** | OneLake + Ontology | Microsoft Fabric · Fabric IQ + Work IQ + Foundry IQ *[Preview·확인 필요]* |
-| **③ 보안·거버넌스** | Governance (전 계층 관통) | Agent 365 *[Preview·확인 필요]* · Purview · Entra ID · Defender |
+| **③ 보안·거버넌스** | Governance (전 계층 관통) | Agent 365 *[GA · 2026.5]* · Purview · Entra ID · Defender |
 | **(공통) 개발 생산성** | Agentic DevOps | GitHub Enterprise·Actions·Copilot·Secret Protection·Code Security |
 
 > 이어지는 섹션에서 이 3대 전략이 실제 아키텍처로 어떻게 구현되는지 살펴봅니다.
@@ -524,7 +524,7 @@ flowchart TD
 
 | 구성 요소 | 역할 | 상세 설명 |
 |-----------|------|-----------|
-| **Agent 365** *[Preview·확인 필요]* | 에이전트의 관제탑 | 에이전트 거버넌스 및 운영 |
+| **Agent 365** *[GA · 2026.5]* | 에이전트의 관제탑 | 에이전트 거버넌스 및 운영 (일부 신기능은 Public Preview) |
 | **Microsoft Purview** | 데이터 보호 | 통합 데이터 거버넌스 및 컴플라이언스 |
 | **Entra ID** | 신원·접근 관리 | 통합 ID 거버넌스 및 접근통제 |
 | **Microsoft Defender** | 위협 대응 | 위협 및 보안 리스크 탐지 |
@@ -546,7 +546,7 @@ flowchart TB
         L5["OneLake"]
         L6["Data"]
     end
-    Gov["Governance & Security<br/>Purview · Entra · Defender (GA)<br/>+ Agent 365 (Preview)"]
+    Gov["Governance & Security<br/>Purview · Entra · Defender (GA)<br/>+ Agent 365 (GA)"]
     Gov --- Layers
     style Gov fill:#1a3d6d,color:#fff
 ```
@@ -562,9 +562,9 @@ flowchart TB
 1. **Identity (Entra ID)** *[GA]* — 누가/어떤 에이전트가 접근하는가
 2. **Data Protection (Purview)** *[GA]* — 민감 데이터 분류·유출 방지
 3. **Threat Protection (Defender)** *[GA]* — 공격·이상 행위 탐지
-4. **Agent Governance (Agent 365)** *[Preview·확인 필요]* — 에이전트 수명주기·감사·통제
+4. **Agent Governance (Agent 365)** *[GA · 2026.5]* — 에이전트 수명주기·감사·통제
 
-> ℹ️ **지금 GA로 시작하는 방법:** Agent 365가 GA/리전 확정 전이라도, **Entra(에이전트 신원) + Purview(데이터 보호) + Defender(위협 탐지) + Azure Monitor/Foundry 평가**로 에이전트 거버넌스의 핵심을 **오늘 구성**할 수 있습니다. Agent 365는 성숙 시 관제탑으로 확장합니다.
+> ℹ️ **거버넌스는 오늘 구성할 수 있습니다:** **Entra(에이전트 신원) + Purview(데이터 보호) + Defender(위협 탐지) + Azure Monitor/Foundry 평가**가 기반이며, 여기에 **Agent 365**(GA · 2026.5)가 에이전트 관제탑을 더합니다. 팀 워크플로에 참여하는 자율 에이전트 등 일부 신기능은 Public Preview이니, 한국 리전·기능 범위는 도입 시 확인하세요.
 
 > AI 도입의 가장 큰 장벽은 기술이 아니라 **신뢰와 규정 준수**.
 > Microsoft는 이를 플랫폼에 **정책으로 연동**할 수 있게 설계했습니다. (Responsible AI 실현)
@@ -594,8 +594,8 @@ flowchart TB
 | **Governance** | 신뢰·보안 | Agent 365 · Microsoft Purview · Microsoft Entra ID · Microsoft Defender · Azure AI Content Safety |
 
 > 🏷️ **성숙도 표기 (정독 시 참고):**
-> - **GA(일반 공급) — 지금 바로 도입 가능:** Microsoft 365 Copilot · GitHub Copilot · Azure OpenAI · Microsoft Fabric/OneLake · **Microsoft Foundry** · Copilot Studio · Azure AI Search · Entra · Purview · Defender · Content Safety
-> - **Preview · 발표 단계 — 로드맵으로 분리:** **Fabric IQ · Work IQ · Foundry IQ · Agent 365**
+> - **GA(일반 공급) — 지금 바로 도입 가능:** Microsoft 365 Copilot · GitHub Copilot · Azure OpenAI · Microsoft Fabric/OneLake · **Microsoft Foundry** · Copilot Studio · Azure AI Search · Entra · Purview · Defender · Content Safety · **Agent 365**
+> - **Preview · 발표 단계 — 로드맵으로 분리:** **Fabric IQ · Work IQ · Foundry IQ**
 > - 위 Preview 기능은 **도입 시점의 GA 여부·한국 리전 지원을 반드시 재확인**해야 합니다. 시작은 **GA 기능 중심**으로, Preview는 로드맵으로 다룹니다. (상세: 부록 *'제품 성숙도'*)
 
 ---
@@ -727,7 +727,7 @@ flowchart TD
 flowchart TD
     S1["1단계<br/>데이터 통합<br/>OneLake · GA"] --> S2["2단계<br/>의미 계층<br/>Azure AI Search(GA)<br/>+ Fabric IQ(Preview)"]
     S2 --> S3["3단계<br/>에이전트 제작<br/>Copilot Studio/Foundry · GA"]
-    S3 --> S4["4단계<br/>확산 & 거버넌스<br/>Purview·Entra(GA)<br/>+ Agent 365(Preview)"]
+    S3 --> S4["4단계<br/>확산 & 거버넌스<br/>Purview·Entra(GA)<br/>+ Agent 365(GA)"]
     style S1 fill:#dbe7f6,color:#1a3d6d
     style S4 fill:#1a3d6d,color:#fff
 ```
@@ -737,10 +737,10 @@ flowchart TD
 | **1. 기반** | 데이터를 OneLake로 연결 | 이기종 소스 통합, Shortcut 구성 |
 | **2. 의미화** | 비즈니스 의미 계층 구축 | Azure AI Search + 자체 시맨틱/메타데이터 (Fabric IQ는 Preview) |
 | **3. 제작** | 파일럿 에이전트 개발 | 1~2개 고가치 업무 선정 |
-| **4. 확산** | 전사 확대 + 거버넌스 | Entra·Purview·Defender·Monitor 기반 운영 (Agent 365는 Preview), 정책 표준화 |
+| **4. 확산** | 전사 확대 + 거버넌스 | Entra·Purview·Defender·Monitor + Agent 365(GA) 기반 운영, 정책 표준화 |
 
 > 🏷️ **로드맵의 GA/Preview 구분:** 1·3단계는 **GA 기능만으로 오늘 착수 가능**합니다(OneLake·Azure AI Search·Copilot Studio·Foundry·Azure OpenAI).
-> 2단계의 **Fabric IQ**와 4단계의 **Agent 365**는 *[Preview·확인 필요]* 로, **도입 전 GA 여부·한국 리전 지원을 검증**한 뒤 반영합니다.
+> 2단계의 **Fabric IQ** 등 IQ 레이어는 *[Preview·확인 필요]* 로 **도입 전 GA 여부·한국 리전 지원을 검증**한 뒤 반영합니다. **Agent 365**는 GA(2026.5)이며, 일부 신기능(Public Preview)과 한국 리전·기능 범위는 도입 시 확인하세요.
 > 즉 **GA 기반으로 시작 → Preview는 성숙 시 확장**하는 순서를 권장합니다. (2단계는 IQ 없이 Azure AI Search로 대체 착수 가능)
 
 ---
@@ -793,7 +793,7 @@ flowchart LR
 4. **의미가 신뢰를 만든다** — Azure AI Search(+ Ontology IQ)가 정확도를 높임
 5. **공장이 있어야 확장된다** — Copilot Studio + Microsoft Foundry로 에이전트 제작·운영
 6. **경험은 익숙한 곳에** — Microsoft 365 Copilot + Teams가 통합 접점 (연동 가치)
-7. **거버넌스는 전제조건** — Purview·Entra·Defender로 신뢰 확보 (Agent 365는 성숙 시 확장)
+7. **거버넌스는 전제조건** — Purview·Entra·Defender로 신뢰 확보 (Agent 365 GA로 관제탑 구성)
 
 ---
 
@@ -973,7 +973,7 @@ flowchart TD
 | 누가 만들 수 있나 | 역할별 권한 (현업=Low-Code, 개발자=Pro-Code) |
 | 어떤 에이전트가 심사를 거치나 | 민감 데이터·외부 노출 에이전트는 사전 승인 |
 | 권한은 어떻게 관리하나 | 에이전트마다 **고유 신원(Entra)** + 최소 권한 |
-| 누가 비용·품질을 보나 | Entra·Purview·Defender + Azure Monitor/Foundry 평가로 사용량·성능·비용 모니터링 (Agent 365 *[Preview·확인 필요]*는 성숙 시 관제탑으로 확장) |
+| 누가 비용·품질을 보나 | Entra·Purview·Defender + Azure Monitor/Foundry 평가로 사용량·성능·비용 모니터링 (Agent 365 *[GA · 2026.5]* 관제탑으로 통합 운영) |
 | 폐기·버전 관리는 | 수명주기 관리 + 감사(Purview) |
 | 조직 차원 통제는 | **AI CoE / 거버넌스 위원회**가 표준·정책 운영 |
 
@@ -988,8 +988,8 @@ flowchart TD
 
 | 구분 | 구성요소 (예시) | 도입 관점 |
 |------|-----------------|-----------|
-| **지금 도입 가능 (GA)** | Microsoft 365 Copilot · GitHub Copilot · Microsoft Fabric / OneLake · Microsoft Foundry · Copilot Studio · Azure OpenAI · Azure AI Search · Entra ID · Purview · Defender · Content Safety | 계약·SLA 기반 도입 가능 |
-| **최신 발표 · 확인 필요** | Fabric IQ · Work IQ · Foundry IQ · Agent 365 | 발표 시점 GA 여부·기능 범위 **검증 후** 반영 |
+| **지금 도입 가능 (GA)** | Microsoft 365 Copilot · GitHub Copilot · Microsoft Fabric / OneLake · Microsoft Foundry · Copilot Studio · Azure OpenAI · Azure AI Search · Entra ID · Purview · Defender · Content Safety · Agent 365 | 계약·SLA 기반 도입 가능 |
+| **최신 발표 · 확인 필요** | Fabric IQ · Work IQ · Foundry IQ | 발표 시점 GA 여부·기능 범위 **검증 후** 반영 |
 
 **우리의 원칙:**
 - **현실 아키텍처는 GA 기능**으로 설계하고, 최신 발표 기능은 **로드맵으로 분리**해 제안합니다.
@@ -1019,7 +1019,7 @@ flowchart TD
 
 | 시나리오 | 역할 | 시나리오 |
 |------|------|----------|
-| **#4** | 거버넌스 담당자 | 에이전트 통합 **ID 통제 및 모니터링** (Entra ID *[GA]* + Agent 365 *[Preview·확인 필요]*) |
+| **#4** | 거버넌스 담당자 | 에이전트 통합 **ID 통제 및 모니터링** (Entra ID *[GA]* + Agent 365 *[GA · 2026.5]*) |
 | **#5** | 거버넌스 담당자 | **통합 데이터 거버넌스** (Microsoft Purview) |
 | **#6 (Private)** | 현업 | 신규 제품·프로젝트 **예상 결과 분석 & 해석 에이전트** |
 
