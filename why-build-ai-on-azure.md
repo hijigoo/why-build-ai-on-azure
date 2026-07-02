@@ -2,7 +2,7 @@
 
 ## 데이터에서 에이전트까지, 신뢰할 수 있는 하나의 Enterprise AI Platform으로
 
-> 🎬 **자료 성격:** 발표 자료 (약 **40분**) · 웹 문서로도 열람 가능 &nbsp;|&nbsp; 🗂️ **버전:** v1.0
+> 🎬 **자료 성격:** 발표 자료 (약 **40분**) · **웹 링크로 공유해 스스로 정독**할 수 있는 문서 &nbsp;|&nbsp; 🗂️ **버전:** v1.0
 
 > 🎯 **이 문서의 목적**
 > 이 문서는 *"왜 지금 AI인가, 그리고 왜 Azure 위에서 AI를 구축·운영해야 하는가"* 를 설명합니다.
@@ -11,9 +11,14 @@
 > M365 Copilot·GitHub Copilot·Fabric 등 Azure 밖의 서비스도 **Azure AI Foundry와 연동**되어 하나의 플랫폼으로 동작합니다.
 
 > 💡 **이렇게 읽으시면 좋습니다**
-> - **경영진 / 리더:** Part 1(왜 Microsoft인가) · Part 2(AX 전략) · Part 4(다음 단계) 중심
+> - **경영진 / 리더:** Part 1(왜 지금·왜 Azure인가) · Part 2(AX 전략) · Part 4(다음 단계) 중심
 > - **IT / 개발 리더:** Part 3(Enterprise AI Platform 아키텍처 · Azure 서비스 맵) 중심
 > - 각 계층은 **비즈니스 가치 → 이를 실현하는 Azure/Microsoft 서비스** 순서로 구성했습니다.
+
+> 📌 **이 문서를 읽고 나면 — 세 가지가 정리됩니다**
+> 1. **왜 지금인가** — AI가 "대화 도구"에서 "업무를 실행하는 에이전트"로 넘어가는 전환의 의미
+> 2. **왜 Azure인가** — 기존 데이터·투자를 버리지 않고, 신뢰(보안·거버넌스)를 전제로 AI를 확장하는 방법
+> 3. **무엇부터 시작하나** — 전사 도입 결정이 아니라, 작은 파일럿으로 안전하게 검증하는 다음 단계
 
 ---
 
@@ -87,7 +92,7 @@ flowchart LR
 
 AI를 도입하려는 대부분의 기업이 공통으로 부딪히는 5가지 벽:
 
-- 🔸 **데이터가 흩어져 있다** — Snowflake, SAP, Salesforce, AWS S3에 파편화
+- 🔸 **데이터가 흩어져 있다** — Snowflake, SAP, Salesforce, 오브젝트 스토리지에 파편화
 - 🔸 **AI가 우리 비즈니스를 이해하지 못한다** — 원본 테이블만으로는 의미를 알 수 없음
 - 🔸 **에이전트를 만드는 방법이 제각각이다** — 표준화된 개발/배포 체계 부재
 - 🔸 **거버넌스가 없다** — 누가 어떤 데이터에 접근하는지 통제 불가
@@ -189,6 +194,10 @@ flowchart LR
 2. **작게 시작, 빠르게 확장** — 고가치 파일럿 → 전사 확산
 3. **신뢰를 먼저** — 보안·거버넌스를 처음부터 함께 설계
 
+> 💡 **기존 투자는 그대로 둡니다.** 이미 보유한 데이터 플랫폼·클라우드·SaaS를 **버리지 않고 연결**하는 것부터 시작합니다.
+> 핵심은 "이전(migration)"이 아니라 **"AI가 쓸 수 있게 연결(connect)"** 이며, 비용·성능은 파일럿에서 실제로 검증합니다.
+> (연결 방식 4가지 패턴 → 부록 *"기존 데이터·클라우드 투자, 옮겨야 하나요?"*)
+
 > 이어지는 내용은 "그것을 어떻게 실현하는가"에 대한 **참고 청사진**입니다.
 
 ---
@@ -275,7 +284,7 @@ flowchart TB
 
 ```mermaid
 flowchart LR
-    A["원본 데이터<br/>Snowflake·SAP<br/>Salesforce·AWS"]
+    A["원본 데이터<br/>Snowflake·SAP<br/>Salesforce·오브젝트 스토리지"]
       -->|"이기종 데이터를<br/>하나의 레이크로 연결"| B["OneLake<br/>통합 데이터 레이크"]
     B -->|"데이터 → 비즈니스<br/>의미 구조로 변환"| C["Ontology<br/>Fabric/Work/Foundry IQ"]
     C -->|"Agent Grounding"| D["Agent Factory<br/>Copilot Studio·Microsoft Foundry"]
@@ -300,16 +309,16 @@ flowchart LR
 
 | 소스 | 역할 | 데이터 성격 |
 |------|------|-------------|
-| **Snowflake on AWS** | CDP · 고객데이터 | 고객 프로필, 행동 데이터 |
-| **SAP on AWS** | ERP · SCM | 재무, 공급망, 생산 |
+| **Snowflake** | CDP · 고객데이터 | 고객 프로필, 행동 데이터 |
+| **SAP** | ERP · SCM | 재무, 공급망, 생산 |
 | **Salesforce** | CRM · 영업 | 파이프라인, 계약, 고객 이력 |
-| **AWS Data Sources** | S3 · Database | 로그, 문서, 트랜잭션 |
+| **오브젝트 스토리지 · DB** | 파일 · Database | 로그, 문서, 트랜잭션 |
 
 **💡 비즈니스 가치:** 흩어진 데이터를 **옮기지 않고** 그대로 활용 → 이관 비용·리스크 제거
 **💠 Azure 서비스:** Microsoft Fabric **Shortcut / Mirroring**, **Azure Data Factory** (200+ 커넥터)
 
 - 기업 데이터는 이미 **여러 클라우드/SaaS에 분산**되어 있음
-- Azure는 멀티클라우드(AWS 포함) 데이터를 **있는 그대로** 연결
+- Azure는 멀티클라우드·이기종 데이터를 **있는 그대로** 연결
 
 ---
 
@@ -322,7 +331,7 @@ flowchart LR
     S1[Snowflake] --> OL[(OneLake<br/>단일 논리 레이크)]
     S2[SAP] --> OL
     S3[Salesforce] --> OL
-    S4[AWS S3/DB] --> OL
+    S4[오브젝트 스토리지/DB] --> OL
     OL --> Fabric[Microsoft Fabric<br/>통합 분석 기반]
 ```
 
@@ -547,6 +556,11 @@ flowchart TB
 | **Agentic DevOps** | 개발·운영 | GitHub Enterprise · Actions · Copilot · Advanced Security |
 | **Governance** | 신뢰·보안 | Agent 365 · Microsoft Purview · Microsoft Entra ID · Microsoft Defender · Azure AI Content Safety |
 
+> 🏷️ **성숙도 표기 (정독 시 참고):**
+> - **GA(일반 공급) — 지금 바로 도입 가능:** Microsoft 365 Copilot · GitHub Copilot · Azure OpenAI · Microsoft Fabric/OneLake · **Azure AI Foundry** · Copilot Studio · Azure AI Search · Entra · Purview · Defender · Content Safety
+> - **Preview · 발표 단계 — 로드맵으로 분리:** **Fabric IQ · Work IQ · Foundry IQ · Agent 365**
+> - 위 Preview 기능은 **도입 시점의 GA 여부·한국 리전 지원을 반드시 재확인**해야 합니다. 시작은 **GA 기능 중심**으로, Preview는 로드맵으로 다룹니다. (상세: 부록 *'제품 성숙도'*)
+
 ---
 
 ## 하나로 연결되는 이유 — "통합의 가치"
@@ -757,9 +771,9 @@ flowchart LR
 
 ---
 
-## 부록 · 기존 AWS · Snowflake 투자, 옮겨야 하나요?
+## 부록 · 기존 데이터·클라우드 투자, 옮겨야 하나요?
 
-> 자주 나오는 질문: *"우리는 이미 AWS·Snowflake·SAP에 크게 투자했는데, 다 옮겨야 하나요?"* → **아닙니다.**
+> 자주 나오는 질문: *"우리는 이미 기존 클라우드·데이터 플랫폼(Snowflake·SAP 등)에 크게 투자했는데, 다 옮겨야 하나요?"* → **아닙니다.**
 
 핵심은 "이전(migration)"이 아니라 **"AI가 쓸 수 있게 연결(connect)"** 하는 것입니다. 원본 위치·비용·성능·거버넌스 상황에 맞춰 **4가지 패턴** 중에서 선택합니다.
 
@@ -920,7 +934,7 @@ flowchart LR
 
 - **에이전틱 데브옵스:** GitHub Copilot이 코드 작성부터 리뷰·배포까지 지원
 - **Work IQ 결합:** 조직의 업무 맥락을 이해한 코드/에이전트 생성
-- **데이터 엔지니어:** OneLake로 이기종 데이터(Snowflake·SAP·Salesforce·AWS)를 통합
+- **데이터 엔지니어:** OneLake로 이기종 데이터(Snowflake·SAP·Salesforce 등)를 통합
 
 | 시나리오 | 역할 | 핵심 |
 |------|------|------|
