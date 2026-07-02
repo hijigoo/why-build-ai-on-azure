@@ -1,6 +1,6 @@
 # Why Build AI on Azure?
 
-## 데이터에서 에이전트까지, 신뢰할 수 있는 하나의 Enterprise AI Platform으로
+## 데이터에서 에이전트까지 — Azure 위에서 만드는 신뢰할 수 있는 Enterprise AI Platform
 
 > 🎬 **자료 성격:** 발표 자료 (약 **40분**) · **웹 링크로 공유해 스스로 정독**할 수 있는 문서 &nbsp;|&nbsp; 🗂️ **버전:** v1.0
 
@@ -268,7 +268,7 @@ flowchart TB
 ```
 
 > **Microsoft 제언:** 직접 구축에 시간·에너지·인력을 투입하지 말고,
-> **Microsoft 통합 Enterprise AI Platform**을 활용해 **핵심 비즈니스**에 집중하세요.
+> **Azure 기반의 통합 Enterprise AI Platform**을 활용해 **핵심 비즈니스**에 집중하세요.
 
 ---
 
