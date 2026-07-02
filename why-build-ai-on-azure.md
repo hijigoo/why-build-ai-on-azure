@@ -587,23 +587,23 @@ AI 도입의 가장 큰 장벽은 기술이 아니라 **신뢰와 규정 준수*
 
 ```mermaid
 flowchart TB
-    F["데이터 기반<br/>Microsoft Fabric · OneLake"]
-    GH["GitHub<br/>프로코드 개발"]
-    CS["Copilot Studio<br/>현업·노코드 에이전트"]
-    AF["Microsoft Foundry<br/>개발자·프로코드 에이전트"]
-    UX["사용자 접점<br/>Microsoft 365 Copilot · Teams"]
-    ENT["Entra · Purview · Defender<br/>하나의 신원·거버넌스·보안"]
-
-    F --> CS
-    F --> AF
-    GH --> AF
-    CS <-->|"서로 호출 · 멀티에이전트"| AF
-    CS -->|"기본 배포"| UX
-    AF -->|"함께 배포 (Preview)"| UX
-    ENT -.전 계층 통제.-> F & CS & AF & UX
-
+    subgraph GOV["Entra · Purview · Defender — 하나의 신원·거버넌스·보안으로 전 계층 통제"]
+        direction TB
+        F["데이터 기반<br/>Microsoft Fabric · OneLake"]
+        GH["GitHub<br/>프로코드 개발"]
+        subgraph MAKE["에이전트 제작 · 두 도구가 상호 운용"]
+            direction LR
+            CS["Copilot Studio<br/>현업·노코드 에이전트"]
+            AF["Microsoft Foundry<br/>개발자·프로코드 에이전트"]
+            CS <-->|"서로 호출 · 멀티에이전트"| AF
+        end
+        UX["사용자 접점<br/>Microsoft 365 Copilot · Teams"]
+        F --> MAKE
+        GH --> MAKE
+        MAKE -->|"배포 · CS 기본(GA) · Foundry 함께(Preview)"| UX
+    end
     style UX fill:#1a3d6d,color:#fff
-    style ENT fill:#1a3d6d,color:#fff
+    style GOV fill:#eef4fb,stroke:#1a3d6d,stroke-width:2px
 ```
 
 - **두 제작 도구가 서로 연동** — Copilot Studio(현업·노코드)와 Microsoft Foundry(개발자·프로코드)가 **서로 에이전트를 호출**하며 멀티에이전트로 확장됩니다.
