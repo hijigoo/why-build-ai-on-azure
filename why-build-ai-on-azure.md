@@ -402,11 +402,10 @@ flowchart LR
 
 **Agent Grounding → 에이전트를 생산하는 공장**
 
-> 📌 **먼저 짚고 갑니다 — "Agent Factory"는 단일 제품명이 아닙니다.**
-> 이 문서의 **아키텍처 계층**이자, Microsoft가 제시하는 **에이전트 확산 전략**을 가리킵니다.
-> 이 계층 안에서 **Copilot Studio와 Microsoft Foundry가 상호 운용**되며, 일반적으로
-> **현업·IT·시민 개발자는 Copilot Studio**(노코드/로우코드)를, **개발자·데이터 과학자는 Microsoft Foundry**(프로코드)를 사용합니다.
-> ("Agent Factory"는 클릭해서 여는 하나의 빌드 도구가 아니라, 이 둘을 아우르는 개념으로 읽어 주세요.)
+> 📌 **먼저 짚고 갑니다 — "Agent Factory"는 두 도구를 합쳐 부르는 별칭이 아닙니다.**
+> 에이전트를 **실제로 만드는 도구는 두 가지** — **Copilot Studio**(현업·IT·시민 개발자 · 노코드/로우코드)와 **Microsoft Foundry**(개발자·데이터 과학자 · 프로코드)이며, 이 둘은 **상호 운용**됩니다.
+> **"Microsoft Agent Factory"**는 이 두 도구를 **하나의 구매 플랜으로 함께 쓰도록** Microsoft가 2025 Ignite에서 발표한 **공식 프로그램**입니다(단일 pre-purchase/미터드 플랜 + 모범사례·지원). 이 문서에서는 그 취지대로 **에이전트를 만드는 계층**을 가리키는 이름으로 사용합니다.
+> 즉 클릭해서 여는 **단일 빌드 도구가 아니라**, 두 도구로 에이전트를 만들어 전사로 확장하는 **계층·프로그램** 개념으로 읽어 주세요.
 
 ```mermaid
 flowchart TB
@@ -587,7 +586,7 @@ flowchart TB
 |------|------|--------------------------|
 | **AI Experience** | 사용자 접점 | Microsoft 365 Copilot · Microsoft Teams |
 | **Agents / AI App** | 업무 수행 에이전트 | M365 Copilot · Copilot Studio 에이전트 · Microsoft Foundry Agent Service |
-| **Agent Factory**<br/>*(계층/전략)* | 에이전트 제작 | **Copilot Studio**(현업·IT) · **Microsoft Foundry**(개발자, 모델·런타임으로 Azure OpenAI 활용) |
+| **Agent Factory**<br/>*(제작 계층·프로그램)* | 에이전트 제작 | **Copilot Studio**(현업·IT) · **Microsoft Foundry**(개발자, 모델·런타임으로 Azure OpenAI 활용) |
 | **Ontology** | 의미·지식 계층 | Fabric IQ · Work IQ · Foundry IQ · **Azure AI Search** |
 | **OneLake** | 통합 데이터 레이크 | **Microsoft Fabric — OneLake** |
 | **Existing Data** | 원본 연결 | Fabric Shortcut/Mirroring · Azure Data Factory |
@@ -658,7 +657,7 @@ flowchart LR
 > **누가 무엇으로 만드나? (헷갈리기 쉬운 부분 — 명확히)**
 > - **현업·IT / 시민 개발자 → Copilot Studio** : M365·Power Platform 기반 **노코드/로우코드** 업무 에이전트
 > - **개발자·데이터 과학자 / 엔지니어 → Microsoft Foundry** : Azure 기반 **프로코드** 커스텀 에이전트 개발·평가·운영
-> - **Agent Factory** : 위 두 도구를 아우르는 **전략·아키텍처 계층**이지, 별도로 클릭하는 단일 제품이 아님
+> - **Agent Factory** : 두 도구를 **하나의 플랜으로 함께 쓰게 하는 Microsoft 공식 프로그램**(단일 구매 플랜)이자, 이 문서의 **에이전트 제작 계층** 이름 — 별도로 클릭하는 단일 빌드 도구가 아님
 > - 두 도구는 **상호 운용**되며, 많은 고객이 **둘 다** 사용합니다. (출처: Microsoft — *"IT·business는 Copilot Studio, 개발자·데이터 과학자는 Foundry를 선호"*)
 
 ---
