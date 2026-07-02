@@ -34,7 +34,7 @@
 > ⏱️ **시간 배분 (총 약 40분):** Part 1 ~14분 · Part 2 ~4분 · Part 3 ~15분 · Part 4 ~7분
 > 📎 심화 자료(멀티클라우드·IQ/Foundry 상세·규제·Agent 운영·제품 성숙도·ROI·추가 시나리오)는 **부록**으로 분리했습니다.
 
-**Part 1 — 왜 지금, 왜 Microsoft인가 (신뢰) · ~12분**
+**Part 1 — 왜 지금, 왜 Azure인가 (신뢰) · ~12분**
 1. **왜 지금 AI인가** — 에이전트 시대의 전환
 2. **고객이 마주한 현실적 과제**
 3. **왜 Microsoft인가** — 4대 신뢰 근거
@@ -267,7 +267,7 @@ flowchart TB
 - **채용(개발):** Agent Factory에서 에이전트를 "채용"
 - **교육(그라운딩):** Ontology(IQ)로 회사 지식을 학습
 - **근무(실행):** Agents 계층에서 실제 업무 수행
-- **인사관리(거버넌스):** Agent 365 + Entra + Purview + Defender로 관리·감사
+- **인사관리(거버넌스):** Agent 365 *[Preview·확인 필요]* + Entra + Purview + Defender로 관리·감사
 
 ---
 
@@ -501,7 +501,7 @@ flowchart LR
     GA --> Deploy["Agent Factory로 배포"]
 ```
 
-- 에이전트 개발 → 검증 → 배포까지 **완전 자동화된 파이프라인**
+- 에이전트 개발 → 검증 → 배포까지 **자동화 설계 가능한 파이프라인**
 - 보안이 파이프라인에 **내장(Shift-Left Security)**
 - 사람과 AI가 함께 개발하는 **협업 개발 문화**
 
@@ -541,7 +541,7 @@ flowchart TB
         L5["OneLake"]
         L6["Data"]
     end
-    Gov["Governance & Security<br/>Purview · Entra · Defender · Agent 365"]
+    Gov["Governance & Security<br/>Purview · Entra · Defender (GA)<br/>+ Agent 365 (Preview)"]
     Gov --- Layers
     style Gov fill:#1a3d6d,color:#fff
 ```
@@ -554,13 +554,15 @@ flowchart TB
 
 ## 신뢰할 수 있는 AI의 4가지 축
 
-1. **Identity (Entra ID)** — 누가/어떤 에이전트가 접근하는가
-2. **Data Protection (Purview)** — 민감 데이터 분류·유출 방지
-3. **Threat Protection (Defender)** — 공격·이상 행위 탐지
-4. **Agent Governance (Agent 365)** — 에이전트 수명주기·감사·통제
+1. **Identity (Entra ID)** *[GA]* — 누가/어떤 에이전트가 접근하는가
+2. **Data Protection (Purview)** *[GA]* — 민감 데이터 분류·유출 방지
+3. **Threat Protection (Defender)** *[GA]* — 공격·이상 행위 탐지
+4. **Agent Governance (Agent 365)** *[Preview·확인 필요]* — 에이전트 수명주기·감사·통제
+
+> ℹ️ **지금 GA로 시작하는 방법:** Agent 365가 GA/리전 확정 전이라도, **Entra(에이전트 신원) + Purview(데이터 보호) + Defender(위협 탐지) + Azure Monitor/Foundry 평가**로 에이전트 거버넌스의 핵심을 **오늘 구성**할 수 있습니다. Agent 365는 성숙 시 관제탑으로 확장합니다.
 
 > AI 도입의 가장 큰 장벽은 기술이 아니라 **신뢰와 규정 준수**.
-> Microsoft는 이를 플랫폼에 **기본 내장**합니다. (Responsible AI 실현)
+> Microsoft는 이를 플랫폼에 **정책으로 연동**할 수 있게 설계했습니다. (Responsible AI 실현)
 >
 > 📎 한국 리전·ISMS-P·데이터 학습 미사용 등 **규제 체크리스트**와 **Agent 운영 모델(통제 가능한 확산)**은 부록 참고.
 
@@ -667,7 +669,7 @@ flowchart LR
 
 ## 시나리오 #1 — 현업 전직원의 노코드 에이전트 제작
 
-**"코딩 없이 몇 분 만에 나만의 AI Agent"** (Copilot Studio)
+**"코딩 없이 빠르게 나만의 AI Agent"** (Copilot Studio)
 
 ```mermaid
 flowchart LR
@@ -677,9 +679,9 @@ flowchart LR
 
 | 단계 | 특징 |
 |------|------|
-| **No-code** | 코딩 없이 빠른 생성 — 몇 분 만에 |
+| **No-code** | 코딩 없이 빠른 생성 |
 | **간편한 연결** | 다양한 Data & 시스템에 손쉽게 연결 |
-| **안전한 관리** | 보안 & 거버넌스가 기본 적용 |
+| **안전한 관리** | 보안 & 거버넌스 정책 연동 가능 |
 | **지속적 개선** | 사용 피드백으로 학습 |
 
 > 전직원이 "AI의 팀장"이 되는 첫걸음.
@@ -696,9 +698,9 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    S1["1단계<br/>데이터 통합<br/>OneLake"] --> S2["2단계<br/>의미 계층<br/>Ontology(IQ)"]
-    S2 --> S3["3단계<br/>에이전트 제작<br/>Copilot Studio/Foundry"]
-    S3 --> S4["4단계<br/>확산 & 거버넌스<br/>Agent 365·Purview"]
+    S1["1단계<br/>데이터 통합<br/>OneLake · GA"] --> S2["2단계<br/>의미 계층<br/>Azure AI Search(GA)<br/>+ Fabric IQ(Preview)"]
+    S2 --> S3["3단계<br/>에이전트 제작<br/>Copilot Studio/Foundry · GA"]
+    S3 --> S4["4단계<br/>확산 & 거버넌스<br/>Purview·Entra(GA)<br/>+ Agent 365(Preview)"]
     style S1 fill:#dbe7f6,color:#1a3d6d
     style S4 fill:#1a3d6d,color:#fff
 ```
@@ -718,7 +720,7 @@ flowchart LR
 
 ## 어디서 시작할까 — Quick Win 전략
 
-- ✅ **작게 시작:** M365 Copilot로 개인 생산성부터 (즉시 효과)
+- ✅ **작게 시작:** M365 Copilot로 개인 생산성부터 (빠른 초기 효과)
 - ✅ **데이터가 준비된 영역** 우선 (예: CRM 기반 영업 에이전트)
 - ✅ **명확한 ROI가 있는 업무** 선정 (반복적·규칙적 업무)
 - ✅ **거버넌스는 처음부터** 함께 설계 (나중에 붙이면 리스크)
@@ -754,12 +756,12 @@ flowchart LR
 ## 핵심 요약 (Key Takeaways)
 
 1. **AI는 이제 에이전트다** — 대화를 넘어 업무를 실행하는 시대
-2. **왜 Microsoft인가** — AI 리더십 · Responsible AI · 완결 스택 · 개발 생태계
+2. **왜 Azure인가** — 데이터 주권 · 보안 경계 · 모델 운영 · 거버넌스 · 비용 관측을 **한 기반에서 통제**
 3. **데이터가 토대다** — Microsoft Fabric OneLake로 흩어진 데이터를 통합
-4. **의미가 신뢰를 만든다** — Ontology(IQ) + Azure AI Search가 정확도를 높임
-5. **공장이 있어야 확장된다** — Copilot Studio + Azure AI Foundry로 에이전트 양산
-6. **경험은 익숙한 곳에** — Microsoft 365 Copilot + Teams가 통합 접점
-7. **거버넌스는 전제조건** — Purview·Entra·Defender·Agent 365로 신뢰 확보
+4. **의미가 신뢰를 만든다** — Azure AI Search(+ Ontology IQ)가 정확도를 높임
+5. **공장이 있어야 확장된다** — Copilot Studio + Azure AI Foundry로 에이전트 제작·운영
+6. **경험은 익숙한 곳에** — Microsoft 365 Copilot + Teams가 통합 접점 (연동 가치)
+7. **거버넌스는 전제조건** — Purview·Entra·Defender로 신뢰 확보 (Agent 365는 성숙 시 확장)
 
 ---
 
@@ -767,8 +769,9 @@ flowchart LR
 
 > **"Azure는 흩어진 데이터를, 신뢰할 수 있는 에이전트로,
 > 그리고 모든 직원의 일상 업무로 바꾸는
-> 완결된 End-to-End Enterprise AI Platform을 제공합니다 —
-> M365·GitHub·Fabric 등 Microsoft 스택까지 Azure AI Foundry로 하나로 이어,
+> End-to-End Enterprise AI Platform의 기반을 제공합니다 —
+> 데이터 주권·보안 경계·거버넌스·비용을 한곳에서 통제하고,
+> M365·GitHub·Fabric 등 Microsoft 스택까지 Azure AI Foundry로 이어,
 > 최신 AI를, 여러분이 믿을 수 있는 방식으로."**
 
 ```mermaid
@@ -950,7 +953,7 @@ flowchart LR
 
 | 구분 | 구성요소 (예시) | 도입 관점 |
 |------|-----------------|-----------|
-| **지금 도입 가능 (GA)** | Microsoft 365 Copilot · GitHub Copilot · Microsoft Fabric / OneLake · Azure AI Foundry · Copilot Studio · Azure OpenAI · Azure AI Search · Entra ID · Purview · Defender · Content Safety | 계약·SLA 기반 즉시 활용 |
+| **지금 도입 가능 (GA)** | Microsoft 365 Copilot · GitHub Copilot · Microsoft Fabric / OneLake · Azure AI Foundry · Copilot Studio · Azure OpenAI · Azure AI Search · Entra ID · Purview · Defender · Content Safety | 계약·SLA 기반 도입 가능 |
 | **최신 발표 · 확인 필요** | Fabric IQ · Work IQ · Foundry IQ · Agent 365 | 발표 시점 GA 여부·기능 범위 **검증 후** 반영 |
 
 **우리의 원칙:**
