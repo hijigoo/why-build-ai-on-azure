@@ -587,11 +587,11 @@ AI 도입의 가장 큰 장벽은 기술이 아니라 **신뢰와 규정 준수*
 
 ```mermaid
 flowchart TB
-    subgraph GOV["Entra · Purview · Defender — 하나의 신원·거버넌스·보안으로 전 계층 통제"]
+    subgraph GOV["Entra · Purview · Defender"]
         direction TB
         F["데이터 기반<br/>Microsoft Fabric · OneLake"]
         GH["GitHub<br/>프로코드 개발"]
-        subgraph MAKE["에이전트 제작 · 두 도구가 상호 운용"]
+        subgraph MAKE["에이전트 제작 · 상호 운용"]
             direction LR
             CS["Copilot Studio<br/>현업·노코드 에이전트"]
             AF["Microsoft Foundry<br/>개발자·프로코드 에이전트"]
