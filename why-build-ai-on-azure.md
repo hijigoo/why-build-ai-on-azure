@@ -142,8 +142,8 @@ AI 도입의 가장 큰 장벽은 기술이 아니라 **신뢰**입니다.
 
 ```mermaid
 flowchart TD
-    D["데이터<br/>Fabric·OneLake"] --> M["의미·모델<br/>Foundry·AI Search"]
-    M --> A["에이전트<br/>Copilot Studio·Foundry"]
+    D["데이터<br/>Fabric·OneLake"] --> M["의미·모델<br/>Microsoft Foundry·AI Search"]
+    M --> A["에이전트<br/>Copilot Studio·Microsoft Foundry"]
     A --> E["경험<br/>M365 Copilot·Teams"]
     style D fill:#dbe7f6,color:#1a3d6d
     style E fill:#1a3d6d,color:#fff
