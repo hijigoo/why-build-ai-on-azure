@@ -301,22 +301,23 @@ flowchart TB
 
 ---
 
-## 데이터의 여정 (Bottom → Top)
+## 데이터의 여정 — 원천 데이터에서 전직원의 업무까지
 
-원본 데이터가 어떻게 실행 가능한 에이전트가 되는가:
+흩어진 원본 데이터가 어떻게 **전직원이 바로 쓰는 에이전트**가 되는지, 6단계로 읽어 보세요(위 → 아래 순서):
 
 ```mermaid
 flowchart TD
-    A["원본 데이터<br/>Snowflake·SAP<br/>Salesforce·오브젝트 스토리지"]
-      -->|"이기종 데이터를<br/>하나의 레이크로 연결"| B["OneLake<br/>통합 데이터 레이크"]
-    B -->|"데이터 → 비즈니스<br/>의미 구조로 변환"| C["Ontology<br/>Fabric/Work/Foundry IQ"]
-    C -->|"Agent Grounding"| D["Agent Factory<br/>Copilot Studio·Microsoft Foundry"]
-    D -->|"Agent 업무 적용"| E["Agents<br/>업무용 에이전트"]
-    E -->|"Agent 배포 & 협업"| F["AI Experience<br/>M365 Copilot + Teams"]
-    F --> G["현업 직원 👥"]
+    A["① 흩어진 원천 데이터<br/>여러 시스템에 분산되어 있음<br/>Snowflake·SAP·Salesforce·스토리지"]
+      -->|"한곳으로 연결"| B["② 하나로 모은 데이터<br/>통합 데이터 레이크<br/>OneLake"]
+    B -->|"회사 언어로 의미 부여"| C["③ 회사 맥락이 입혀진 데이터<br/>매출·고객을 우리 회사 기준으로 해석<br/>Azure AI Search·Fabric IQ"]
+    C -->|"그 지식으로 에이전트 제작"| D["④ 업무를 아는 에이전트 제작<br/>현업은 노코드, 개발자는 프로코드<br/>Copilot Studio·Microsoft Foundry"]
+    D -->|"실제 업무에 투입"| E["⑤ 일하는 에이전트<br/>실제 업무를 대신 처리"]
+    E -->|"직원의 일터로 전달"| F["⑥ 전직원의 경험<br/>Teams·M365에서 바로 사용"]
+    style A fill:#dbe7f6,color:#1a3d6d
+    style F fill:#1a3d6d,color:#fff
 ```
 
-각 화살표의 **변환(transition)** 이 이 플랫폼의 핵심 가치입니다.
+단계를 내려갈수록 데이터가 점점 더 쓸모 있어지고, 마지막에는 전직원이 바로 쓰는 에이전트가 됩니다. **이 전환 과정 전체를 하나의 플랫폼에서 제공**하는 것이 핵심 가치입니다.
 
 ---
 
