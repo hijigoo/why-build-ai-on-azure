@@ -604,20 +604,32 @@ flowchart TB
 ## 하나로 연결되는 이유 — 통합의 가치
 
 ```mermaid
-flowchart LR
-    F["Microsoft Fabric<br/>데이터"] --> AF["Microsoft Foundry<br/>모델·에이전트"]
-    AF --> CS["Copilot Studio<br/>현업 에이전트"]
-    AF --> M365["Microsoft 365 Copilot<br/>경험"]
-    GH["GitHub"] -.개발.-> AF
-    ENT["Entra · Purview · Defender"] -.거버넌스.-> F & AF & CS & M365
+flowchart TB
+    F["데이터 기반<br/>Microsoft Fabric · OneLake"]
+    GH["GitHub<br/>프로코드 개발"]
+    CS["Copilot Studio<br/>현업·노코드 에이전트"]
+    AF["Microsoft Foundry<br/>개발자·프로코드 에이전트"]
+    UX["사용자 접점<br/>Microsoft 365 Copilot · Teams"]
+    ENT["Entra · Purview · Defender<br/>하나의 신원·거버넌스·보안"]
+
+    F --> CS
+    F --> AF
+    GH --> AF
+    CS <-->|"서로 호출 · 멀티에이전트"| AF
+    CS -->|"기본 배포"| UX
+    AF -->|"함께 배포"| UX
+    ENT -.전 계층 통제.-> F & CS & AF & UX
+
+    style UX fill:#1a3d6d,color:#fff
     style ENT fill:#1a3d6d,color:#fff
 ```
 
-- 각 서비스가 **개별 제품이 아니라 하나의 플랫폼**으로 네이티브 연동
-- **하나의 신원(Entra), 하나의 데이터 거버넌스(Purview), 하나의 보안(Defender)** 로 전 계층 통제
-- 통합 부담과 운영 복잡도를 **줄임** → 고객은 **비즈니스에 더 집중**
+- **두 제작 도구가 서로 연동** — Copilot Studio(현업·노코드)와 Microsoft Foundry(개발자·프로코드)가 **서로 에이전트를 호출**하며 멀티에이전트로 확장됩니다.
+- **같은 접점으로 배포** — Copilot Studio는 원래 **Microsoft 365 Copilot·Teams**로 바로 배포됩니다. 여기에 Microsoft Foundry 에이전트도 **같은 접점으로 배포**할 수 있어, 직원은 늘 쓰던 자리에서 두 종류의 에이전트를 함께 사용합니다.
+- **하나의 신원·거버넌스·보안** — Entra·Purview·Defender로 데이터부터 접점까지 전 계층을 한 번에 통제합니다.
+- 통합 부담과 운영 복잡도를 **줄여** 고객은 비즈니스에 더 집중할 수 있습니다.
 
-> 이것이 "Why Build AI on **Azure**" — 부품을 각자 사는 게 아니라, **한 신원·한 거버넌스·한 보안**으로 통제되는 기반 위에서 만든다는 뜻입니다.
+> 이것이 Why Build AI on **Azure** — 부품을 각자 사는 게 아니라, 한 신원·한 거버넌스·한 보안으로 통제되는 기반 위에서, 두 제작 도구가 서로 연동되고 같은 접점으로 배포된다는 뜻입니다.
 
 ---
 
