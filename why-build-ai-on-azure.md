@@ -157,7 +157,7 @@ flowchart LR
     D["데이터<br/>Fabric·OneLake"] --> M["의미·모델<br/>Foundry·AI Search"]
     M --> A["에이전트<br/>Copilot Studio·Foundry"]
     A --> E["경험<br/>M365 Copilot·Teams"]
-    style D fill:#dbe7f6
+    style D fill:#dbe7f6,color:#1a3d6d
     style E fill:#1a3d6d,color:#fff
 ```
 
@@ -656,7 +656,7 @@ flowchart LR
     S1["1단계<br/>데이터 통합<br/>OneLake"] --> S2["2단계<br/>의미 계층<br/>Ontology(IQ)"]
     S2 --> S3["3단계<br/>에이전트 제작<br/>Copilot Studio/Foundry"]
     S3 --> S4["4단계<br/>확산 & 거버넌스<br/>Agent 365·Purview"]
-    style S1 fill:#dbe7f6
+    style S1 fill:#dbe7f6,color:#1a3d6d
     style S4 fill:#1a3d6d,color:#fff
 ```
 
@@ -690,7 +690,7 @@ flowchart LR
 flowchart LR
     N1["1) Envisioning<br/>Workshop (반나절)"] --> N2["2) Value Discovery<br/>고가치 유스케이스 발굴"]
     N2 --> N3["3) Pilot / PoC<br/>4~6주 파일럿"]
-    style N1 fill:#dbe7f6
+    style N1 fill:#dbe7f6,color:#1a3d6d
     style N3 fill:#1a3d6d,color:#fff
 ```
 
@@ -728,7 +728,7 @@ flowchart LR
 flowchart LR
     D["데이터"] --> A["에이전트"] --> W["업무 성과"]
     T["신뢰 · Responsible AI"] -.전 계층.-> D & A & W
-    style D fill:#dbe7f6
+    style D fill:#dbe7f6,color:#1a3d6d
     style A fill:#7aa5d6,color:#fff
     style W fill:#1a3d6d,color:#fff
     style T fill:#1a3d6d,color:#fff
