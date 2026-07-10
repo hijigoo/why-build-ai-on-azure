@@ -14,7 +14,7 @@ const C = {
 };
 const FONT = "Apple SD Gothic Neo";
 const FONTL = "Apple SD Gothic Neo";
-const VERSION = process.env.DECK_VERSION || "v8";
+const VERSION = process.env.DECK_VERSION || "v9";
 let CUR_PART = 1; // 1..4, drives the top progress indicator
 
 const pptx = new pptxgen();
@@ -770,12 +770,12 @@ function part4() {
     [{text:"#"},{text:"업무 시나리오"},{text:"핵심 Azure 서비스"}],
     [{text:"1",align:"center"},"보고서·리서치 자동 작성","Foundry · AI Search · OneLake"],
     [{text:"2",align:"center"},"내부 지식 Q&A 어시스턴트","Copilot Studio · AI Search"],
-    [{text:"3",align:"center"},"업무 프로세스 자동화","Copilot Studio · Work IQ [Preview]"],
+    [{text:"3",align:"center"},"업무 프로세스 자동화","Copilot Studio · Microsoft 365"],
     [{text:"4",align:"center"},"전사 에이전트 관리·운영","Agent 365 · Entra · Purview"],
-    [{text:"5",align:"center"},"데이터 분석·인사이트","Fabric · Fabric IQ [Preview]"],
+    [{text:"5",align:"center"},"데이터 분석·인사이트","Microsoft Fabric · Foundry"],
     [{text:"6",align:"center"},"개발 가속·현대화","GitHub Copilot · Foundry"],
   ], 0.6, 2.0, 12.15, [1.0, 6.15, 5.0], { fs: 11.5, rowH: 0.58 });
-  s.addText("대표 시나리오 #1은 이미 GA 서비스만으로 구현 가능 — 여기서 시작해 패턴을 확장합니다.", { x: 0.6, y: 6.5, w: 12.15, h: 0.4, align: "center", fontFace: FONT, fontSize: 12.5, bold: true, color: C.NAVY });
+  s.addText("표의 핵심 서비스는 대부분 GA — 특히 #1 보고서·리서치는 지금 바로 시작해 패턴을 확장합니다.", { x: 0.6, y: 6.5, w: 12.15, h: 0.4, align: "center", fontFace: FONT, fontSize: 12.5, bold: true, color: C.NAVY });
   footer(s, 29);
 }
 
@@ -933,7 +933,7 @@ const SCRIPT = [
   // 28) Personas
   `[약 1.5분]\n이 플랫폼이 역할별로 무엇을 주는지 보겠습니다. 경영진께는 KPI·리스크를 한눈에 보는 성과 가시성을, 현업 담당자께는 Copilot Studio로 직접 만드는 반복업무 자동화를 드립니다. 개발자는 GitHub Copilot·Foundry로 개발 생산성을 얻고, IT·보안 조직은 Entra·Purview로 '통제 가능한 확산'을 얻습니다.\n여기서 중요한 균형이 있습니다 — 현업의 자율성과 IT의 통제가 충돌하지 않고, 한 플랫폼 안에서 양립한다는 점입니다.\n그럼 실제 어떤 업무부터 시작할 수 있는지 시나리오로 보겠습니다.`,
   // 29) 시나리오 6개
-  `[약 1.3분]\n바로 시작할 수 있는 대표 업무 여섯 개입니다. 보고서·리서치 자동 작성, 내부 지식 Q&A 어시스턴트, 업무 프로세스 자동화, 전사 에이전트 관리·운영, 데이터 분석·인사이트, 그리고 개발 가속입니다. 표시된 것처럼 3번·5번은 Preview인 Work IQ·Fabric IQ가 관련되지만, 첫 번째 시나리오인 보고서·리서치 자동 작성은 이미 GA 서비스만으로 구현이 가능합니다. 그래서 저희는 보통 여기서 시작해 패턴을 확장하시길 권합니다.\n그럼 그 시작을 어떻게 단계적으로 밟는지, 로드맵을 보겠습니다.`,
+  `[약 1.3분]\n바로 시작할 수 있는 대표 업무 여섯 개입니다. 보고서·리서치 자동 작성, 내부 지식 Q&A 어시스턴트, 업무 프로세스 자동화, 전사 에이전트 관리·운영, 데이터 분석·인사이트, 그리고 개발 가속입니다. 각 시나리오를 대표 서비스 중심으로 매핑했는데, Foundry·AI Search·Copilot Studio·Fabric·GitHub Copilot 같은 주요 서비스로 대부분 지금 바로 구현할 수 있습니다. 특히 첫 번째 보고서·리서치 자동 작성은 GA 서비스만으로 시작 가능하니, 저희는 보통 여기서 출발해 패턴을 확장하시길 권합니다.\n그럼 그 시작을 어떻게 단계적으로 밟는지, 로드맵을 보겠습니다.`,
   // 30) 로드맵 4단계
   `[약 1.8분]\n도입은 네 단계로, 작게 시작해 안전하게 확장합니다. 1단계 Envision, 0~2주 — ROI가 높은 한 업무를 정하고 데이터·보안 요건을 정리합니다. 2단계 Pilot, 2~6주 — GA 서비스만으로 대표 시나리오 하나를 실제로 구현·검증합니다. 3단계 Scale, 6주 이후 — 검증된 패턴을 인접 업무로 넓힙니다. 4단계 Govern은 상시로, Entra·Purview·Defender로 통제·관측을 정착시킵니다.\n아래 Quick Win 박스가 실무적으로 중요합니다 — 워크숍에 딱 세 가지만 준비해 오시면 됩니다. 데이터 소스 2개, 보안 요구사항, 그리고 ROI 후보 업무 1개. 이것만 있으면 바로 파일럿 설계를 시작할 수 있습니다.\n이제 오늘 내용을 일곱 가지로 압축하겠습니다.`,
   // 31) Key Takeaways
