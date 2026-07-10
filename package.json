@@ -1,0 +1,28 @@
+{
+  "name": "wba",
+  "version": "1.0.0",
+  "description": "엔터프라이즈 의사결정자(C-Level·사업부 임원·팀장)를 위한 **Azure AI 기술 소개 자료**입니다. Microsoft Solution Engineer 관점에서 \"왜 지금, 왜 Azure에서 AI를 구축하는가\"를 신뢰 → 가치 → 플랫폼 → 실현의 흐름으로 정리했습니다.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hijigoo/why-build-ai-on-azure.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/hijigoo/why-build-ai-on-azure/issues"
+  },
+  "homepage": "https://github.com/hijigoo/why-build-ai-on-azure#readme",
+  "dependencies": {
+    "pptxgenjs": "^4.0.1",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "react-icons": "^5.7.0",
+    "sharp": "^0.35.3"
+  }
+}

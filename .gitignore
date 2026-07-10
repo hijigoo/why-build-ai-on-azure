@@ -3,3 +3,9 @@
 
 # OS
 .DS_Store
+
+# PPTX 빌드 산출물 (재생성 가능)
+node_modules/
+package-lock.json
+slide-*.jpg
+*.pdf
