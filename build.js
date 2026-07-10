@@ -14,6 +14,8 @@ const C = {
 };
 const FONT = "Apple SD Gothic Neo";
 const FONTL = "Apple SD Gothic Neo";
+const VERSION = process.env.DECK_VERSION || "v2";
+let CUR_PART = 1; // 1..4, drives the top progress indicator
 
 const pptx = new pptxgen();
 pptx.defineLayout({ name: "W", width: 13.333, height: 7.5 });
@@ -71,7 +73,18 @@ function footer(slide, n, dark) {
 
 function contentBG(slide) {
   slide.background = { color: C.BG };
-  slide.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: PW, h: 0.14, fill: { color: C.NAVY } });
+  // segmented "you are here" progress indicator (4 parts)
+  const gap = 0.05, segW = (PW - 3 * gap) / 4;
+  for (let i = 0; i < 4; i++) {
+    const on = (i + 1) === CUR_PART;
+    slide.addShape(pptx.ShapeType.rect, { x: i * (segW + gap), y: 0, w: segW, h: 0.11, fill: { color: on ? C.ACCENT : C.ICE } });
+  }
+}
+
+// horizontal arrow (line + triangle head) — replaces plain "→" glyph
+function arrowR(slide, x, y, len, opts) {
+  opts = opts || {};
+  slide.addShape(pptx.ShapeType.line, { x, y, w: len, h: 0, line: { color: opts.color || C.MID, width: opts.w || 2.5, endArrowType: "triangle" } });
 }
 
 function header(slide, kicker, title, opts) {
@@ -101,11 +114,11 @@ function iconCircle(slide, x, y, d, icon, opts) {
 }
 
 function pill(slide, x, y, txt, kind) {
-  const map = { ga: [C.GREEN, "GA"], prev: [C.GOLD, "Preview"], info: [C.MID, ""] };
   const col = kind === "ga" ? C.GREEN : kind === "prev" ? C.GOLD : C.MID;
-  const w = Math.max(0.7, 0.16 + txt.length * 0.085);
-  slide.addShape(pptx.ShapeType.roundRect, { x, y, w, h: 0.28, rectRadius: 0.14, fill: { color: col } });
-  slide.addText(txt, { x, y, w, h: 0.28, fontFace: FONT, fontSize: 9, bold: true, color: C.WHITE, align: "center", valign: "middle" });
+  const txtCol = kind === "prev" ? C.DARK : C.WHITE;
+  const w = Math.max(0.72, 0.2 + txt.length * 0.092);
+  slide.addShape(pptx.ShapeType.roundRect, { x, y, w, h: 0.3, rectRadius: 0.15, fill: { color: col } });
+  slide.addText(txt, { x, y, w, h: 0.3, fontFace: FONT, fontSize: 10, bold: true, color: txtCol, align: "center", valign: "middle" });
   return w;
 }
 
@@ -145,6 +158,7 @@ function divider(part, title, sub, icon) {
 }
 
 function main() {
+  CUR_PART = 0;
   // ===== Slide 1: Title =====
   let s = pptx.addSlide();
   s.background = { color: C.DARK };
@@ -188,6 +202,7 @@ function slideIconRight(slide, x, y, d, icon) {
 
 // ===== PART 1 =====
 function part1() {
+  CUR_PART = 1;
   divider("Part 1", "왜 지금, 왜 Azure인가", "에이전트 시대의 전환과 신뢰의 근거", IC.compass_w);
 
   // Slide 4: AI 3세대 진화
@@ -206,7 +221,7 @@ function part1() {
     s.addText(g[0], { x: gx, y: 3.55, w: 3.6, h: 0.35, align: "center", fontFace: FONT, fontSize: 12, bold: true, color: isLast ? C.SKY : C.MID });
     s.addText(g[1], { x: gx, y: 3.9, w: 3.6, h: 0.5, align: "center", fontFace: FONTL, fontSize: 21, bold: true, color: isLast ? C.WHITE : C.DARK });
     s.addText(g[2], { x: gx, y: 4.45, w: 3.6, h: 0.7, align: "center", fontFace: FONT, fontSize: 12, color: isLast ? C.ICE : C.MUTED, lineSpacingMultiple: 1.1 });
-    if (i < 2) s.addText("→", { x: gx + 3.5, y: 3.0, w: 0.5, h: 0.6, align: "center", fontFace: FONTL, fontSize: 28, bold: true, color: C.SKY });
+    if (i < 2) arrowR(s, gx + 3.62, 3.55, 0.32, { color: C.MID });
     gx += 4.0;
   });
   s.addText("지금 AI는 '무엇을 알려주는' 도구에서 '무엇을 대신 해주는' 실행 주체로 전환되고 있습니다.", { x: 0.75, y: 5.5, w: 11.8, h: 0.5, fontFace: FONT, fontSize: 14, bold: true, color: C.NAVY, align: "center" });
@@ -249,26 +264,28 @@ function slabel(slide, x, y, txt, icon) {
 }
 
 function part1b() {
+  CUR_PART = 1;
   // Slide 6: 5가지 과제
   let s = pptx.addSlide(); contentBG(s);
   header(s, "2. 고객이 겪는 과제", "AI 도입을 막는 5개의 벽");
   const walls = [
-    ["데이터의 벽", "흩어진 데이터, 사일로. AI가 쓸 준비가 안 됨", IC.db_w],
-    ["신뢰의 벽", "환각·보안·규제. '믿고 맡길 수 있나'", IC.shield_w],
+    ["데이터의 벽", "흩어진 데이터·사일로 — AI가 쓸 준비가 안 됨", IC.db_w],
+    ["신뢰의 벽", "환각·보안·규제 — '믿고 맡길 수 있나'", IC.shield_w],
     ["통합의 벽", "기존 시스템·업무와 어떻게 연결하나", IC.plug_w],
     ["인재·역량의 벽", "만들 사람도, 운영할 체계도 부족", IC.users_w],
     ["확장의 벽", "PoC는 됐지만 전사 확장이 안 됨", IC.stream_w],
   ];
-  let wx = 0.55;
+  const wx0 = 0.9, ww = 11.55, chh = 0.8, cg = 0.09, wy0 = 1.9;
   walls.forEach((w, i) => {
-    const wcard = 2.42, gap = 0.12;
-    card(s, wx, 2.05, wcard, 3.5, { fill: C.NAVY });
-    iconCircle(s, wx + (wcard-1.0)/2, 2.4, 1.0, w[2], { fill: C.MID });
-    s.addText(w[0], { x: wx, y: 3.55, w: wcard, h: 0.7, align: "center", fontFace: FONTL, fontSize: 16, bold: true, color: C.WHITE });
-    s.addText(w[1], { x: wx + 0.12, y: 4.25, w: wcard - 0.24, h: 1.1, align: "center", fontFace: FONT, fontSize: 11, color: C.ICE, lineSpacingMultiple: 1.15 });
-    wx += wcard + gap;
+    const cy = wy0 + i * (chh + cg);
+    const shade = i % 2 ? C.NAVY : C.MID;
+    s.addShape(pptx.ShapeType.rect, { x: wx0, y: cy, w: ww, h: chh, fill: { color: shade }, shadow: shadow({ opacity: 0.1, blur: 4, offset: 1 }) });
+    s.addImage({ data: w[2], x: wx0 + 0.32, y: cy + (chh - 0.42) / 2, w: 0.42, h: 0.42 });
+    s.addText(w[0], { x: wx0 + 1.05, y: cy, w: 3.3, h: chh, fontFace: FONTL, fontSize: 15, bold: true, color: C.WHITE, valign: "middle" });
+    s.addShape(pptx.ShapeType.rect, { x: wx0 + 4.35, y: cy + 0.18, w: 0.02, h: chh - 0.36, fill: { color: C.SKY } });
+    s.addText(w[1], { x: wx0 + 4.6, y: cy, w: ww - 4.9, h: chh, fontFace: FONT, fontSize: 12, color: C.ICE, valign: "middle" });
   });
-  s.addText("이 다섯 개의 벽을 한 번에, 하나의 스택에서 넘을 수 있는가 — 그것이 플랫폼 선택의 핵심입니다.", { x: 0.55, y: 5.85, w: 12.2, h: 0.5, align: "center", fontFace: FONT, fontSize: 14, bold: true, color: C.NAVY });
+  s.addText("이 다섯 개의 벽을 한 번에, 하나의 스택에서 넘을 수 있는가 — 그것이 플랫폼 선택의 핵심입니다.", { x: 0.9, y: 6.45, w: 11.55, h: 0.5, align: "center", fontFace: FONT, fontSize: 13.5, bold: true, color: C.NAVY });
   footer(s, 6);
 
   // Slide 7: 4대 신뢰 근거
@@ -289,7 +306,7 @@ function part1b() {
     card(s, px, py, cw, ch, { fill: dk ? C.NAVY : C.WHITE });
     const key = ["brain","balance","layers","code"][i];
     iconCircle(s, px + 0.35, py + 0.4, 1.0, dk ? IC[key+"_w"] : IC[key+"_n"], { fill: dk ? C.MID : C.ICE });
-    s.addText(String(i+1), { x: px + cw - 0.9, y: py + 0.25, w: 0.6, h: 0.6, align: "center", fontFace: FONTL, fontSize: 30, bold: true, color: dk ? C.MID : C.ICE });
+    s.addText(String(i+1), { x: px + cw - 0.9, y: py + 0.25, w: 0.6, h: 0.6, align: "center", fontFace: FONTL, fontSize: 30, bold: true, color: C.SKY });
     s.addText(t[0], { x: px + 1.55, y: py + 0.42, w: cw - 2.2, h: 0.5, fontFace: FONTL, fontSize: 18, bold: true, color: dk ? C.WHITE : C.DARK });
     s.addText(t[1], { x: px + 1.55, y: py + 0.95, w: cw - 1.85, h: 1.3, fontFace: FONT, fontSize: 12, color: dk ? C.ICE : C.MUTED, lineSpacingMultiple: 1.18, valign: "top" });
   });
@@ -297,6 +314,7 @@ function part1b() {
 }
 
 function part1c() {
+  CUR_PART = 1;
   // Slide 8: Responsible AI 표
   let s = pptx.addSlide(); contentBG(s);
   header(s, "3. 왜 Azure인가 · Responsible AI", "신뢰는 기능이 아니라 설계 원칙입니다");
@@ -365,6 +383,7 @@ function part1c() {
 
 // ===== PART 2 =====
 function part2() {
+  CUR_PART = 2;
   divider("Part 2", "AX 전략과 비즈니스 가치", "AI Transformation을 성과로 연결하는 법", IC.chart_w);
 
   // Slide 12: AX 3대 전략
@@ -405,6 +424,7 @@ function part2() {
 
 // ===== PART 3 =====
 function part3a() {
+  CUR_PART = 3;
   divider("Part 3", "Enterprise AI Platform", "6개 완결 서비스 · 6계층 아키텍처 (근거)", IC.layers_w);
 
   // Slide 15: 6개 서비스 미리보기
@@ -434,6 +454,7 @@ function part3a() {
 }
 
 function part3b() {
+  CUR_PART = 3;
   // Slide 16: ① Fabric · OneLake
   let s = pptx.addSlide(); contentBG(s);
   header(s, "6-① 데이터 기반", "Microsoft Fabric · OneLake");
@@ -448,30 +469,33 @@ function part3b() {
   s.addText("데이터를 옮기지 않고도 AI가 쓸 수 있게 — 이것이 시작점입니다.", { x: 1.4, y: 5.9, w: 11, h: 0.4, fontFace: FONT, fontSize: 12.5, bold: true, color: C.NAVY, valign: "middle" });
   footer(s, 16);
 
-  // Slide 17: ② 3개 IQ + AI Search
+  // Slide 17: ② 3개 IQ + AI Search  (convergence "equation")
   s = pptx.addSlide(); contentBG(s);
-  header(s, "6-② 지능 레이어", "3개의 IQ + Azure AI Search");
-  iconCircle(s, 10.9, 0.5, 1.4, IC.brain_n, { fill: C.ICE });
+  header(s, "6-② 지능 레이어", "3개의 IQ가 합쳐져 '비즈니스를 아는 지능'이 됩니다");
   const iqs = [
-    ["Fabric IQ", "데이터의 의미", "테이블·컬럼이 '무엇을 뜻하는지' 이해 (온톨로지)", "prev"],
-    ["Work IQ", "일의 맥락", "M365 속 업무·협업의 흐름을 이해", "prev"],
-    ["Foundry IQ", "에이전트 지식", "에이전트가 참조할 지식을 관리", "prev"],
+    ["Fabric IQ", "데이터의 의미", "테이블·컬럼이 '무엇을 뜻하는지' 이해"],
+    ["Work IQ", "일의 맥락", "M365 속 업무·협업의 흐름을 이해"],
+    ["Foundry IQ", "에이전트 지식", "에이전트가 참조할 지식을 관리"],
   ];
-  let ix = 0.6;
-  iqs.forEach(q => {
-    const cw = 3.62;
-    card(s, ix, 2.05, cw, 2.35, { fill: C.NAVY });
-    s.addText(q[0], { x: ix, y: 2.3, w: cw, h: 0.45, align: "center", fontFace: FONTL, fontSize: 19, bold: true, color: C.WHITE });
-    s.addText(q[1], { x: ix, y: 2.78, w: cw, h: 0.35, align: "center", fontFace: FONT, fontSize: 12, bold: true, color: C.SKY });
-    s.addText(q[2], { x: ix + 0.2, y: 3.18, w: cw - 0.4, h: 0.8, align: "center", fontFace: FONT, fontSize: 11, color: C.ICE, lineSpacingMultiple: 1.15 });
-    pill(s, ix + (cw-1.35)/2, 4.02, "Preview", "prev");
-    ix += 3.78;
+  const iqW = 3.7, iqXs = [0.7, 4.75, 8.8], iqY = 1.85, iqH = 2.05;
+  iqs.forEach((q, i) => {
+    const ix = iqXs[i];
+    card(s, ix, iqY, iqW, iqH, { fill: C.NAVY });
+    s.addText(q[0], { x: ix, y: iqY + 0.28, w: iqW, h: 0.45, align: "center", fontFace: FONTL, fontSize: 19, bold: true, color: C.WHITE });
+    s.addText(q[1], { x: ix, y: iqY + 0.74, w: iqW, h: 0.32, align: "center", fontFace: FONT, fontSize: 12, bold: true, color: C.SKY });
+    s.addText(q[2], { x: ix + 0.25, y: iqY + 1.08, w: iqW - 0.5, h: 0.6, align: "center", fontFace: FONT, fontSize: 11, color: C.ICE, lineSpacingMultiple: 1.12 });
+    pill(s, ix + (iqW - 1.35) / 2, iqY + 1.62, "Preview", "prev");
+    if (i < 2) s.addText("+", { x: ix + iqW - 0.03, y: iqY + 0.55, w: 0.38, h: 0.9, align: "center", valign: "middle", fontFace: FONTL, fontSize: 30, bold: true, color: C.MID });
   });
-  card(s, 0.6, 4.7, 12.15, 1.15, { fill: C.ICE2 });
-  s.addImage({ data: IC.search_n, x: 0.85, y: 4.98, w: 0.6, h: 0.6 });
-  s.addText([{ text: "Azure AI Search  ", options: { bold: true, color: C.NAVY, fontSize: 14 } }, { text: "GA", options: { color: C.GREEN, fontSize: 11, bold: true } }], { x: 1.65, y: 4.85, w: 10.8, h: 0.4, fontFace: FONTL });
-  s.addText("세 IQ를 뒷받침하는 검색·검색증강(RAG)의 엔진 — 에이전트가 정확한 근거를 찾도록 합니다.", { x: 1.65, y: 5.2, w: 10.8, h: 0.5, fontFace: FONT, fontSize: 11.5, color: C.MUTED });
-  s.addText("세 IQ가 합쳐질 때 '데이터 + 업무 + 지식'을 아는, 비즈니스를 이해하는 지능이 됩니다.", { x: 0.6, y: 6.05, w: 12.15, h: 0.4, align: "center", fontFace: FONT, fontSize: 12.5, bold: true, color: C.NAVY });
+  // convergence banner
+  card(s, 0.7, 4.32, 11.8, 0.98, { fill: C.ICE2, line: C.SKY });
+  iconCircle(s, 0.95, 4.55, 0.55, IC.brain_n, { fill: C.WHITE });
+  s.addText([{ text: "= 비즈니스를 이해하는 지능  ", options: { bold: true, color: C.NAVY, fontSize: 15 } }, { text: "— '데이터 + 업무 + 지식'을 모두 아는 하나의 지능", options: { color: C.TEXT, fontSize: 12.5 } }], { x: 1.7, y: 4.32, w: 10.6, h: 0.98, fontFace: FONTL, valign: "middle" });
+  // AI Search engine bar
+  card(s, 0.7, 5.5, 11.8, 0.98, { fill: C.NAVY });
+  iconCircle(s, 0.95, 5.73, 0.55, IC.search_w, { fill: C.MID });
+  s.addText([{ text: "Azure AI Search ", options: { bold: true, color: C.WHITE, fontSize: 14 } }, { text: "GA", options: { color: C.WHITE, fontSize: 10.5, bold: true } }], { x: 1.7, y: 5.62, w: 10.6, h: 0.35, fontFace: FONTL });
+  s.addText("세 IQ를 뒷받침하는 검색·검색증강(RAG) 엔진 — 에이전트가 정확한 근거를 찾도록 합니다.", { x: 1.7, y: 5.98, w: 10.6, h: 0.4, fontFace: FONT, fontSize: 11.5, color: C.ICE });
   footer(s, 17);
 }
 
@@ -488,6 +512,7 @@ function deepBody(s, lead, rows) {
 }
 
 function part3c() {
+  CUR_PART = 3;
   // Slide 18: ③ Microsoft Foundry
   let s = pptx.addSlide(); contentBG(s);
   header(s, "6-③ 에이전트 개발·운영", "Microsoft Foundry (구 Azure AI Foundry)");
@@ -537,6 +562,7 @@ function part3c() {
 }
 
 function part3d() {
+  CUR_PART = 3;
   // Slide 20: 전체 아키텍처 (네이티브 계층도)
   let s = pptx.addSlide(); contentBG(s);
   header(s, "7. Enterprise AI Platform", "한눈에 보는 6계층 아키텍처");
@@ -588,12 +614,13 @@ function part3d() {
     numBadge(s, px + cw - 0.72, py + 0.28, String(i+1), { d: 0.44, fs: 14, fill: C.NAVY });
     s.addText(st[0], { x: px + 1.3, y: py + 0.35, w: cw - 1.9, h: 0.45, fontFace: FONTL, fontSize: 16, bold: true, color: C.DARK });
     s.addText(st[1], { x: px + 0.3, y: py + 1.2, w: cw - 0.55, h: 0.55, fontFace: FONT, fontSize: 11, color: C.MUTED, lineSpacingMultiple: 1.1 });
-    if (col < 2) s.addText("→", { x: px + cw - 0.1, y: py + 0.5, w: 0.4, h: 0.6, align: "center", fontFace: FONTL, fontSize: 22, bold: true, color: C.SKY });
+    if (col < 2) arrowR(s, px + cw + 0.02, py + 0.72, 0.18, { color: C.MID });
   });
   footer(s, 21);
 }
 
 function part3e() {
+  CUR_PART = 3;
   // Slide 22: 계층별 요약
   let s = pptx.addSlide(); contentBG(s);
   header(s, "8. 계층별 요약", "비즈니스 가치 → 이를 실현하는 Azure 서비스");
@@ -625,7 +652,7 @@ function part3e() {
     iconCircle(s, x + (cw-1.0)/2, 2.5, 1.0, f[2], { fill: C.ICE });
     s.addText(f[0], { x, y: 3.6, w: cw, h: 0.4, align: "center", fontFace: FONTL, fontSize: 17, bold: true, color: C.DARK });
     s.addText(f[1], { x: x + 0.15, y: 4.0, w: cw - 0.3, h: 0.5, align: "center", fontFace: FONT, fontSize: 11, color: C.MUTED, lineSpacingMultiple: 1.1 });
-    if (i < 3) s.addText("→", { x: x + cw - 0.05, y: 3.0, w: 0.5, h: 0.6, align: "center", fontFace: FONTL, fontSize: 24, bold: true, color: C.SKY });
+    if (i < 3) arrowR(s, x + cw + 0.03, 3.35, 0.24, { color: C.MID });
     x += 3.0;
   });
   card(s, 0.85, 5.0, 11.6, 1.35, { fill: C.ICE2 });
@@ -660,6 +687,7 @@ function part3e() {
 }
 
 function part3f() {
+  CUR_PART = 3;
   // Slide 25: 서비스 맵
   let s = pptx.addSlide(); contentBG(s);
   header(s, "11. Azure 서비스 맵", "계층 ↔ 서비스 총정리");
@@ -680,6 +708,7 @@ function part3f() {
 
 // ===== PART 4 =====
 function part4() {
+  CUR_PART = 4;
   divider("Part 4", "실현 — 다음 단계", "역할별 시나리오 · 도입 로드맵 · 핵심 요약", IC.rocket_w);
 
   // Slide 27: Personas
@@ -721,6 +750,7 @@ function part4() {
 }
 
 function part4b() {
+  CUR_PART = 4;
   // Slide 29: 로드맵 4단계
   let s = pptx.addSlide(); contentBG(s);
   header(s, "14. 도입 로드맵", "작게 시작해 안전하게 확장합니다");
@@ -730,21 +760,30 @@ function part4b() {
     ["3", "Scale", "6주~", "검증된 패턴을 인접 업무로 확장"],
     ["4", "Govern", "상시", "Entra·Purview·Defender로 통제·관측 정착"],
   ];
-  let x = 0.6;
+  const nodeX = [2.55, 5.4, 8.25, 11.1], spineY = 3.9, nd = 0.66;
+  // spine
+  s.addShape(pptx.ShapeType.roundRect, { x: nodeX[0], y: spineY - 0.035, w: nodeX[3] - nodeX[0], h: 0.07, rectRadius: 0.035, fill: { color: C.SKY } });
   road.forEach((r, i) => {
-    const cw = 2.95, ch = 3.0;
+    const nx = nodeX[i], above = i % 2 === 0;
+    const cw = 2.75, chh = 1.5;
+    const cy = above ? 2.0 : 4.3;
+    const cx = nx - cw / 2;
+    // connector
+    if (above) s.addShape(pptx.ShapeType.line, { x: nx, y: cy + chh, w: 0, h: spineY - nd / 2 - (cy + chh), line: { color: C.SKY, width: 1.5 } });
+    else s.addShape(pptx.ShapeType.line, { x: nx, y: spineY + nd / 2, w: 0, h: cy - (spineY + nd / 2), line: { color: C.SKY, width: 1.5 } });
+    // card
     const dk = i === 0;
-    card(s, x, 2.1, cw, ch, { fill: dk ? C.NAVY : C.WHITE });
-    numBadge(s, x + (cw-0.6)/2, 2.4, r[0], { d: 0.6, fs: 22, fill: dk ? C.MID : C.NAVY });
-    s.addText(r[1], { x, y: 3.15, w: cw, h: 0.45, align: "center", fontFace: FONTL, fontSize: 18, bold: true, color: dk ? C.WHITE : C.DARK });
-    pill(s, x + (cw-1.1)/2, 3.65, r[2], "info");
-    s.addText(r[3], { x: x + 0.2, y: 4.15, w: cw - 0.4, h: 0.9, align: "center", fontFace: FONT, fontSize: 11, color: dk ? C.ICE : C.MUTED, lineSpacingMultiple: 1.18 });
-    if (i < 3) s.addText("→", { x: x + cw - 0.02, y: 3.3, w: 0.5, h: 0.6, align: "center", fontFace: FONTL, fontSize: 22, bold: true, color: C.SKY });
-    x += 3.1;
+    card(s, cx, cy, cw, chh, { fill: dk ? C.NAVY : C.WHITE });
+    s.addText(r[1], { x: cx, y: cy + 0.16, w: cw, h: 0.42, align: "center", fontFace: FONTL, fontSize: 17, bold: true, color: dk ? C.WHITE : C.DARK });
+    pill(s, cx + (cw - 1.05) / 2, cy + 0.58, r[2], "info");
+    s.addText(r[3], { x: cx + 0.18, y: cy + 0.96, w: cw - 0.36, h: 0.48, align: "center", fontFace: FONT, fontSize: 10, color: dk ? C.ICE : C.MUTED, lineSpacingMultiple: 1.1 });
+    // node
+    s.addShape(pptx.ShapeType.ellipse, { x: nx - nd / 2, y: spineY - nd / 2, w: nd, h: nd, fill: { color: i === 0 ? C.ACCENT : C.NAVY }, line: { color: C.WHITE, width: 2 } });
+    s.addText(r[0], { x: nx - nd / 2, y: spineY - nd / 2, w: nd, h: nd, align: "center", valign: "middle", fontFace: FONTL, fontSize: 16, bold: true, color: i === 0 ? C.DARK : C.WHITE });
   });
-  card(s, 0.6, 5.45, 12.15, 0.95, { fill: C.ICE2 });
-  s.addImage({ data: IC.bulb_n, x: 0.9, y: 5.72, w: 0.5, h: 0.5 });
-  s.addText([{text:"Quick Win  ", options:{bold:true, color:C.NAVY, fontSize:13}},{text:"— 워크숍 준비물: 데이터 소스 2개 · 보안 요구사항 · ROI 후보 업무 1개", options:{color:C.TEXT, fontSize:12}}], { x: 1.55, y: 5.6, w: 11.0, h: 0.7, fontFace: FONT, valign: "middle", lineSpacingMultiple: 1.15 });
+  card(s, 0.6, 6.0, 12.15, 0.85, { fill: C.ICE2 });
+  s.addImage({ data: IC.bulb_n, x: 0.9, y: 6.2, w: 0.46, h: 0.46 });
+  s.addText([{text:"Quick Win  ", options:{bold:true, color:C.NAVY, fontSize:13}},{text:"— 워크숍 준비물: 데이터 소스 2개 · 보안 요구사항 · ROI 후보 업무 1개", options:{color:C.TEXT, fontSize:12}}], { x: 1.5, y: 6.0, w: 11.1, h: 0.85, fontFace: FONT, valign: "middle" });
   footer(s, 29);
 
   // Slide 30: Key Takeaways
@@ -796,7 +835,7 @@ function part4b() {
     s.addShape(pptx.ShapeType.roundRect, { x: qx, y: 4.35, w: cw, h: 2.1, rectRadius: 0.08, fill: { color: C.NAVY }, line: { color: C.MID, width: 1 } });
     numBadge(s, qx + 0.3, 4.65, String(i+1), { d: 0.5, fs: 17, fill: C.MID });
     s.addText(q[0], { x: qx + 0.3, y: 5.35, w: cw - 0.6, h: 0.5, fontFace: FONTL, fontSize: 16, bold: true, color: C.WHITE });
-    s.addText(q[1], { x: qx + 0.3, y: 5.85, w: cw - 0.6, h: 0.55, fontFace: FONT, fontSize: 11.5, color: C.SKY, lineSpacingMultiple: 1.15 });
+    s.addText(q[1], { x: qx + 0.3, y: 5.85, w: cw - 0.6, h: 0.55, fontFace: FONT, fontSize: 11.5, color: C.ICE, lineSpacingMultiple: 1.15 });
     qx += 3.95;
   });
   footer(s, 31, true);
@@ -809,7 +848,8 @@ async function run() {
   part2();
   part3a(); part3b(); part3c(); part3d(); part3e(); part3f();
   part4(); part4b();
-  await pptx.writeFile({ fileName: "why-build-ai-on-azure.pptx" });
-  console.log("WROTE why-build-ai-on-azure.pptx");
+  const OUT = VERSION + "-why-build-ai-on-azure.pptx";
+  await pptx.writeFile({ fileName: OUT });
+  console.log("WROTE " + OUT);
 }
 run().catch(e => { console.error(e); process.exit(1); });

@@ -1,8 +1,12 @@
-# 대용량 소스(원본 제안서) — GitHub 100MB 제한 초과, git 추적 제외
-*.pptx
-
 # OS
 .DS_Store
+
+# 모든 pptx 무시 (원본 제안서 + 작업 히스토리) — 단, 루트의 PROD-*.pptx만 추적/푸시
+*.pptx
+!PROD-*.pptx
+
+# 작업 히스토리 폴더 (푸시 제외)
+pptx/
 
 # PPTX 빌드 산출물 (재생성 가능)
 node_modules/
