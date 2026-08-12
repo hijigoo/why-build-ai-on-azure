@@ -1,0 +1,433 @@
+<!--
+  slide-patterns.html — 복사해서 쓰는 슬라이드 패턴 모음
+
+  각 <article class="chapter">를 통째로 복사해 내용만 바꾼다.
+  id / data-n / 페이지 번호는 build.py가 자동으로 다시 매기므로 그대로 둬도 된다.
+  data-part 값이 바뀌는 지점에서 목차 그룹이 나뉜다.
+-->
+
+
+<!-- ══════════════════════════════════════════════════════════
+     1. 표지 — 문서 첫 장
+     ══════════════════════════════════════════════════════════ -->
+<article class="chapter" data-part="시작하기">
+  <div class="ch-head">
+    <span class="ch-n">01</span>
+    <h2 class="ch-t">표지</h2>
+    <span class="ch-part">시작하기</span>
+    <a class="ch-link" href="#">#</a>
+  </div>
+  <div class="sheet">
+    <div class="slide">
+      <div class="cover-top">
+        <div class="cover-brand cv cv1"><span class="cover-sq"></span><span class="cover-kick">브랜드 라벨</span></div>
+        <h1 class="cover-h1 cv cv2">큰 제목<br>두 줄까지<span class="q">.</span></h1>
+        <div class="cover-rule"></div>
+        <p class="cover-sub cv cv3">부제 한 줄 또는 두 줄</p>
+      </div>
+      <div class="cover-bot">
+        <div class="cover-pillars">
+          <div class="cover-p cv cv4"><div class="n">01</div><div class="t">핵심 포인트<br>첫 번째</div><div class="d">보조 설명 한 줄</div></div>
+          <div class="cover-p cv cv5"><div class="n">02</div><div class="t">핵심 포인트<br>두 번째</div><div class="d">보조 설명 한 줄</div></div>
+          <div class="cover-p cv cv6"><div class="n">03</div><div class="t">핵심 포인트<br>세 번째</div><div class="d">보조 설명 한 줄</div></div>
+        </div>
+        <div class="cover-foot cv cv7"><span>작성 주체</span><span>v1.0</span></div>
+      </div>
+    </div>
+  </div>
+  <aside class="note" aria-label="슬라이드 설명">
+    <div class="note-head">슬라이드 설명</div>
+    <div class="note-body">
+      <p>이 문서가 무엇이고 어떤 순서로 읽으면 되는지 설명한다.</p>
+      <p class="q">조작 안내나 보조 메모는 이 스타일로.</p>
+    </div>
+  </aside>
+</article>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     2. 파트 표지 — 긴 문서에 리듬을 준다
+     ══════════════════════════════════════════════════════════ -->
+<article class="chapter" data-part="파트 이름">
+  <div class="ch-head">
+    <span class="ch-n">02</span>
+    <h2 class="ch-t">PART 1 — 파트 제목</h2>
+    <span class="ch-part">파트 이름</span>
+    <a class="ch-link" href="#">#</a>
+  </div>
+  <div class="sheet">
+    <div class="slide dark">
+      <div class="orb o1"></div><div class="orb o2"></div>
+      <div class="frame">
+        <div class="s-body">
+          <div class="part-no reveal r1">01</div>
+          <div class="part-t reveal r2">파트 제목</div>
+          <div class="part-d reveal r3">이 파트에서 다루는 내용을 한두 문장으로. <b>핵심</b>은 이렇게 강조한다.</div>
+          <div class="part-idx reveal r4">
+            <span>첫 번째 주제</span>
+            <span>두 번째 주제</span>
+            <span>세 번째 주제</span>
+          </div>
+        </div>
+        <div class="s-foot"><span>Part 1 · 라벨</span><span class="pg"></span></div>
+      </div>
+    </div>
+  </div>
+  <aside class="note" aria-label="슬라이드 설명">
+    <div class="note-head">슬라이드 설명</div>
+    <div class="note-body">
+      <p>이 파트를 왜 이 순서에 배치했는지, 무엇을 얻어가면 되는지.</p>
+    </div>
+  </aside>
+</article>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     3. 카드 그리드 — 3~6개 항목을 병렬로 (가장 많이 쓰는 패턴)
+     ══════════════════════════════════════════════════════════ -->
+<article class="chapter" data-part="파트 이름">
+  <div class="ch-head">
+    <span class="ch-n">03</span>
+    <h2 class="ch-t">카드로 보여주는 장</h2>
+    <span class="ch-part">파트 이름</span>
+    <a class="ch-link" href="#">#</a>
+  </div>
+  <div class="sheet">
+    <div class="slide">
+      <div class="frame">
+        <header class="s-head">
+          <div class="kicker reveal r1">섹션 라벨</div>
+          <h2 class="s-title reveal r2">핵심 메시지 <span class="hl">강조 부분</span></h2>
+          <p class="s-lead reveal r3">한 줄 보충 설명. 필요 없으면 이 줄을 지운다.</p>
+        </header>
+        <div class="s-body">
+          <div class="grid g3 stagger">
+            <div class="card">
+              <svg class="ic ic-badge" aria-hidden="true"><use href="#az-openai"></use></svg>
+              <div class="cn">라벨</div>
+              <h3 class="sm">카드 제목</h3>
+              <p>한두 문장 설명. <b>강조</b>는 이렇게.</p>
+              <div class="svc">관련 서비스 이름</div>
+            </div>
+            <div class="card tone-2">
+              <div class="cn">라벨</div><h3 class="sm">카드 제목</h3>
+              <p>설명</p><div class="svc">서비스</div>
+            </div>
+            <div class="card tone-3">
+              <div class="cn">라벨</div><h3 class="sm">카드 제목</h3>
+              <p>설명</p><div class="svc">서비스</div>
+            </div>
+          </div>
+          <div class="callout reveal r6" style="margin-top:44px">
+            <b>한 줄 결론</b> — 이 장에서 기억할 것.
+          </div>
+        </div>
+        <div class="s-foot"><span>Part 1 · 라벨</span><span class="pg"></span></div>
+      </div>
+    </div>
+  </div>
+  <aside class="note" aria-label="슬라이드 설명">
+    <div class="note-head">슬라이드 설명</div>
+    <div class="note-body">
+      <p>각 카드가 왜 그렇게 되는지 배경과 근거.</p>
+      <ul>
+        <li><em>첫 번째 카드</em> — 슬라이드에 못 담은 부연</li>
+        <li><em>두 번째 카드</em> — 실무에서 자주 나오는 오해</li>
+      </ul>
+      <dl class="gloss">
+        <dt>제품명</dt><dd>처음 보는 사람도 이해할 한 문장 정의.</dd>
+      </dl>
+    </div>
+  </aside>
+</article>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     4. 번호 리스트 — 순서가 있는 항목 (tight/xtight로 밀도 조절)
+     ══════════════════════════════════════════════════════════ -->
+<article class="chapter" data-part="파트 이름">
+  <div class="ch-head">
+    <span class="ch-n">04</span>
+    <h2 class="ch-t">리스트로 보여주는 장</h2>
+    <span class="ch-part">파트 이름</span>
+    <a class="ch-link" href="#">#</a>
+  </div>
+  <div class="sheet">
+    <div class="slide dark">
+      <div class="orb o1"></div>
+      <div class="frame">
+        <header class="s-head">
+          <div class="kicker reveal r1">섹션 라벨</div>
+          <h2 class="s-title reveal r2">기억할 <span class="hl">세 가지</span></h2>
+        </header>
+        <div class="s-body">
+          <!-- 항목 5~6개는 list tight, 7개 이상은 list xtight -->
+          <div class="list stagger">
+            <div class="li"><div class="b">01</div><div class="tx">
+              <div class="t">항목 제목</div>
+              <div class="d">한 줄 설명. <b>강조</b> 포함.</div></div></div>
+            <div class="li"><div class="b">02</div><div class="tx">
+              <div class="t">항목 제목</div>
+              <div class="d">한 줄 설명.</div></div></div>
+            <div class="li"><div class="b">03</div><div class="tx">
+              <div class="t">항목 제목</div>
+              <div class="d">한 줄 설명.</div></div></div>
+          </div>
+        </div>
+        <div class="s-foot"><span>Part 1 · 라벨</span><span class="pg"></span></div>
+      </div>
+    </div>
+  </div>
+  <aside class="note" aria-label="슬라이드 설명">
+    <div class="note-head">슬라이드 설명</div>
+    <div class="note-body"><p>각 항목의 근거.</p></div>
+  </aside>
+</article>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     5. 표 — 비교·매핑 (기본 5행, tbl sm으로 8행까지)
+     ══════════════════════════════════════════════════════════ -->
+<article class="chapter" data-part="파트 이름">
+  <div class="ch-head">
+    <span class="ch-n">05</span>
+    <h2 class="ch-t">표로 정리하는 장</h2>
+    <span class="ch-part">파트 이름</span>
+    <a class="ch-link" href="#">#</a>
+  </div>
+  <div class="sheet">
+    <div class="slide">
+      <div class="frame">
+        <header class="s-head">
+          <div class="kicker reveal r1">섹션 라벨</div>
+          <h2 class="s-title reveal r2">무엇이 <span class="hl">다른가</span></h2>
+        </header>
+        <div class="s-body">
+          <table class="tbl reveal r3">
+            <colgroup><col style="width:24%"><col style="width:38%"><col style="width:38%"></colgroup>
+            <thead><tr><th>구분</th><th>항목</th><th>설명</th></tr></thead>
+            <tbody>
+              <tr><td><strong>행 제목</strong></td><td>내용</td>
+                  <td>내용<span class="sub">부연은 이렇게</span></td></tr>
+              <tr><td><strong>행 제목</strong></td><td>내용</td><td>내용</td></tr>
+              <tr><td><strong>행 제목</strong></td><td>내용</td>
+                  <td>서비스명 <span class="badge ga">GA</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="s-foot"><span>Part 1 · 라벨</span><span class="pg"></span></div>
+      </div>
+    </div>
+  </div>
+  <aside class="note" aria-label="슬라이드 설명">
+    <div class="note-head">슬라이드 설명</div>
+    <div class="note-body">
+      <p><b>표에서 줄인 부연</b> — 셀에 다 못 넣은 조건이나 예외.</p>
+    </div>
+  </aside>
+</article>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     6. 가로 흐름 — 단계·프로세스 (노드 3~5개)
+     ══════════════════════════════════════════════════════════ -->
+<article class="chapter" data-part="파트 이름">
+  <div class="ch-head">
+    <span class="ch-n">06</span>
+    <h2 class="ch-t">흐름을 보여주는 장</h2>
+    <span class="ch-part">파트 이름</span>
+    <a class="ch-link" href="#">#</a>
+  </div>
+  <div class="sheet">
+    <div class="slide">
+      <div class="frame">
+        <header class="s-head">
+          <div class="kicker reveal r1">섹션 라벨</div>
+          <h2 class="s-title reveal r2">이런 <span class="hl">순서로</span> 진행됩니다</h2>
+        </header>
+        <div class="s-body">
+          <div class="flow stagger">
+            <div class="fnode"><div class="fn-n">STEP 1</div><div class="fn-t">단계 이름</div>
+              <div class="fn-d">보조 설명</div></div>
+            <div class="farrow"></div>
+            <div class="fnode acc"><div class="fn-n">STEP 2</div><div class="fn-t">단계 이름</div>
+              <div class="fn-d">보조 설명</div></div>
+            <div class="farrow"></div>
+            <div class="fnode end"><div class="fn-n">STEP 3</div><div class="fn-t">최종 결과</div>
+              <div class="fn-d">보조 설명</div></div>
+          </div>
+        </div>
+        <div class="s-foot"><span>Part 1 · 라벨</span><span class="pg"></span></div>
+      </div>
+    </div>
+  </div>
+  <aside class="note" aria-label="슬라이드 설명">
+    <div class="note-head">슬라이드 설명</div>
+    <div class="note-body"><p>각 단계에서 실제로 하는 일.</p></div>
+  </aside>
+</article>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     7. 세로 스택 — 계층 구조 (아래에서 위로 쌓임)
+     ══════════════════════════════════════════════════════════ -->
+<article class="chapter" data-part="파트 이름">
+  <div class="ch-head">
+    <span class="ch-n">07</span>
+    <h2 class="ch-t">계층을 보여주는 장</h2>
+    <span class="ch-part">파트 이름</span>
+    <a class="ch-link" href="#">#</a>
+  </div>
+  <div class="sheet">
+    <div class="slide dark">
+      <div class="orb o1"></div>
+      <div class="frame">
+        <header class="s-head">
+          <div class="kicker reveal r1">섹션 라벨</div>
+          <h2 class="s-title reveal r2">아래에서 <span class="hl">위로</span></h2>
+        </header>
+        <div class="s-body">
+          <div class="stack stagger">
+            <div class="layer"><span class="lx">03</span><span class="ln">상위 계층</span>
+              <span class="ld">역할 설명</span><span class="lsvc">관련 서비스</span></div>
+            <div class="vsep">▼ 전환 설명</div>
+            <div class="layer"><span class="lx">02</span><span class="ln">중간 계층</span>
+              <span class="ld">역할 설명</span><span class="lsvc">관련 서비스</span></div>
+            <div class="vsep">▼ 전환 설명</div>
+            <div class="layer hot"><span class="lx">01</span><span class="ln">기반 계층</span>
+              <span class="ld">역할 설명</span><span class="lsvc">관련 서비스</span></div>
+          </div>
+        </div>
+        <div class="s-foot"><span>Part 1 · 라벨</span><span class="pg"></span></div>
+      </div>
+    </div>
+  </div>
+  <aside class="note" aria-label="슬라이드 설명">
+    <div class="note-head">슬라이드 설명</div>
+    <div class="note-body"><p>계층별 역할과 어디서 끊기기 쉬운지.</p></div>
+  </aside>
+</article>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     8. 두 칼럼 — 좌우 대비
+     ══════════════════════════════════════════════════════════ -->
+<article class="chapter" data-part="파트 이름">
+  <div class="ch-head">
+    <span class="ch-n">08</span>
+    <h2 class="ch-t">두 칼럼으로 대비하는 장</h2>
+    <span class="ch-part">파트 이름</span>
+    <a class="ch-link" href="#">#</a>
+  </div>
+  <div class="sheet">
+    <div class="slide">
+      <div class="frame">
+        <header class="s-head">
+          <div class="kicker reveal r1">섹션 라벨</div>
+          <h2 class="s-title reveal r2">두 가지 <span class="hl">접근</span></h2>
+        </header>
+        <div class="s-body">
+          <div class="cols">
+            <div class="c1 reveal r3">
+              <div class="colhead">왼쪽 제목</div>
+              <div class="list tight">
+                <div class="li"><div class="b">01</div><div class="tx">
+                  <div class="t">항목</div><div class="d">설명</div></div></div>
+                <div class="li"><div class="b">02</div><div class="tx">
+                  <div class="t">항목</div><div class="d">설명</div></div></div>
+              </div>
+            </div>
+            <div class="c2 reveal r4">
+              <div class="colhead">오른쪽 제목</div>
+              <div class="list tight">
+                <div class="li"><div class="b">A</div><div class="tx">
+                  <div class="t">항목</div><div class="d">설명</div></div></div>
+                <div class="li"><div class="b">B</div><div class="tx">
+                  <div class="t">항목</div><div class="d">설명</div></div></div>
+              </div>
+              <div class="callout" style="margin-top:24px">
+                <b>💡</b> 보조 결론
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="s-foot"><span>Part 1 · 라벨</span><span class="pg"></span></div>
+      </div>
+    </div>
+  </div>
+  <aside class="note" aria-label="슬라이드 설명">
+    <div class="note-head">슬라이드 설명</div>
+    <div class="note-body"><p>어느 쪽을 언제 선택하는지.</p></div>
+  </aside>
+</article>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     9. 이미지 — 다이어그램·아키텍처 그림
+     ══════════════════════════════════════════════════════════ -->
+<article class="chapter" data-part="파트 이름">
+  <div class="ch-head">
+    <span class="ch-n">09</span>
+    <h2 class="ch-t">그림으로 보여주는 장</h2>
+    <span class="ch-part">파트 이름</span>
+    <a class="ch-link" href="#">#</a>
+  </div>
+  <div class="sheet">
+    <div class="slide">
+      <div class="frame" style="padding:78px 96px 104px">
+        <header class="s-head">
+          <div class="kicker reveal r1">섹션 라벨</div>
+          <h2 class="s-title sm reveal r2">전체 구조 <span class="hl">한눈에</span></h2>
+        </header>
+        <div class="s-body" style="margin-top:26px">
+          <div class="figwrap reveal r3">
+            <img src="images/diagram.png" alt="다이어그램에 대한 설명">
+          </div>
+        </div>
+        <div class="s-foot"><span>Part 1 · 라벨</span><span class="pg"></span></div>
+      </div>
+    </div>
+  </div>
+  <aside class="note" aria-label="슬라이드 설명">
+    <div class="note-head">슬라이드 설명</div>
+    <div class="note-body">
+      <p><b>그림 읽는 법</b> — 어디서부터 어느 방향으로 보면 되는지.</p>
+      <ul><li><em>가운데</em> — 무엇을 나타내는지</li></ul>
+    </div>
+  </aside>
+</article>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     10. 마무리 — 선언형 한 문장
+     ══════════════════════════════════════════════════════════ -->
+<article class="chapter" data-part="마무리">
+  <div class="ch-head">
+    <span class="ch-n">10</span>
+    <h2 class="ch-t">한 문장으로</h2>
+    <span class="ch-part">마무리</span>
+    <a class="ch-link" href="#">#</a>
+  </div>
+  <div class="sheet">
+    <div class="slide dark">
+      <div class="orb o1"></div><div class="orb o2"></div>
+      <div class="frame">
+        <header class="s-head">
+          <div class="kicker reveal r1">결론</div>
+        </header>
+        <div class="s-body">
+          <p class="quote reveal r2">한 문장으로 정리하면<br>
+            <span class="hl">이것이 핵심</span>입니다.</p>
+          <div class="callout reveal r7" style="margin-top:36px">
+            <b>다음 단계</b> — 무엇부터 하면 되는지.
+          </div>
+        </div>
+        <div class="s-foot"><span>마무리</span><span class="pg"></span></div>
+      </div>
+    </div>
+  </div>
+  <aside class="note" aria-label="슬라이드 설명">
+    <div class="note-head">슬라이드 설명</div>
+    <div class="note-body"><p>전체를 관통하는 메시지 정리.</p></div>
+  </aside>
+</article>
