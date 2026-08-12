@@ -461,6 +461,33 @@ svg {
 .dark .li .t b,     .dark .li .t strong{color:#FFFFFF;font-weight:700}
 .dark .callout b, .dark .callout strong{color:#FFFFFF}
 
+
+/* ===========================================================
+   6.12 AZURE SERVICE ICONS (공식 아이콘 스프라이트)
+   원본 SVG를 <symbol>로 담아 <use>로 참조합니다.
+   장식이 아니라 '어떤 서비스인지'를 빠르게 알리는 용도로만 씁니다.
+   =========================================================== */
+.ic{width:1em;height:1em;flex:0 0 auto;vertical-align:-.14em}
+
+/* 카드 헤더 옆 아이콘 — 제목과 나란히 */
+.card h3 .ic{width:34px;height:34px;margin-right:12px;vertical-align:-8px}
+.card h3.sm .ic{width:30px;height:30px;vertical-align:-6px}
+
+/* 카드 우상단 워터마크 아이콘 */
+.card .ic-badge{position:absolute;right:22px;top:22px;width:38px;height:38px;opacity:.9}
+.dark .card .ic-badge{opacity:.95}
+
+/* 리스트 항목 제목 앞 아이콘 */
+.li .t .ic{width:30px;height:30px;margin-right:11px;vertical-align:-7px}
+
+/* 표 셀 안 인라인 아이콘 */
+.tbl td .ic{width:22px;height:22px;margin-right:7px;vertical-align:-5px}
+
+/* 서비스 라벨(.svc) 앞 아이콘 묶음 */
+.svc .ic{width:19px;height:19px;margin-right:5px;vertical-align:-4px}
+.ic-row{display:flex;align-items:center;gap:9px;margin-top:15px}
+.ic-row .ic{width:26px;height:26px}
+
 /* ===========================================================
    7. ENTRANCE ANIMATIONS — 활성 슬라이드에서 순차 등장
    =========================================================== */
@@ -667,6 +694,21 @@ body.sb-collapsed .sb-toggle{display:block}
 </style>
 </head>
 <body>
+
+<svg class="az-sprite" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">
+  <symbol id="az-openai" viewBox="0 0 18 18"><defs><radialGradient id="az-openai-g0" cx="-67.981" cy="793.199" r=".45" gradientTransform="translate(-17939.03 20368.029) rotate(45) scale(25.091 -34.149)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#83b9f9" /><stop offset="1" stop-color="#0078d4" /></radialGradient></defs><path d="m0,2.7v12.6c0,1.491,1.209,2.7,2.7,2.7h12.6c1.491,0,2.7-1.209,2.7-2.7V2.7c0-1.491-1.209-2.7-2.7-2.7H2.7C1.209,0,0,1.209,0,2.7ZM10.8,0v3.6c0,3.976,3.224,7.2,7.2,7.2h-3.6c-3.976,0-7.199,3.222-7.2,7.198v-3.598c0-3.976-3.224-7.2-7.2-7.2h3.6c3.976,0,7.2-3.224,7.2-7.2Z" fill="url(#az-openai-g0)" stroke-width="0" /></symbol>
+  <symbol id="az-foundry" viewBox="0 0 18 18"><defs><linearGradient id="az-foundry-g1" x1="-603.563" y1="-218.378" x2="-606.6" y2="-206.22" gradientTransform="translate(617.126 -205.758) scale(1 -1)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#712575" /><stop offset=".09" stop-color="#9a2884" /><stop offset=".18" stop-color="#bf2c92" /><stop offset=".27" stop-color="#da2e9c" /><stop offset=".34" stop-color="#eb30a2" /><stop offset=".4" stop-color="#f131a5" /><stop offset=".5" stop-color="#ec30a3" /><stop offset=".61" stop-color="#df2f9e" /><stop offset=".72" stop-color="#c92d96" /><stop offset=".83" stop-color="#aa2a8a" /><stop offset=".95" stop-color="#83267c" /><stop offset="1" stop-color="#712575" /></linearGradient><linearGradient id="az-foundry-g0" x1="-602.412" y1="-206.025" x2="-602.412" y2="-223.175" gradientTransform="translate(617.126 -205.758) scale(1 -1)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#da7ed0" /><stop offset=".08" stop-color="#b17bd5" /><stop offset=".19" stop-color="#8778db" /><stop offset=".3" stop-color="#6276e1" /><stop offset=".41" stop-color="#4574e5" /><stop offset=".54" stop-color="#2e72e8" /><stop offset=".67" stop-color="#1d71eb" /><stop offset=".81" stop-color="#1471ec" /><stop offset="1" stop-color="#1171ed" /></linearGradient><linearGradient id="az-foundry-g2" x1="-603.438" y1="-206.414" x2="-614.807" y2="-224.644" gradientTransform="translate(617.126 -205.758) scale(1 -1)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#da7ed0" /><stop offset=".05" stop-color="#b77bd4" /><stop offset=".11" stop-color="#9079da" /><stop offset=".18" stop-color="#6e77df" /><stop offset=".25" stop-color="#5175e3" /><stop offset=".33" stop-color="#3973e7" /><stop offset=".42" stop-color="#2772e9" /><stop offset=".54" stop-color="#1a71eb" /><stop offset=".68" stop-color="#1371ec" /><stop offset="1" stop-color="#1171ed" /></linearGradient></defs><path d="m12.061.012c.534,0,1.008.401,1.178.984s1.166,4.19,1.166,4.19v7.166h-3.607l.073-12.352h1.19v.012Z" fill="url(#az-foundry-g1)" fill-rule="evenodd" stroke-width="0" /><path d="m17.356,5.611c0-.255-.206-.449-.449-.449h-2.126c-1.494,0-2.709,1.215-2.709,2.709v4.494h2.575c1.494,0,2.709-1.215,2.709-2.709v-4.045Z" fill="url(#az-foundry-g0)" stroke-width="0" /><path d="m12.061.012c-.413,0-.741.328-.741.741l-.073,13.64c0,1.992-1.615,3.607-3.607,3.607H1.093c-.316,0-.522-.304-.425-.595L5.915,2.429C6.425.984,7.785.012,9.316.012h2.757-.012Z" fill="url(#az-foundry-g2)" fill-rule="evenodd" stroke-width="0" /></symbol>
+  <symbol id="az-search" viewBox="0 0 18 18"><defs><linearGradient id="az-search-g0" x1="9" y1="0.36" x2="9" y2="18.31" gradientUnits="userSpaceOnUse"><stop offset="0.18" stop-color="#5ea0ef" /><stop offset="1" stop-color="#0078d4" /></linearGradient></defs><title>Icon-web-44</title><path d="M18,11.32a4.12,4.12,0,0,0-3.51-4,5.15,5.15,0,0,0-5.25-5,5.25,5.25,0,0,0-5,3.49A4.86,4.86,0,0,0,0,10.59a5,5,0,0,0,5.07,4.82l.44,0h8.21a.78.78,0,0,0,.22,0A4.13,4.13,0,0,0,18,11.32Z" fill="url(#az-search-g0)" /><path d="M12.33,6.59a3.07,3.07,0,0,0-5.61.85,3.16,3.16,0,0,0,.33,2.27L4.71,12.08a.79.79,0,0,0,0,1.12.78.78,0,0,0,.56.23.76.76,0,0,0,.56-.23l2.33-2.36a3.14,3.14,0,0,0,.81.33,3.08,3.08,0,0,0,3.36-4.58Zm-.54,2.1A2.16,2.16,0,0,1,9.7,10.34a1.79,1.79,0,0,1-.51-.07,1.87,1.87,0,0,1-.7-.32,2.13,2.13,0,0,1-.56-.56,2.17,2.17,0,0,1-.31-1.73A2.14,2.14,0,0,1,9.7,6a2.31,2.31,0,0,1,.52.06,2.18,2.18,0,0,1,1.32,1A2.13,2.13,0,0,1,11.79,8.69Z" fill="#f2f2f2" /><ellipse cx="9.69" cy="8.18" rx="2.15" ry="2.16" fill="#83b9f9" /></symbol>
+  <symbol id="az-safety" viewBox="0 0 18 18"><defs><linearGradient id="az-safety-g0" x1="7.997" y1="14.863" x2="7.997" y2="2.057" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#0078d4" /><stop offset=".82" stop-color="#5ea0ef" /></linearGradient><linearGradient id="az-safety-g2" x1="-558.124" y1="1021.188" x2="-558.124" y2="1019.083" gradientTransform="translate(564 1025.516) scale(1 -1)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity=".7" /><stop offset="1" stop-color="#fff" stop-opacity=".6" /></linearGradient></defs><path d="m.362,3.138C.162,3.138,0,2.976,0,2.777h0V.361C0,.162.162,0,.362,0h2.266c.2,0,.362.162.362.361,0,.199-.162.361-.362.361H.724v2.053c0,.199-.161.362-.361.362,0,0,0,0-.001,0Zm17.638-.361V.361C18,.162,17.838,0,17.638,0h-2.266c-.2,0-.362.162-.362.361s.162.361.362.361h1.904v2.053c0,.199.162.361.362.361.2,0,.361-.162.362-.361h0ZM2.99,17.639c0-.199-.162-.361-.362-.361H.724v-2.053c0-.199-.162-.361-.362-.361-.2,0-.362.162-.362.361v2.415c0,.199.163.36.362.36h2.266c.2,0,.362-.162.362-.361Zm15.01.001v-2.415c0-.199-.162-.361-.362-.361-.2,0-.361.162-.362.361v2.053h-1.904c-.2,0-.362.162-.362.362,0,.199.162.361.362.361h2.266c.199,0,.361-.161.362-.36Z" fill="#76bc2d" /><g><path d="m13.864,8.047c0,3.822-4.627,6.907-5.632,7.544-.12.066-.265.066-.386,0-1.073-.687-5.716-3.772-5.716-7.544V3.386c0-.197.155-.36.352-.369,3.604-.101,2.783-1.676,5.482-1.676s1.861,1.576,5.465,1.676c.197.009.352.171.352.369l.084,4.66Z" fill="#0078d4" /><path d="m8.04,14.863c-4.683-3.064-5.194-5.781-5.194-6.816V3.719c1.873-.106,2.625-.637,3.236-1.068.489-.345.843-.594,1.881-.594s1.387.249,1.872.593c.607.431,1.355.962,3.235,1.069l.078,4.34c0,.817-.372,3.733-5.109,6.804Z" fill="url(#az-safety-g0)" /></g><g><rect x="8.155" y="4.328" width="3.721" height=".691" rx=".141" ry=".141" fill="#fff" opacity=".7" /><rect x="8.155" y="5.742" width="3.721" height=".691" rx=".141" ry=".141" fill="#fff" opacity=".6" /><rect x="4.117" y="9.983" width="4.472" height=".691" rx=".141" ry=".141" fill="#fff" opacity=".3" /><rect x="4.117" y="8.57" width="7.76" height=".691" rx=".141" ry=".141" fill="#fff" opacity=".4" /><rect x="4.117" y="7.156" width="7.076" height=".691" rx=".14" ry=".14" fill="#fff" opacity=".5" /><g id="az-safety-g1"><path d="m4.235,4.328h3.282c.065,0,.118.046.118.102v1.901c0,.057-.053.102-.118.102h-3.282c-.065,0-.118-.046-.118-.102v-1.901c0-.057.053-.102.118-.102Z" fill="url(#az-safety-g2)" /></g></g><g><circle cx="12.449" cy="13.203" r="3.442" fill="#76bc2d" /><g><path d="m12.096,14.356l-.316.316c-.054.054-.141.054-.195,0h0l-1.256-1.256c-.054-.054-.054-.141,0-.195h0l.219-.219c.054-.054.141-.054.195,0h0l1.353,1.353h0Z" fill="#fff" /><path d="m11.591,14.676l-.316-.316h0l2.888-2.888c.054-.054.141-.054.195,0h0l.219.219c.054.054.054.141,0,.195h0l-2.791,2.791c-.054.054-.141.054-.195,0h0Z" fill="#f0f0f0" /></g></g></symbol>
+  <symbol id="az-entra" viewBox="0 0 18 18"><defs><linearGradient id="az-entra-g0" x1="10.901" y1="4.385" x2="10.901" y2="18.783" gradientUnits="userSpaceOnUse"><stop offset=".085" stop-color="#ef7100" /><stop offset=".999" stop-color="#f78d1e" /></linearGradient><linearGradient id="az-entra-g1" x1="-79.452" y1="778.657" x2="-79.452" y2="786.378" gradientTransform="translate(94 795.516) scale(1 -1)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#0078d4" /><stop offset=".06" stop-color="#0a7cd7" /><stop offset=".34" stop-color="#2e8ce1" /><stop offset=".59" stop-color="#4897e9" /><stop offset=".82" stop-color="#589eed" /><stop offset="1" stop-color="#5ea0ef" /></linearGradient></defs><g><polygon points="4.636 9.985 4.688 10.017 9 12.713 9.001 12.713 9.001 12.713 9.001 5.062 9 5.061 4.636 9.985" fill="#ffb34d" isolation="isolate" opacity=".9" stroke-width="0" /><path d="m10.146,1.294c-.299-.338-.722-.507-1.145-.507h0c-.424-.001-.847.168-1.147.506h-.001L.353,9.753c-.579.654-.428,1.642.323,2.111,0,0,2.776,1.735,3.126,1.954.388.242,1.033.511,1.715.511.621,0,1.198-.18,1.676-.487,0,0,0,0,.002,0l1.805-1.128-4.364-2.728,4.365-4.924.109-.123c.55-.627,1.377-1.026,2.302-1.026.472,0,.916.107,1.313.291l-2.579-2.909Z" fill="#faa21d" stroke-width="0" /><polygon points="13.365 9.985 13.365 9.985 13.365 9.985 9.001 5.062 9.001 12.712 13.365 9.985" fill="#f78d1e" stroke-width="0" /><path d="m17.647,9.753l-4.921-5.551c-.397-.185-.842-.291-1.313-.291-.925,0-1.752.399-2.302,1.026l-.109.123,4.364,4.924-4.266,2.666-.099.062v.003s-.001-.002-.001-.002l-1.805,1.128s-.002,0-.002,0c-.478.307-1.055.487-1.676.487-.682,0-1.327-.269-1.715-.511l4.374,2.734c.25.156.538.234.824.234h0s.001,0,.001,0c.287,0,.573-.078.823-.234l1.73-1.081h0s5.77-3.607,5.77-3.607h0c.751-.468.902-1.456.323-2.11Z" fill="url(#az-entra-g0)" stroke-width="0" /></g><path d="m18,12.721c0,2.265-2.739,4.088-3.338,4.46-.068.044-.156.044-.224,0-.599-.367-3.338-2.19-3.338-4.46v-2.725c0-.119.093-.215.21-.218,2.134-.055,1.642-.991,3.241-.991s1.106.937,3.241.991c.117.003.21.1.21.218v2.725Z" fill="#0078d4" stroke-width="0" /><path d="m17.717,12.741c0,2.081-2.515,3.751-3.065,4.088-.063.039-.142.039-.205,0-.551-.337-3.065-2.007-3.065-4.088v-2.478c-.019-.111.054-.216.163-.235.011-.002.021-.003.032-.003,1.959-.035,1.511-.887,2.973-.887s1.014.852,2.973.887c.107.003.192.09.195.198v2.517Z" fill="url(#az-entra-g1)" stroke-width="0" /></symbol>
+  <symbol id="az-defender" viewBox="0 0 18 18"><defs><linearGradient id="az-defender-g0" x1="9" y1="16.795" x2="9" y2="1.205" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#5e9624" /><stop offset="0.321" stop-color="#639d26" /><stop offset="0.794" stop-color="#6fb12a" /><stop offset="0.999" stop-color="#76bc2d" /></linearGradient></defs><g><path d="M16.083,8.438c0,4.571-5.626,8.25-6.85,9a.449.449,0,0,1-.466,0c-1.224-.747-6.85-4.426-6.85-9v-5.5A.44.44,0,0,1,2.351,2.5C6.728,2.386,5.72.5,9,.5s2.272,1.886,6.649,2a.44.44,0,0,1,.434.435Z" fill="#76bc2d" /><path d="M15.5,8.485c0,4.191-5.16,7.566-6.282,8.25a.412.412,0,0,1-.428,0C7.664,16.051,2.5,12.676,2.5,8.485V3.441a.4.4,0,0,1,.4-.4C6.916,2.935,5.992,1.205,9,1.205s2.084,1.73,6.1,1.837a.4.4,0,0,1,.4.4Z" fill="url(#az-defender-g0)" /><path d="M11.853,7.66h-.408l0-1.417a2.652,2.652,0,0,0-.7-1.809,2.358,2.358,0,0,0-3.483,0,2.606,2.606,0,0,0-.7,1.808V7.66H6.147a.328.328,0,0,0-.326.32v3.682a.329.329,0,0,0,.326.32h5.706a.329.329,0,0,0,.326-.32V7.98A.328.328,0,0,0,11.853,7.66Zm-1.549,0H7.7V6.219a1.434,1.434,0,0,1,.41-.99,1.2,1.2,0,0,1,1.788,0,1.394,1.394,0,0,1,.153.2h0a1.445,1.445,0,0,1,.258.791Z" fill="#fff" /><path d="M6.148,7.658h5.705a.328.328,0,0,1,.21.08L5.938,11.9a.313.313,0,0,1-.116-.241V7.979A.328.328,0,0,1,6.148,7.658Z" fill="#b3b3b3" opacity="0.15" /><path d="M11.853,7.658H6.147a.328.328,0,0,0-.209.08L12.062,11.9a.314.314,0,0,0,.117-.241V7.979A.329.329,0,0,0,11.853,7.658Z" fill="#a3a3a3" opacity="0.09" /></g></symbol>
+  <symbol id="az-purview" viewBox="0 0 18 18"><defs><linearGradient id="az-purview-g0" x1="8.977" y1="11.134" x2="8.977" y2="7.178" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#29bade" /><stop offset="1" stop-color="#50e6ff" /></linearGradient><linearGradient id="az-purview-g3" x1="6.446" y1="14.626" x2="6.446" y2="3.374" gradientUnits="userSpaceOnUse"><stop offset="0.041" stop-color="#32bedd" /><stop offset="0.495" stop-color="#50e6ff" /><stop offset="0.92" stop-color="#c3f1ff" /></linearGradient><linearGradient id="az-purview-g1" x1="7.464" y1="10.047" x2="7.464" y2="0.254" gradientUnits="userSpaceOnUse"><stop offset="0.244" stop-color="#0078d4" /><stop offset="0.6" stop-color="#2e8ce1" /><stop offset="0.933" stop-color="#589eed" /></linearGradient><linearGradient id="az-purview-g2" x1="13.628" y1="14.626" x2="13.628" y2="4.193" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#005ba1" /><stop offset="0.399" stop-color="#0078d4" /><stop offset="0.857" stop-color="#5ea0ef" /></linearGradient></defs><path d="M10.577,8.8a1.622,1.622,0,0,1-1.622-1.62,1.979,1.979,0,1,0,1.961,1.583A1.638,1.638,0,0,1,10.577,8.8Z" fill="url(#az-purview-g0)" /><path d="M12.862,11.231a5.051,5.051,0,0,0-.656-2.024A3.218,3.218,0,0,1,9,12.227c-.077,0-.149-.017-.224-.023a6.735,6.735,0,0,1-4.559-1.86A8.724,8.724,0,0,1,1.936,6.661,20.447,20.447,0,0,0,.294,8.335a.909.909,0,0,0,0,1.336A16.887,16.887,0,0,0,4.16,13.079,8.8,8.8,0,0,0,9.131,14.62a7.2,7.2,0,0,0,3.318-.789c.065-.03.121-.07.185-.1A6.926,6.926,0,0,0,12.862,11.231Z" fill="url(#az-purview-g3)" /><path d="M6.158,10.5a3.177,3.177,0,0,1,.591-3.807,6.414,6.414,0,0,1,3.245-2.3,7.915,7.915,0,0,1,2.182-.344,8.377,8.377,0,0,0-1.857-.56,7.978,7.978,0,0,0-5.107.843A14.276,14.276,0,0,0,2.752,5.95a7.836,7.836,0,0,0,2.1,3.615A5.977,5.977,0,0,0,6.158,10.5Z" fill="url(#az-purview-g1)" /><path d="M17.73,8.379A17.2,17.2,0,0,0,14.374,5.3a7.439,7.439,0,0,0-3.991.02A5.724,5.724,0,0,0,9.256,5.8a3.209,3.209,0,0,1,1.562.536.453.453,0,0,1,.118.053,6.712,6.712,0,0,1,2.891,4.544,7.629,7.629,0,0,1-.033,2.161,16.951,16.951,0,0,0,3.932-3.457A.862.862,0,0,0,17.73,8.379Z" fill="url(#az-purview-g2)" /></symbol>
+  <symbol id="az-adf" viewBox="0 0 18 18"><defs><linearGradient id="az-adf-g0" x1="0.5" y1="9.77" x2="9" y2="9.77" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#005ba1" /><stop offset="0.07" stop-color="#0060a9" /><stop offset="0.36" stop-color="#0071c8" /><stop offset="0.52" stop-color="#0078d4" /><stop offset="0.64" stop-color="#0074cd" /><stop offset="0.81" stop-color="#006abb" /><stop offset="0.99" stop-color="#005ba1" /></linearGradient></defs><title>Icon-databases-126</title><g><path d="M13.25,10.48V6.57a.14.14,0,0,0-.24-.1l-4,4L4.85,14.63V17.5H16.93a.56.56,0,0,0,.57-.57V6.57a.14.14,0,0,0-.24-.1Z" fill="#005ba1" /><path d="M4.75,3.58C2.4,3.58.5,2.89.5,2V7.67h0v9.26a.56.56,0,0,0,.57.57H9V2C9,2.89,7.1,3.58,4.75,3.58Z" fill="url(#az-adf-g0)" /><rect x="12.91" y="12.97" width="2.27" height="2.27" rx="0.28" fill="#fff" /><rect x="8.97" y="12.97" width="2.27" height="2.27" rx="0.28" fill="#fff" /><rect x="5.03" y="12.97" width="2.27" height="2.27" rx="0.28" fill="#fff" /><path d="M9,2c0,.85-1.9,1.54-4.25,1.54S.5,2.89.5,2,2.4.5,4.75.5,9,1.19,9,2" fill="#eaeaea" /><path d="M8,1.91c0,.55-1.46,1-3.26,1s-3.26-.43-3.26-1S3,.94,4.75.94,8,1.37,8,1.91" fill="#50e6ff" /><path d="M4.75,2.14a8.07,8.07,0,0,0-2.58.37,7.64,7.64,0,0,0,2.58.38,7.64,7.64,0,0,0,2.58-.38A8.07,8.07,0,0,0,4.75,2.14Z" fill="#198ab3" /></g></symbol>
+  <symbol id="az-monitor" viewBox="0 0 18 18"><defs><radialGradient id="az-monitor-g1" cx="5.72" cy="7.45" r="8.42" gradientTransform="translate(3.23 1.51) scale(1.01 1.01)" gradientUnits="userSpaceOnUse"><stop offset="0.18" stop-color="#5ea0ef" /><stop offset="0.56" stop-color="#5c9fee" /><stop offset="0.69" stop-color="#559ced" /><stop offset="0.78" stop-color="#4a97e9" /><stop offset="0.86" stop-color="#3990e4" /><stop offset="0.93" stop-color="#2387de" /><stop offset="0.99" stop-color="#087bd6" /><stop offset="1" stop-color="#0078d4" /></radialGradient><radialGradient id="az-monitor-g0" cx="28.18" cy="202.29" r="2.7" gradientTransform="translate(-17.77 -185.01) scale(0.95)" gradientUnits="userSpaceOnUse"><stop offset="0.19" stop-color="#8c8e90" /><stop offset="0.35" stop-color="#848688" /><stop offset="0.6" stop-color="#6e7071" /><stop offset="0.91" stop-color="#4a4b4c" /><stop offset="1" stop-color="#3e3f3f" /></radialGradient></defs><title>Icon-manage-317</title><ellipse cx="9" cy="9" rx="8.5" ry="8.47" fill="url(#az-monitor-g1)" /><ellipse cx="9" cy="9" rx="7.4" ry="7.37" fill="#fff" /><path d="M2.72,9.44a6.24,6.24,0,0,0,1.82,4l2-2a3.53,3.53,0,0,1-1-2Z" fill="#9cebff" /><path d="M13.13,4.27A6.25,6.25,0,0,0,9.44,2.74V5.53a3.41,3.41,0,0,1,1.71.7Z" fill="#32bedd" /><path d="M4.87,4.27l2,2a3.41,3.41,0,0,1,1.71-.7V2.74A6.25,6.25,0,0,0,4.87,4.27Z" fill="#32bedd" /><path d="M11.78,6.85a3.6,3.6,0,0,1,.71,1.71h2.79a6.16,6.16,0,0,0-1.53-3.67Z" fill="#32bedd" /><path d="M6.22,6.85l-2-2A6.16,6.16,0,0,0,2.72,8.56H5.51A3.6,3.6,0,0,1,6.22,6.85Z" fill="#50e6ff" /><path d="M14.14,7a.45.45,0,0,0-.57-.25L9.45,8.41l.32.81,4.12-1.63A.44.44,0,0,0,14.14,7Z" fill="#f04049" /><ellipse cx="9" cy="9" rx="1.2" ry="1.2" fill="url(#az-monitor-g0)" /></symbol>
+  <symbol id="az-cost" viewBox="0 0 18 18"><defs><linearGradient id="az-cost-g1" x1="9" y1="1.48" x2="9" y2="17.07" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#76bc2d" /><stop offset="0.32" stop-color="#73b82c" /><stop offset="0.65" stop-color="#6cab29" /><stop offset="0.99" stop-color="#5e9724" /><stop offset="1" stop-color="#5e9624" /></linearGradient><linearGradient id="az-cost-g0" x1="6.13" y1="9.28" x2="11.87" y2="9.28" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" /><stop offset="1" stop-color="#fff" /></linearGradient></defs><title>Icon-general-19</title><path d="M12.35,1.48H5.65a2,2,0,0,0-1.73,1L.58,8.28a2,2,0,0,0,0,2l3.34,5.79a2,2,0,0,0,1.73,1h6.7a2,2,0,0,0,1.73-1l3.34-5.79a2,2,0,0,0,0-2l-3.34-5.8A2,2,0,0,0,12.35,1.48Z" fill="url(#az-cost-g1)" /><path d="M9.07,4.81A.82.82,0,0,1,8.25,4,.82.82,0,0,1,9.89,4,.82.82,0,0,1,9.07,4.81Zm-.82,9.75a.82.82,0,1,0,1.64,0,.82.82,0,0,0-1.64,0Zm.84-2.7A1.5,1.5,0,0,1,7.58,11l-1.45.28A2.68,2.68,0,0,0,9,13c1.69,0,2.91-.89,2.91-2.13a2.07,2.07,0,0,0-1.12-2A13,13,0,0,0,9,8.33c-.67-.16-1.1-.53-1.1-1A1,1,0,0,1,9,6.46a1.4,1.4,0,0,1,1.29.69l1.25-.4A2.56,2.56,0,0,0,9,5.45c-1.18,0-2.55.52-2.55,2,0,1.81,1.11,2.17,2.69,2.48.37.07,1.23.32,1.23,1C10.33,11.31,10,11.86,9.09,11.86Z" opacity="0.9" fill="url(#az-cost-g0)" /></symbol>
+  <symbol id="az-vnet" viewBox="0 0 18 18"><defs><linearGradient id="az-vnet-g0" x1="7.699" y1="259.22" x2="7.699" y2="263.711" gradientTransform="translate(0 -250)" gradientUnits="userSpaceOnUse"><stop offset="0.23" stop-color="#5ea0ef" /><stop offset="0.32" stop-color="#5b9fee" /><stop offset="0.48" stop-color="#509aeb" /><stop offset="0.57" stop-color="#3f92e6" /><stop offset="0.75" stop-color="#2688df" /><stop offset="0.93" stop-color="#127fd9" /></linearGradient><linearGradient id="az-vnet-g1" x1="9.927" y1="261.091" x2="9.927" y2="265.582" gradientTransform="translate(0 -250)" gradientUnits="userSpaceOnUse"><stop offset="0.02" stop-color="#5ea0ef" /><stop offset="0.14" stop-color="#5b9fee" /><stop offset="0.23" stop-color="#5b9fee" /><stop offset="0.34" stop-color="#509aeb" /><stop offset="0.44" stop-color="#3f92e6" /><stop offset="0.63" stop-color="#2688df" /><stop offset="0.93" stop-color="#127fd9" /></linearGradient></defs><path d="M8.252,2.521H9.374V9.594H8.252Z" fill="#7a7a7a" /><path d="M10.459,2.3A1.647,1.647,0,1,1,8.813.65h0A1.646,1.646,0,0,1,10.459,2.3Z" fill="#1490df" /><path d="M8.588,9.22h-1.8a2.246,2.246,0,0,0-.348,4.461,2.415,2.415,0,0,1,.022-.835,1.418,1.418,0,0,1,.326-2.8h1.8a1.422,1.422,0,0,1,0,2.844H8.094a1.078,1.078,0,0,0-.1.45,1.022,1.022,0,0,0,.071.374h.527a2.246,2.246,0,1,0,0-4.491Z" fill="url(#az-vnet-g0)" /><path d="M11.182,11.121a2.642,2.642,0,0,1,.026.344,2.317,2.317,0,0,1-.049.491,1.418,1.418,0,0,1-.325,2.8h-1.8a1.423,1.423,0,0,1,0-2.845h.494a1.042,1.042,0,0,0,.1-.449,1.018,1.018,0,0,0-.071-.374H9.037a2.246,2.246,0,0,0,0,4.491h1.8a2.246,2.246,0,0,0,.348-4.461Z" fill="url(#az-vnet-g1)" /><path d="M5.58,16.525l-.412.415a.28.28,0,0,1-.4,0l-4.607-4.6a.566.566,0,0,1,0-.8l.416-.412,5,4.992a.276.276,0,0,1,0,.391h0Z" fill="#50e6ff" /><path d="M5.082,7.02l.46.46a.282.282,0,0,1,0,.4L.625,12.809l-.461-.457a.566.566,0,0,1,0-.8L4.685,7.02A.28.28,0,0,1,5.082,7.02Z" fill="#1490df" /><path d="M12.417,16.851a.278.278,0,0,1-.006-.392h0l.006,0,5-4.989.416.416a.566.566,0,0,1,0,.8l-4.611,4.588a.277.277,0,0,1-.391.006h0l-.006-.005Z" fill="#50e6ff" /><path d="M13.311,7.349l4.525,4.536a.563.563,0,0,1,0,.793l-.461.46L12.454,8.206a.289.289,0,0,1,0-.4l.46-.456A.282.282,0,0,1,13.311,7.349Z" fill="#1490df" /></symbol>
+  <symbol id="az-storage" viewBox="0 0 18 18"><defs><linearGradient id="az-storage-g0" x1="9" y1="15.83" x2="9" y2="5.79" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#b3b3b3" /><stop offset="0.26" stop-color="#c1c1c1" /><stop offset="1" stop-color="#e6e6e6" /></linearGradient></defs><title>Icon-storage-86</title><path d="M.5,5.79h17a0,0,0,0,1,0,0v9.48a.57.57,0,0,1-.57.57H1.07a.57.57,0,0,1-.57-.57V5.79A0,0,0,0,1,.5,5.79Z" fill="url(#az-storage-g0)" /><path d="M1.07,2.17H16.93a.57.57,0,0,1,.57.57V5.79a0,0,0,0,1,0,0H.5a0,0,0,0,1,0,0V2.73A.57.57,0,0,1,1.07,2.17Z" fill="#37c2b1" /><path d="M2.81,6.89H15.18a.27.27,0,0,1,.26.27v1.4a.27.27,0,0,1-.26.27H2.81a.27.27,0,0,1-.26-.27V7.16A.27.27,0,0,1,2.81,6.89Z" fill="#fff" /><path d="M2.82,9.68H15.19a.27.27,0,0,1,.26.27v1.41a.27.27,0,0,1-.26.27H2.82a.27.27,0,0,1-.26-.27V10A.27.27,0,0,1,2.82,9.68Z" fill="#37c2b1" /><path d="M2.82,12.5H15.19a.27.27,0,0,1,.26.27v1.41a.27.27,0,0,1-.26.27H2.82a.27.27,0,0,1-.26-.27V12.77A.27.27,0,0,1,2.82,12.5Z" fill="#258277" /></symbol>
+</svg>
 
 <div class="top-prog"><span id="topProg"></span></div>
 <button class="sb-toggle" id="sbToggle" title="목차 열기 (M)" aria-label="목차 열기">☰</button>
@@ -1178,16 +1220,16 @@ body.sb-collapsed .sb-toggle{display:block}
     </header>
     <div class="s-body">
       <div class="grid g4 stagger">
-        <div class="card"><div class="cn">①</div><h3 class="sm">AI 리더십</h3>
+        <div class="card"><svg class="ic ic-badge" aria-hidden="true"><use href="#az-openai"></use></svg><div class="cn">①</div><h3 class="sm">AI 리더십</h3>
           <p>최신 모델을 <b>운영 가능한 방식</b>으로 선택</p>
           <div class="svc">Microsoft Foundry · Azure OpenAI</div></div>
-        <div class="card"><div class="cn">②</div><h3 class="sm">Responsible AI<br>&amp; 엔터프라이즈 신뢰</h3>
+        <div class="card"><svg class="ic ic-badge" aria-hidden="true"><use href="#az-safety"></use></svg><div class="cn">②</div><h3 class="sm">Responsible AI<br>&amp; 엔터프라이즈 신뢰</h3>
           <p>데이터 주권·보안·규정 준수를 <b>플랫폼 차원</b>에서</p>
           <div class="svc">Microsoft Entra ID · Microsoft Purview · Microsoft Defender</div></div>
-        <div class="card"><div class="cn">③</div><h3 class="sm">End-to-End<br>완결 스택</h3>
+        <div class="card"><svg class="ic ic-badge" aria-hidden="true"><use href="#az-foundry"></use></svg><div class="cn">③</div><h3 class="sm">End-to-End<br>완결 스택</h3>
           <p>데이터부터 사용자 경험까지 <b>하나의 플랫폼</b></p>
           <div class="svc">Microsoft Fabric · Microsoft Foundry · Azure Monitor</div></div>
-        <div class="card"><div class="cn">④</div><h3 class="sm">개발자 ·<br>생산성 생태계</h3>
+        <div class="card"><svg class="ic ic-badge" aria-hidden="true"><use href="#az-monitor"></use></svg><div class="cn">④</div><h3 class="sm">개발자 ·<br>생산성 생태계</h3>
           <p>노코드부터 프로코드까지 <b>같은 기반</b> 위에서</p>
           <div class="svc">GitHub · GitHub Copilot · Microsoft Foundry</div></div>
       </div>
@@ -1329,11 +1371,11 @@ body.sb-collapsed .sb-toggle{display:block}
         <colgroup><col style="width:20%"><col style="width:46%"><col style="width:34%"></colgroup>
         <thead><tr><th>신뢰 요소</th><th>Microsoft의 접근</th><th>관련 Azure 서비스</th></tr></thead>
         <tbody>
-          <tr><td><strong>데이터 주권</strong></td><td>고객 입력·출력의 기반 모델 학습 미사용 원칙<span class="sub">서비스·모델별 약관 확인 필요</span></td><td>Azure OpenAI · Microsoft Foundry</td></tr>
-          <tr><td><strong>보안</strong></td><td>제로 트러스트, 위협 탐지 내장</td><td>Microsoft Entra ID · Microsoft Defender</td></tr>
-          <tr><td><strong>규정 준수</strong></td><td>데이터 분류 · DLP · 감사</td><td>Microsoft Purview</td></tr>
-          <tr><td><strong>안전한 AI</strong></td><td>콘텐츠 안전 · 프롬프트 보호</td><td>Azure AI Content Safety</td></tr>
-          <tr><td><strong>투명성</strong></td><td>Responsible AI 표준 · 거버넌스</td><td>Microsoft Foundry (평가 · 추적)</td></tr>
+          <tr><td><strong>데이터 주권</strong></td><td>고객 입력·출력의 기반 모델 학습 미사용 원칙<span class="sub">서비스·모델별 약관 확인 필요</span></td><td><svg class="ic" aria-hidden="true"><use href="#az-openai"></use></svg>Azure OpenAI · Microsoft Foundry</td></tr>
+          <tr><td><strong>보안</strong></td><td>제로 트러스트, 위협 탐지 내장</td><td><svg class="ic" aria-hidden="true"><use href="#az-entra"></use></svg>Microsoft Entra ID · Microsoft Defender</td></tr>
+          <tr><td><strong>규정 준수</strong></td><td>데이터 분류 · DLP · 감사</td><td><svg class="ic" aria-hidden="true"><use href="#az-purview"></use></svg>Microsoft Purview</td></tr>
+          <tr><td><strong>안전한 AI</strong></td><td>콘텐츠 안전 · 프롬프트 보호</td><td><svg class="ic" aria-hidden="true"><use href="#az-safety"></use></svg>Azure AI Content Safety</td></tr>
+          <tr><td><strong>투명성</strong></td><td>Responsible AI 표준 · 거버넌스</td><td><svg class="ic" aria-hidden="true"><use href="#az-foundry"></use></svg>Microsoft Foundry (평가 · 추적)</td></tr>
         </tbody>
       </table>
     </div>
@@ -1479,12 +1521,12 @@ body.sb-collapsed .sb-toggle{display:block}
         <colgroup><col style="width:20%"><col style="width:38%"><col style="width:42%"></colgroup>
         <thead><tr><th>판단 기준</th><th>왜 중요한가 · 고객 관점</th><th>Azure에서 어떻게</th></tr></thead>
         <tbody>
-          <tr><td><strong>데이터 위치·주권</strong></td><td>리전 밖으로 나가면 규제 리스크</td><td>한국 리전 우선 설계</td></tr>
-          <tr><td><strong>모델 운영</strong></td><td>어떤 모델을 안전하게 서빙할지</td><td>Azure OpenAI · Microsoft Foundry</td></tr>
-          <tr><td><strong>보안 경계</strong></td><td>AI가 사내 데이터에 닿는 경로</td><td>Private Endpoint · VNet · 망분리</td></tr>
-          <tr><td><strong>네트워크 격리</strong></td><td>프롬프트·응답·로그의 이동</td><td>VNet · 방화벽 · 경로 통제</td></tr>
-          <tr><td><strong>거버넌스·감사</strong></td><td>누가·무엇을·언제 접근했는지</td><td>Microsoft Entra ID · Microsoft Purview · Microsoft Defender</td></tr>
-          <tr><td><strong>비용 관측</strong></td><td>토큰·라이선스 비용의 가시성</td><td>Cost Management</td></tr>
+          <tr><td><strong>데이터 위치·주권</strong></td><td>리전 밖으로 나가면 규제 리스크</td><td><svg class="ic" aria-hidden="true"><use href="#az-storage"></use></svg>한국 리전 우선 설계</td></tr>
+          <tr><td><strong>모델 운영</strong></td><td>어떤 모델을 안전하게 서빙할지</td><td><svg class="ic" aria-hidden="true"><use href="#az-openai"></use></svg>Azure OpenAI · Microsoft Foundry</td></tr>
+          <tr><td><strong>보안 경계</strong></td><td>AI가 사내 데이터에 닿는 경로</td><td><svg class="ic" aria-hidden="true"><use href="#az-vnet"></use></svg>Private Endpoint · VNet · 망분리</td></tr>
+          <tr><td><strong>네트워크 격리</strong></td><td>프롬프트·응답·로그의 이동</td><td><svg class="ic" aria-hidden="true"><use href="#az-vnet"></use></svg>VNet · 방화벽 · 경로 통제</td></tr>
+          <tr><td><strong>거버넌스·감사</strong></td><td>누가·무엇을·언제 접근했는지</td><td><svg class="ic" aria-hidden="true"><use href="#az-entra"></use></svg>Microsoft Entra ID · Microsoft Purview · Microsoft Defender</td></tr>
+          <tr><td><strong>비용 관측</strong></td><td>토큰·라이선스 비용의 가시성</td><td><svg class="ic" aria-hidden="true"><use href="#az-cost"></use></svg>Cost Management</td></tr>
         </tbody>
       </table>
       <div class="callout reveal r7" style="margin-top:36px">
@@ -1934,11 +1976,11 @@ body.sb-collapsed .sb-toggle{display:block}
     </header>
     <div class="s-body">
       <div class="grid g3 stagger">
-        <div class="card"><div class="cn">① 데이터</div><h3 class="sm">Microsoft Fabric · OneLake</h3>
+        <div class="card"><div class="cn">① 데이터</div><h3 class="sm"><svg class="ic" aria-hidden="true"><use href="#az-storage"></use></svg>Microsoft Fabric · OneLake</h3>
           <p>흩어진 데이터를 하나의 논리 레이크로 통합</p></div>
-        <div class="card"><div class="cn">② 맥락</div><h3 class="sm">3개의 IQ + Azure AI Search</h3>
+        <div class="card"><div class="cn">② 맥락</div><h3 class="sm"><svg class="ic" aria-hidden="true"><use href="#az-search"></use></svg>3개의 IQ + Azure AI Search</h3>
           <p>데이터에 회사의 <b>의미·맥락</b>을 입혀 근거 있는 답변</p></div>
-        <div class="card tone-2"><div class="cn">③ 제작 · Pro</div><h3 class="sm">Microsoft Foundry</h3>
+        <div class="card tone-2"><div class="cn">③ 제작 · Pro</div><h3 class="sm"><svg class="ic" aria-hidden="true"><use href="#az-foundry"></use></svg>Microsoft Foundry</h3>
           <p>프로덕션급 에이전트를 만드는 엔진 (Pro-Code)</p></div>
         <div class="card tone-2"><div class="cn">④ 제작 · Low</div><h3 class="sm">Microsoft Copilot Studio</h3>
           <p>현업이 노코드로 에이전트 제작 (Low-Code)</p></div>
@@ -2151,10 +2193,10 @@ body.sb-collapsed .sb-toggle{display:block}
         <colgroup><col style="width:22%"><col style="width:38%"><col style="width:40%"></colgroup>
         <thead><tr><th>구성</th><th>무엇인가</th><th>왜 중요한가 · 비즈니스</th></tr></thead>
         <tbody>
-          <tr><td><strong>① 모델 카탈로그</strong></td><td>OpenAI · 오픈소스 · 산업별 모델을 한곳에서 선택</td><td><strong>벤더 종속 없이</strong> 용도·비용에 맞는 모델 선택</td></tr>
+          <tr><td><svg class="ic" aria-hidden="true"><use href="#az-openai"></use></svg><strong>① 모델 카탈로그</strong></td><td>OpenAI · 오픈소스 · 산업별 모델을 한곳에서 선택</td><td><strong>벤더 종속 없이</strong> 용도·비용에 맞는 모델 선택</td></tr>
           <tr><td><strong>② 에이전트 개발</strong></td><td>Microsoft Foundry Agent Service로 도구·지식·워크플로 연결</td><td>아이디어 → <strong>동작하는 에이전트</strong>까지 빠르게</td></tr>
           <tr><td><strong>③ 평가 · 관측</strong></td><td>품질·비용·응답을 측정·추적</td><td>느낌이 아니라 <strong>데이터로 검증</strong>하고 배포</td></tr>
-          <tr><td><strong>④ 안전 · 거버넌스</strong></td><td>Azure AI Content Safety · 정책 · 필터 내장</td><td>유해·오남용 차단 → <strong>엔터프라이즈 신뢰</strong></td></tr>
+          <tr><td><svg class="ic" aria-hidden="true"><use href="#az-safety"></use></svg><strong>④ 안전 · 거버넌스</strong></td><td>Azure AI Content Safety · 정책 · 필터 내장</td><td>유해·오남용 차단 → <strong>엔터프라이즈 신뢰</strong></td></tr>
         </tbody>
       </table>
       <div class="callout reveal r6" style="margin-top:36px">
@@ -2426,7 +2468,7 @@ body.sb-collapsed .sb-toggle{display:block}
         </tbody>
       </table>
       <div class="callout warn reveal r6">
-        <b>💠 Azure 서비스</b> — Fabric IQ / Work IQ / Foundry IQ <span class="badge pv">Preview · 확인 필요</span> · <b>Azure AI Search</b> <span class="badge ga">GA</span><br>
+        <b>💠 Azure 서비스</b> — Fabric IQ / Work IQ / Foundry IQ <span class="badge pv">Preview · 확인 필요</span> · <svg class="ic" aria-hidden="true"><use href="#az-search"></use></svg><b>Azure AI Search</b> <span class="badge ga">GA</span><br>
         <b>ℹ️ 지금 GA로 시작하는 방법:</b> 의미 계층을 IQ 없이도 <b>Azure AI Search + 자체 시맨틱/메타데이터</b>로 구성해 오늘 착수할 수 있습니다.
       </div>
     </div>
@@ -2649,13 +2691,13 @@ body.sb-collapsed .sb-toggle{display:block}
     </header>
     <div class="s-body">
       <div class="grid g4 stagger">
-        <div class="card"><div class="cn">관제탑</div><h3 class="sm">Microsoft Agent 365 <span class="badge ga">GA 2026.5</span></h3>
+        <div class="card"><svg class="ic ic-badge" aria-hidden="true"><use href="#az-monitor"></use></svg><div class="cn">관제탑</div><h3 class="sm">Microsoft Agent 365 <span class="badge ga">GA 2026.5</span></h3>
           <p>에이전트 거버넌스 및 운영<br><span style="font-size:19px">일부 신기능은 Public Preview</span></p></div>
-        <div class="card tone-2"><div class="cn">데이터 보호</div><h3 class="sm">Microsoft Purview</h3>
+        <div class="card tone-2"><svg class="ic ic-badge" aria-hidden="true"><use href="#az-purview"></use></svg><div class="cn">데이터 보호</div><h3 class="sm">Microsoft Purview</h3>
           <p>통합 데이터 거버넌스 및 컴플라이언스</p></div>
-        <div class="card tone-3"><div class="cn">신원 · 접근</div><h3 class="sm">Microsoft Entra ID</h3>
+        <div class="card tone-3"><svg class="ic ic-badge" aria-hidden="true"><use href="#az-entra"></use></svg><div class="cn">신원 · 접근</div><h3 class="sm">Microsoft Entra ID</h3>
           <p>통합 ID 거버넌스 및 접근통제</p></div>
-        <div class="card tone-4"><div class="cn">위협 대응</div><h3 class="sm">Microsoft Defender</h3>
+        <div class="card tone-4"><svg class="ic ic-badge" aria-hidden="true"><use href="#az-defender"></use></svg><div class="cn">위협 대응</div><h3 class="sm">Microsoft Defender</h3>
           <p>위협 및 보안 리스크 탐지</p></div>
       </div>
       <div class="callout reveal r6" style="margin-top:44px">
@@ -2700,16 +2742,16 @@ body.sb-collapsed .sb-toggle{display:block}
     <div class="s-body">
       <div class="list tight stagger">
         <div class="li"><div class="b">01</div><div class="tx">
-          <div class="t">Identity — Microsoft Entra ID <span class="badge ga">GA</span></div>
+          <div class="t"><svg class="ic" aria-hidden="true"><use href="#az-entra"></use></svg>Identity — Microsoft Entra ID <span class="badge ga">GA</span></div>
           <div class="d">누가 / 어떤 에이전트가 접근하는가</div></div></div>
         <div class="li"><div class="b">02</div><div class="tx">
-          <div class="t">Data Protection — Microsoft Purview <span class="badge ga">GA</span></div>
+          <div class="t"><svg class="ic" aria-hidden="true"><use href="#az-purview"></use></svg>Data Protection — Microsoft Purview <span class="badge ga">GA</span></div>
           <div class="d">민감 데이터 분류 · 유출 방지</div></div></div>
         <div class="li"><div class="b">03</div><div class="tx">
-          <div class="t">Threat Protection — Microsoft Defender <span class="badge ga">GA</span></div>
+          <div class="t"><svg class="ic" aria-hidden="true"><use href="#az-defender"></use></svg>Threat Protection — Microsoft Defender <span class="badge ga">GA</span></div>
           <div class="d">공격 · 이상 행위 탐지</div></div></div>
         <div class="li"><div class="b">04</div><div class="tx">
-          <div class="t">Agent Governance — Microsoft Agent 365 <span class="badge ga">GA 2026.5</span></div>
+          <div class="t"><svg class="ic" aria-hidden="true"><use href="#az-monitor"></use></svg>Agent Governance — Microsoft Agent 365 <span class="badge ga">GA 2026.5</span></div>
           <div class="d">에이전트 수명주기 · 감사 · 통제</div></div></div>
       </div>
       <div class="callout reveal r7" style="margin-top:28px">
@@ -2753,12 +2795,12 @@ body.sb-collapsed .sb-toggle{display:block}
         <tbody>
           <tr><td><strong>AI Experience</strong></td><td>사용자 접점</td><td>Microsoft 365 Copilot · Microsoft Teams</td></tr>
           <tr><td><strong>Agents / AI App</strong></td><td>업무 수행 에이전트</td><td>Microsoft 365 Copilot · Microsoft Copilot Studio · Microsoft Foundry Agent Service</td></tr>
-          <tr><td><strong>Agent Build</strong></td><td>두 도구로 제작</td><td><strong>Microsoft Copilot Studio</strong>(현업·IT) · <strong>Microsoft Foundry</strong>(개발자)</td></tr>
-          <tr><td><strong>Ontology</strong></td><td>의미 · 지식 계층</td><td>Fabric IQ · Work IQ · Foundry IQ <span class="badge pv">Preview</span> · <strong>Azure AI Search</strong> <span class="badge ga">GA</span></td></tr>
-          <tr><td><strong>OneLake</strong></td><td>통합 데이터 레이크</td><td><strong>Microsoft Fabric — OneLake</strong></td></tr>
-          <tr><td><strong>Existing Data</strong></td><td>원본 연결</td><td>Microsoft Fabric Shortcut / Mirroring · Azure Data Factory</td></tr>
+          <tr><td><strong>Agent Build</strong></td><td>두 도구로 제작</td><td><svg class="ic" aria-hidden="true"><use href="#az-foundry"></use></svg><strong>Microsoft Copilot Studio</strong>(현업·IT) · <strong>Microsoft Foundry</strong>(개발자)</td></tr>
+          <tr><td><strong>Ontology</strong></td><td>의미 · 지식 계층</td><td><svg class="ic" aria-hidden="true"><use href="#az-search"></use></svg>Fabric IQ · Work IQ · Foundry IQ <span class="badge pv">Preview</span> · <strong>Azure AI Search</strong> <span class="badge ga">GA</span></td></tr>
+          <tr><td><strong>OneLake</strong></td><td>통합 데이터 레이크</td><td><svg class="ic" aria-hidden="true"><use href="#az-storage"></use></svg><strong>Microsoft Fabric — OneLake</strong></td></tr>
+          <tr><td><strong>Existing Data</strong></td><td>원본 연결</td><td><svg class="ic" aria-hidden="true"><use href="#az-adf"></use></svg>Microsoft Fabric Shortcut / Mirroring · Azure Data Factory</td></tr>
           <tr><td><strong>Agentic DevOps</strong></td><td>개발 · 운영</td><td>GitHub Enterprise · GitHub Actions · GitHub Copilot · GitHub Code Security</td></tr>
-          <tr><td><strong>Governance</strong></td><td>신뢰 · 보안</td><td>Microsoft Agent 365 · Microsoft Purview · Microsoft Entra ID · Microsoft Defender</td></tr>
+          <tr><td><strong>Governance</strong></td><td>신뢰 · 보안</td><td><svg class="ic" aria-hidden="true"><use href="#az-defender"></use></svg>Microsoft Agent 365 · Microsoft Purview · Microsoft Entra ID · Microsoft Defender</td></tr>
         </tbody>
       </table>
     </div>
