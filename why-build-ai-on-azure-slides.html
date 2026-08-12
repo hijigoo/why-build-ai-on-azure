@@ -1468,7 +1468,7 @@ body.editing .edit-hint{display:block}
           <tr><td><strong>① Agent 전사 Scale</strong></td><td>Agent Build + Agents + Experience</td>
             <td>Microsoft Copilot Studio · Microsoft Foundry · Microsoft 365 Copilot + Microsoft Teams</td></tr>
           <tr><td><strong>② 데이터 IQ Layer</strong></td><td>OneLake + Ontology</td>
-            <td>Microsoft Fabric · Fabric IQ + Work IQ + Foundry IQ <span class="badge pv">Preview · 확인 필요</span></td></tr>
+            <td>Microsoft Fabric · Fabric IQ + Work IQ <span class="badge pv">Preview</span> + Foundry IQ <span class="badge ga">일부 GA</span></td></tr>
           <tr><td><strong>③ 보안 · 거버넌스</strong></td><td>Governance (전 계층 관통)</td>
             <td>Microsoft Agent 365 <span class="badge ga">GA 2026.5</span> · Microsoft Purview · Microsoft Entra ID · Microsoft Defender</td></tr>
           <tr><td><strong>(공통) 개발 생산성</strong></td><td>Agentic DevOps</td>
@@ -1483,10 +1483,10 @@ body.editing .edit-hint{display:block}
   </div>
   <div class="notes">
     <p>이 표는 Part 2와 Part 3을 잇는 다리입니다. 왼쪽은 경영 관점의 언어, 오른쪽은 기술 관점의 언어이며 같은 것을 두 방식으로 표현한 것입니다.</p>
-    <p><b>표에서 줄인 각주</b> — ①의 배포 경로: Microsoft Copilot Studio 에이전트는 Microsoft 365·Microsoft Teams로 <b>GA</b>로 배포되고, Microsoft Foundry 에이전트를 같은 접점으로 게시하는 것은 현재 <b>Early Access Preview</b>입니다. (공통) 항목의 GitHub 구성에는 <b>GitHub Secret Protection</b>(비밀키 탐지·푸시 보호)도 포함됩니다.</p>
-    <p><b>성숙도 구분은 도입 계획에 직접 영향을 줍니다.</b> ②의 IQ 계열은 Preview 단계이므로, 오늘 착수하려면 <b>Azure AI Search와 자체 시맨틱·메타데이터 모델링</b>으로 의미 계층을 구성하고 IQ는 로드맵으로 분리하는 것이 안전합니다.</p>
+    <p><b>표에서 줄인 각주</b> — ①의 배포 경로: Microsoft Copilot Studio 에이전트와 Microsoft Foundry 에이전트 모두 Microsoft 365 Copilot·Microsoft Teams로 <b>정식 출시(GA)된 게시 기능</b>을 통해 배포할 수 있습니다. Microsoft Foundry는 포털의 게시 버튼 또는 REST API를 사용하며, 공개 네트워크 접근을 차단한 프로젝트는 REST API 경로를 씁니다. (공통) 항목의 GitHub 구성에는 <b>GitHub Secret Protection</b>(비밀키 탐지·푸시 보호)도 포함됩니다.</p>
+    <p><b>성숙도 구분은 도입 계획에 직접 영향을 줍니다.</b> ②의 IQ 계열 중 <b>Fabric IQ와 Work IQ는 Preview</b>이고, <b>Foundry IQ는 일부 기능이 정식 출시</b>되었습니다. 오늘 착수한다면 정식 출시된 범위와 <b>Azure AI Search 및 자체 시맨틱·메타데이터 모델링</b>으로 의미 계층을 구성하고, Preview 영역은 로드맵으로 분리하는 것이 안전합니다.</p>
     <dl class="gloss">
-      <dt>Early Access Preview</dt><dd>일부 고객에게 먼저 공개하는 초기 시험 단계입니다. 기능과 지원 범위가 바뀔 수 있어 운영 도입 전에 재확인이 필요합니다.</dd>
+      <dt>일부 GA(부분 정식 출시)</dt><dd>제품의 일부 기능만 정식 출시되고 나머지는 Preview로 남아 있는 상태입니다. 도입 범위를 정식 출시된 기능으로 한정하면 운영에 쓸 수 있습니다.</dd>
     </dl>
   </div>
 </section>
@@ -1665,14 +1665,14 @@ body.editing .edit-hint{display:block}
         </tbody>
       </table>
       <div class="callout warn reveal r5">
-        <b>세 IQ는 현재 Preview 단계입니다</b> <span class="badge pv">Preview</span><br>
-        회사 맥락 계층은 <b>Azure AI Search</b>와 자체 시맨틱·메타데이터 모델링으로 지금 구성할 수 있습니다. 세 IQ는 정식 출시와 한국 리전 지원이 확정된 뒤 단계적으로 확장합니다.
+        <b>성숙도가 서로 다릅니다</b> <span class="badge pv">Fabric IQ · Work IQ Preview</span> <span class="badge ga">Foundry IQ 일부 GA</span><br>
+        회사 맥락 계층은 <b>Azure AI Search</b>와 자체 시맨틱·메타데이터 모델링으로 지금 구성할 수 있습니다. Preview 영역은 정식 출시와 한국 리전 지원이 확정된 뒤 단계적으로 확장합니다.
       </div>
     </div>
     <div class="s-foot"><span>Part 3 · 근거</span><span class="pg"></span></div>
   </div>
   <div class="notes">
-    <p>세 IQ는 강력한 방향이지만, 도입 계획을 세울 때는 <b>현재 성숙도를 정확히 아는 것이 더 중요합니다.</b> Fabric IQ·Work IQ·Foundry IQ는 Preview·발표 단계이며 도입 시점의 정식 출시 여부와 한국 리전 지원을 반드시 확인해야 합니다.</p>
+    <p>세 IQ는 강력한 방향이지만, 도입 계획을 세울 때는 <b>현재 성숙도를 정확히 아는 것이 더 중요합니다.</b> <b>Fabric IQ</b>는 온톨로지를 포함한 핵심 항목이 Preview이고, <b>Work IQ</b>도 공개 Preview 단계입니다. <b>Foundry IQ</b>는 이를 뒷받침하는 Azure AI Search의 에이전틱 검색이 2026-04-01 API 버전에서 첫 정식 출시를 맞아, 검색 인덱스·Azure Blob·OneLake·웹 지식 소스가 정식 출시 범위에 들어왔습니다. 다만 Microsoft Foundry 포털과 Azure 포털의 화면 경로는 아직 Preview로 제공되므로, 도입 시점의 정식 출시 범위와 한국 리전 지원을 확인해야 합니다.</p>
     <p><b>지금 시작할 수 있는 구성</b> — 의미 계층은 IQ 없이도 만들 수 있습니다. 정식 출시된 <b>Azure AI Search</b>로 검색·근거 인덱스를 만들고, 자체 시맨틱 모델과 메타데이터로 비즈니스 용어를 정의하면 됩니다. 실제로 많은 조직이 이 구성으로 시작합니다.</p>
     <p>전사 온톨로지를 처음부터 만들 필요는 없습니다. <b>파일럿 유스케이스 하나에 필요한 용어 10~20개</b>만 정의하면 4~6주 안에 마칠 수 있습니다.</p>
     <dl class="gloss">
@@ -1831,7 +1831,7 @@ body.editing .edit-hint{display:block}
 <dl class="gloss">
       <dt>Snowflake · SAP · Salesforce</dt><dd>많은 기업이 이미 쓰고 있는 외부 시스템입니다. 각각 고객 데이터, 전사 자원 관리(ERP), 영업 관리(CRM)를 담당하며 서로 다른 곳에 데이터가 쌓입니다.</dd>
       <dt>OneLake</dt><dd>그 흩어진 데이터를 원본 이동 없이 하나로 모아 보여 주는 조직 단일 데이터 저장소입니다.</dd>
-      <dt>Azure AI Search · Fabric IQ</dt><dd>모아 둔 데이터에 회사의 의미를 입히는 계층입니다. Azure AI Search는 지금 바로 쓸 수 있고, Fabric IQ는 Preview 단계입니다.</dd>
+      <dt>Azure AI Search · Fabric IQ</dt><dd>모아 둔 데이터에 회사의 의미를 입히는 계층입니다. Azure AI Search는 지금 바로 쓸 수 있고, Fabric IQ는 온톨로지를 포함한 핵심 항목이 Preview 단계입니다.</dd>
       <dt>Microsoft Copilot Studio · Microsoft Foundry</dt><dd>에이전트를 만드는 두 도구입니다. 앞은 현업의 노코드용, 뒤는 개발자의 프로코드용입니다.</dd>
       <dt>Microsoft 365 Copilot · Microsoft Teams</dt><dd>완성된 에이전트를 직원이 실제로 만나는 자리입니다. 새 도구를 배울 필요가 없습니다.</dd>
     </dl>
@@ -1922,7 +1922,7 @@ body.editing .edit-hint{display:block}
       </table>
       <div class="callout warn reveal r6">
         <b>이 계층을 구성하는 서비스</b><br>
-        Fabric IQ · Work IQ · Foundry IQ <span class="badge pv">Preview</span> &nbsp;·&nbsp; <b>Azure AI Search</b> <span class="badge ga">GA</span><br>
+        Fabric IQ · Work IQ <span class="badge pv">Preview</span> &nbsp;·&nbsp; Foundry IQ <span class="badge ga">일부 GA</span> &nbsp;·&nbsp; <b>Azure AI Search</b> <span class="badge ga">GA</span><br>
         의미 계층은 IQ 없이 <b>Azure AI Search</b>와 자체 시맨틱·메타데이터만으로도 구성할 수 있습니다.
       </div>
     </div>
@@ -2185,7 +2185,7 @@ body.editing .edit-hint{display:block}
           <tr><td><strong>AI Experience</strong></td><td>사용자 접점</td><td>Microsoft 365 Copilot · Microsoft Teams</td></tr>
           <tr><td><strong>Agents / AI App</strong></td><td>업무 수행 에이전트</td><td>Microsoft 365 Copilot · Microsoft Copilot Studio · Microsoft Foundry Agent Service</td></tr>
           <tr><td><strong>Agent Build</strong></td><td>두 도구로 제작</td><td><strong>Microsoft Copilot Studio</strong>(현업·IT) · <strong>Microsoft Foundry</strong>(개발자)</td></tr>
-          <tr><td><strong>Ontology</strong></td><td>의미 · 지식 계층</td><td>Fabric IQ · Work IQ · Foundry IQ <span class="badge pv">Preview</span> · <strong>Azure AI Search</strong> <span class="badge ga">GA</span></td></tr>
+          <tr><td><strong>Ontology</strong></td><td>의미 · 지식 계층</td><td>Fabric IQ · Work IQ <span class="badge pv">Preview</span> · Foundry IQ <span class="badge ga">일부 GA</span> · <strong>Azure AI Search</strong> <span class="badge ga">GA</span></td></tr>
           <tr><td><strong>OneLake</strong></td><td>통합 데이터 레이크</td><td><strong>Microsoft Fabric — OneLake</strong></td></tr>
           <tr><td><strong>Existing Data</strong></td><td>원본 연결</td><td>Microsoft Fabric Shortcut / Mirroring · Azure Data Factory</td></tr>
           <tr><td><strong>Agentic DevOps</strong></td><td>개발 · 운영</td><td>GitHub Enterprise · GitHub Actions · GitHub Copilot · GitHub Code Security</td></tr>
@@ -2201,7 +2201,8 @@ body.editing .edit-hint{display:block}
     <p><b>성숙도 구분</b></p>
     <ul>
       <li><em>정식 출시(GA) · 지금 도입 가능</em> — Microsoft 365 Copilot · GitHub Copilot · Azure OpenAI · Microsoft Fabric/OneLake · Microsoft Foundry · Microsoft Copilot Studio · Azure AI Search · Microsoft Entra ID · Microsoft Purview · Microsoft Defender · Azure AI Content Safety · Microsoft Agent 365</li>
-      <li><em>Preview · 로드맵으로 분리</em> — Fabric IQ · Work IQ · Foundry IQ</li>
+      <li><em>일부 정식 출시</em> — Foundry IQ. 에이전틱 검색이 2026-04-01 API 버전에서 정식 출시되었고, 검색 인덱스·Azure Blob·OneLake·웹 지식 소스가 이 범위에 들어갑니다. 그 외 지식 소스와 답변 합성 기능, 포털 화면 경로는 Preview로 남아 있습니다.</li>
+      <li><em>Preview · 로드맵으로 분리</em> — Fabric IQ · Work IQ</li>
       <li>Preview 기능은 <b>도입 시점의 정식 출시 여부와 한국 리전 지원을 반드시 재확인</b>해야 합니다. 시작은 정식 출시 기능 중심으로 하고 Preview는 확장 후보로 다루는 것이 안전합니다.</li>
     </ul>
 <dl class="gloss">
@@ -2209,7 +2210,7 @@ body.editing .edit-hint{display:block}
       <dt>Microsoft Foundry Agent Service</dt><dd>에이전트에 도구·지식·업무 흐름을 연결해 실제로 동작하게 만드는 Microsoft Foundry의 실행 구성 요소입니다.</dd>
       <dt>Microsoft Copilot Studio</dt><dd>현업과 IT 담당자가 코드 없이 에이전트를 만드는 도구입니다.</dd>
       <dt>Microsoft Foundry · Azure OpenAI</dt><dd>개발자가 프로덕션급 에이전트를 만드는 플랫폼과, 그 안에서 쓰이는 OpenAI 모델 서비스입니다.</dd>
-      <dt>Fabric IQ · Work IQ · Foundry IQ</dt><dd>각각 데이터의 의미, 업무의 맥락, 에이전트가 참조할 지식을 담당하는 지능 계층입니다. 현재 Preview 단계입니다.</dd>
+      <dt>Fabric IQ · Work IQ · Foundry IQ</dt><dd>각각 데이터의 의미, 업무의 맥락, 에이전트가 참조할 지식을 담당하는 지능 계층입니다. Fabric IQ와 Work IQ는 Preview이고, Foundry IQ는 일부 기능이 정식 출시되었습니다.</dd>
       <dt>Azure AI Search</dt><dd>사내 문서를 색인해 답변의 근거를 찾아오는 검색 서비스입니다. 지금 바로 도입할 수 있어 IQ 계열의 대안 출발점이 됩니다.</dd>
       <dt>Microsoft Fabric — OneLake</dt><dd>조직 전체가 함께 쓰는 단일 데이터 저장소입니다.</dd>
       <dt>Shortcut / Mirroring · Azure Data Factory</dt><dd>원본 데이터를 연결하는 세 가지 방식입니다. 순서대로 복제 없는 가상 연결, 준 실시간 동기화, 정제·가공이 필요한 경우의 파이프라인입니다.</dd>
@@ -2235,7 +2236,7 @@ body.editing .edit-hint{display:block}
         <div class="li"><div class="b">01</div><div class="tx"><div class="t">두 제작 도구가 서로 연동</div>
           <div class="d">Microsoft Copilot Studio와 Microsoft Foundry가 서로 호출하며 <b>멀티에이전트</b>로 확장</div></div></div>
         <div class="li"><div class="b">02</div><div class="tx"><div class="t">같은 접점으로 배포</div>
-          <div class="d">Microsoft Copilot Studio는 Microsoft 365·Microsoft Teams로 바로 배포 <span class="badge ga">GA</span> · Microsoft Foundry도 같은 접점 <span class="badge pv">Preview</span></div></div></div>
+          <div class="d">Microsoft Copilot Studio와 Microsoft Foundry 모두 Microsoft 365 Copilot·Microsoft Teams로 배포 <span class="badge ga">GA</span></div></div></div>
         <div class="li"><div class="b">03</div><div class="tx"><div class="t">하나의 신원 · 거버넌스 · 보안</div>
           <div class="d"><b>Microsoft Entra ID · Microsoft Purview · Microsoft Defender</b>로 전 계층을 한 번에 통제</div></div></div>
         <div class="li"><div class="b">04</div><div class="tx"><div class="t">운영 복잡도 감소</div>
@@ -2249,7 +2250,7 @@ body.editing .edit-hint{display:block}
   </div>
   <div class="notes">
     <p>Part 3의 결론입니다. 앞선 장들에서 개별 서비스를 살펴봤다면, 이 장은 <b>왜 그것들이 따로가 아니라 하나인가</b>를 정리합니다.</p>
-    <p><b>슬라이드에서 줄인 내용</b> — ①의 역할 구분: Microsoft Copilot Studio는 <b>현업·노코드</b>, Microsoft Foundry는 <b>개발자·프로코드</b>입니다. ②의 정확한 성숙도: Microsoft Foundry 에이전트를 Microsoft 365·Microsoft Teams에 게시하는 것은 <b>Early Access Preview</b>입니다. ④: 통합 부담과 운영 복잡도가 줄어 비즈니스에 집중할 수 있습니다.</p>
+    <p><b>슬라이드에서 줄인 내용</b> — ①의 역할 구분: Microsoft Copilot Studio는 <b>현업·노코드</b>, Microsoft Foundry는 <b>개발자·프로코드</b>입니다. ②의 게시 방식: Microsoft Foundry는 포털의 게시 버튼으로 Teams 앱 패키지를 자동 생성해 등록하며, 공개 네트워크 접근을 차단한 프로젝트는 REST API로 게시합니다. 조직 전체에 공개하려면 Microsoft 365 관리 센터의 승인이 필요합니다. ④: 통합 부담과 운영 복잡도가 줄어 비즈니스에 집중할 수 있습니다.</p>
     <p><b>비교 검토에서의 핵심</b> — 개별 기능은 어디서든 조합할 수 있습니다. 조합으로 만들기 어려운 것은 <b>하나의 신원 체계와 하나의 감사 기록</b>이며, 여기서 실질적인 차이가 발생합니다.</p>
     <dl class="gloss">
       <dt>멀티에이전트(Multi-agent)</dt><dd>여러 에이전트가 각자 역할을 나눠 맡고 서로 호출하며 하나의 업무를 함께 처리하는 방식입니다.</dd>
@@ -2429,7 +2430,7 @@ body.editing .edit-hint{display:block}
           <div class="fn-d">전사 확대 + 정책 표준화<br>Microsoft Entra ID·Microsoft Purview·Microsoft Defender·Microsoft Agent 365</div></div>
       </div>
       <div class="callout warn reveal r6">
-        <b>단계별 성숙도</b> — 1·3단계는 정식 출시된 기능만으로 착수할 수 있습니다 <span class="badge ga">GA</span>. 2단계의 IQ 계층은 <span class="badge pv">Preview</span>이므로 <b>Azure AI Search</b>로 대체해 시작하고, 정식 출시와 한국 리전 지원을 확인한 뒤 반영합니다.
+        <b>단계별 성숙도</b> — 1·3단계는 정식 출시된 기능만으로 착수할 수 있습니다 <span class="badge ga">GA</span>. 2단계는 <b>Azure AI Search</b>로 시작하고, <b>Fabric IQ</b> 등 <span class="badge pv">Preview</span> 영역은 정식 출시와 한국 리전 지원을 확인한 뒤 반영합니다.
       </div>
     </div>
     <div class="s-foot"><span>Part 4 · 실현</span><span class="pg"></span></div>
@@ -2447,7 +2448,7 @@ body.editing .edit-hint{display:block}
 <dl class="gloss">
       <dt>OneLake (1단계)</dt><dd>흩어진 데이터를 원본 이동 없이 연결하는 단일 저장소입니다. Shortcut으로 가상 연결하는 것부터 시작합니다.</dd>
       <dt>Azure AI Search (2단계)</dt><dd>사내 문서를 색인해 AI 답변의 근거를 찾아오게 합니다. 지금 바로 쓸 수 있어 의미 계층의 출발점이 됩니다.</dd>
-      <dt>Fabric IQ (2단계)</dt><dd>데이터의 비즈니스 의미를 정의하는 지능 계층입니다. Preview 단계이므로 도입 시점에 정식 출시 여부를 확인해야 합니다.</dd>
+      <dt>Fabric IQ (2단계)</dt><dd>데이터의 비즈니스 의미를 정의하는 지능 계층입니다. 온톨로지를 포함한 핵심 항목이 Preview 단계이므로 도입 시점에 정식 출시 여부를 확인해야 합니다.</dd>
       <dt>Microsoft Copilot Studio · Microsoft Foundry (3단계)</dt><dd>파일럿 에이전트를 만드는 두 도구입니다. 현업은 앞을, 개발자는 뒤를 사용합니다.</dd>
       <dt>Microsoft Entra ID · Purview · Defender · Agent 365 (4단계)</dt><dd>전사 확산 단계에서 신원·데이터·위협·에이전트 수명주기를 각각 담당합니다. 다만 설계는 1단계부터 함께 하는 것이 좋습니다.</dd>
       <dt>Azure Monitor (4단계)</dt><dd>확산된 에이전트가 정상 동작하는지, 비용이 얼마나 드는지 지속적으로 관측합니다.</dd>
