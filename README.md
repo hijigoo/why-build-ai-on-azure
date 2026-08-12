@@ -1,28 +1,21 @@
-# Markdown to Scroll Deck
+# Why Build AI on Azure?
 
-Markdown 원고를 **세로 스크롤형 HTML 슬라이드 문서**로 바꾸는 Copilot CLI 스킬과, 그 스킬로 만든 샘플 프로젝트입니다.
+엔터프라이즈 의사결정자(C-Level·사업부 임원·팀장)를 위한 **Azure AI 기술 소개 온라인 덱**입니다.
+"왜 지금, 왜 Azure에서 AI를 구축하는가"를 **신뢰 → 가치 → 플랫폼 → 실현**의 흐름으로 정리했습니다.
 
-읽는 사람은 위에서 아래로 스크롤하고, 각 장은 발표 슬라이드처럼 독립적으로 보입니다.
-슬라이드에 다 담지 못한 상세 설명은 **바로 아래 설명란**에 붙어, 발표 없이 혼자 읽어도 맥락이 이어집니다.
+세로 스크롤 원페이지와 발표용 덱, 두 형태로 제공되며 **브라우저에서 바로 열립니다.**
 
-결과물은 **의존성 없는 단일 HTML 파일**이라 브라우저에서 바로 열립니다.
+## 온라인으로 바로 보기
 
----
-
-## 샘플 프로젝트
-
-스킬이 어떤 결과를 만드는지 보려면 아래 두 문서를 열어 보세요.
-
-### Why Build AI on Azure? — 49장
-
-엔터프라이즈 의사결정자(C-Level·사업부 임원·팀장)를 위한 **Azure AI 기술 소개 자료**입니다.
-"왜 지금, 왜 Azure에서 AI를 구축하는가"를 신뢰 → 가치 → 플랫폼 → 실현의 흐름으로 정리했습니다.
-
-| 파일 | 형태 | 조작 |
+| 형태 | 링크 | 조작 |
 |---|---|---|
-| [`why-build-ai-on-azure-onepage.html`](./why-build-ai-on-azure-onepage.html) | 세로 스크롤 원페이지 (좌측 목차) | 스크롤 · `J`/`K` 이동 · `N` 설명란 · `M` 목차 |
-| [`why-build-ai-on-azure-slides.html`](./why-build-ai-on-azure-slides.html) | 발표용 덱 | `←`/`→` 이동 · `N` 설명란 |
-| [`why-build-ai-on-azure.md`](./why-build-ai-on-azure.md) | 원고 (Mermaid 다이어그램 20개) | GitHub에서 바로 렌더링 |
+| **원페이지** (세로 스크롤 · 좌측 목차) | **[열기 ↗](https://hijigoo.github.io/why-build-ai-on-azure/why-build-ai-on-azure-onepage.html)** | 스크롤 · `J`/`K` 이동 · `N` 설명란 · `M` 목차 |
+| **발표용 덱** | **[열기 ↗](https://hijigoo.github.io/why-build-ai-on-azure/why-build-ai-on-azure-slides.html)** | `←`/`→` 이동 · `N` 설명란 |
+| **원고 (Markdown)** | [`why-build-ai-on-azure.md`](./why-build-ai-on-azure.md) | GitHub에서 Mermaid 다이어그램 20개 바로 렌더링 |
+
+> 링크는 GitHub Pages로 호스팅됩니다. 저장소 최초 배포 직후에는 반영에 1~2분 걸릴 수 있습니다.
+
+### 구성
 
 | 파트 | 내용 |
 |------|------|
@@ -31,21 +24,16 @@ Markdown 원고를 **세로 스크롤형 HTML 슬라이드 문서**로 바꾸는
 | **Part 3. 완결 스택** | 핵심 서비스 6종, 전체 아키텍처, 계층별 해설, Agentic DevOps, Governance |
 | **Part 4. 실현** | Personas, 도입 시나리오, 로드맵, 자주 묻는 질문 |
 
-### Microsoft Foundry 네트워크 격리 — 19장
-
-보안·인프라 담당자와 클라우드 아키텍트를 위한 자료입니다.
-Foundry를 사설 네트워크 경계 안에서 운영할 때의 선택지와 되돌릴 수 없는 제약을 정리했습니다.
-
-👉 [`samples/foundry-network-isolation/`](./samples/foundry-network-isolation/)
-
-인바운드(공용 접근 정책·프라이빗 엔드포인트·DNS) → 아웃바운드(BYO 가상 네트워크와 관리형 가상 네트워크의 대비·방화벽) → 도구와 제약(도구별 지원 현황·배포 전 체크리스트) 순으로 구성했습니다.
-
-> 이 문서는 **스킬의 표준 워크플로만으로** 만들었습니다. 원고 작성부터 검증까지 거친 결과물이라,
-> 새 덱을 만들 때 참고 예시로 쓸 수 있습니다.
-
 ---
 
-## 스킬 사용법
+## 이 덱을 만든 스킬 — `markdown-to-scroll-deck`
+
+이 덱은 손으로 HTML을 짠 것이 아니라, **Copilot CLI 스킬**로 만들었습니다.
+Markdown 원고를 **세로 스크롤형 HTML 슬라이드 문서**로 바꿔 주는 스킬입니다.
+
+읽는 사람은 위에서 아래로 스크롤하고, 각 장은 발표 슬라이드처럼 독립적으로 보입니다.
+슬라이드에 다 담지 못한 상세 설명은 **바로 아래 설명란**에 붙어, 발표 없이 혼자 읽어도 맥락이 이어집니다.
+결과물은 **의존성 없는 단일 HTML 파일**이라 브라우저에서 바로 열립니다.
 
 ### 무엇에 맞는 스킬인가
 
@@ -128,6 +116,40 @@ node .github/skills/markdown-to-scroll-deck/scripts/verify.js http://localhost:8
 
 ---
 
+## 완성된 샘플 + 만든 명령
+
+이 스킬로 실제로 만든 결과물입니다. 각 문서 옆에 **어떤 명령으로 만들었는지** 함께 적었습니다.
+
+### 1. Why Build AI on Azure? — 49장
+
+이 저장소의 메인 덱(위 [온라인으로 바로 보기](#온라인으로-바로-보기))입니다. 기존 Markdown 원고에서 출발했습니다.
+
+```
+/markdown-to-scroll-deck  why-build-ai-on-azure.md 를 스크롤 덱으로 만들어줘
+```
+
+- 온라인: [원페이지 ↗](https://hijigoo.github.io/why-build-ai-on-azure/why-build-ai-on-azure-onepage.html) · [발표용 덱 ↗](https://hijigoo.github.io/why-build-ai-on-azure/why-build-ai-on-azure-slides.html)
+- 원페이지는 발표용 덱에서 파생됩니다 → `python3 build_onepage.py`
+
+### 2. Microsoft Foundry 네트워크 격리 — 19장
+
+보안·인프라 담당자와 클라우드 아키텍트를 위한 자료입니다.
+Foundry를 사설 네트워크 경계 안에서 운영할 때의 선택지와 되돌릴 수 없는 제약을 정리했습니다.
+**원고 파일 없이 주제만 주고** 스킬이 공식 문서를 조회해 원고부터 작성했습니다.
+
+```
+/markdown-to-scroll-deck  Microsoft Foundry 네트워크 격리에 대한 덱을 만들어줘
+```
+
+- 온라인: [완성 문서 ↗](https://hijigoo.github.io/why-build-ai-on-azure/samples/foundry-network-isolation/foundry-network-isolation.html)
+- 소스: [`samples/foundry-network-isolation/`](./samples/foundry-network-isolation/)
+- 인바운드(공용 접근 정책·프라이빗 엔드포인트·DNS) → 아웃바운드(BYO 가상 네트워크와 관리형 가상 네트워크의 대비·방화벽) → 도구와 제약(도구별 지원 현황·배포 전 체크리스트) 순으로 구성했습니다.
+
+> 두 샘플 모두 **스킬의 표준 워크플로만으로** 만들었습니다. 원고 작성부터 검증까지 거친 결과물이라,
+> 새 덱을 만들 때 참고 예시로 쓸 수 있습니다.
+
+---
+
 ## 자료 수정하기
 
 **Why Build AI on Azure?** 는 덱과 원페이지 두 파일로 되어 있고, 원페이지는 덱에서 파생됩니다.
@@ -149,9 +171,9 @@ python3 build_onepage.py
 ## 저장소 구조
 
 ```
-.github/skills/markdown-to-scroll-deck/   스킬 본체
-samples/foundry-network-isolation/        샘플 — Foundry 네트워크 격리 (19장)
-why-build-ai-on-azure*.{md,html}          샘플 — Why Build AI on Azure? (49장)
+why-build-ai-on-azure*.{md,html}          메인 덱 — Why Build AI on Azure? (49장)
 build_onepage.py                          덱 → 원페이지 재생성기
 build.js                                  PPTX 생성기
+samples/foundry-network-isolation/        샘플 — Foundry 네트워크 격리 (19장)
+.github/skills/markdown-to-scroll-deck/   스킬 본체
 ```
