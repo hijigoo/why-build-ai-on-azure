@@ -16,7 +16,7 @@ Copilot Studio에 Foundry 아이콘을 잘못 붙인 적이 있다).
 | 제품 | 심볼 ID |
 |---|---|
 | Azure OpenAI | `az-openai` |
-| Microsoft Foundry (제품) | `az-foundry` (파란 리본, 구 AI Studio 마크) |
+| Microsoft Foundry | `az-foundry` |
 | Azure AI Search | `az-search` |
 | Azure AI Content Safety | `az-safety` |
 | Microsoft Entra ID | `az-entra` |
@@ -34,9 +34,10 @@ Copilot Studio에 Foundry 아이콘을 잘못 붙인 적이 있다).
 | **OneLake** | `fab-onelake` |
 | **Microsoft Copilot Studio** | `fab-copilot` |
 | **Fabric IQ** | `fab-fabric` (Microsoft Fabric 녹색 F) |
-| **Foundry IQ** | `ms-foundry` (Microsoft Foundry 보라 스타버스트) |
+| **Work IQ** | `fab-copilot` (Microsoft Copilot 컬러 리본) |
+| **Foundry IQ** | `az-foundry` (Microsoft Foundry 리본) |
 | 지식 그래프 (일반) | `fab-graphiq` |
-| Microsoft 365 Copilot · Agent 365 · **Work IQ** | `ms-365` |
+| Microsoft 365 Copilot · Agent 365 | `ms-365` |
 | GitHub · GitHub Copilot · Actions · Code Security | `gh-mark` |
 
 `gh-mark`는 단색이므로 `ic-gh`를 함께 붙인다 (지면에 따라 색 자동 전환).
@@ -70,8 +71,7 @@ Copilot Studio에 Foundry 아이콘을 잘못 붙인 적이 있다).
 | `fab-onelake` | OneLake | Fabric 공식 |
 | `fab-copilot` | Copilot / Copilot Studio | Fabric 공식 |
 | `fab-graphiq` | Graph Intelligence (Fabric IQ 등) | Fabric 공식 |
-| `ms-365` | Microsoft 365 / Agent 365 / Work IQ | 브랜드 로고 |
-| `ms-foundry` | Foundry IQ | 신규 Foundry 마크 (자체 제작) |
+| `ms-365` | Microsoft 365 / Agent 365 | 브랜드 로고 |
 | `gh-mark` | GitHub / GitHub Copilot | Octicons |
 
 ---
@@ -153,16 +153,16 @@ node .github/skills/markdown-to-scroll-deck/scripts/verify.js <url>
 ## 세 IQ 아이콘 (자주 헷갈림)
 
 Fabric IQ / Work IQ / Foundry IQ는 이름이 비슷해 아이콘을 바꿔 다는 실수가 잦다.
-각각 **모체 제품의 브랜드 마크**를 쓴다.
+각각 **모체 제품의 브랜드 마크**를 그대로 쓴다.
 
 | IQ | 심볼 | 생김새 |
 |---|---|---|
 | Fabric IQ | `fab-fabric` | Microsoft Fabric 녹색 "F" |
-| Work IQ | `ms-365` | Microsoft 365 4색 그리드 |
-| Foundry IQ | `ms-foundry` | 보라색 스타버스트 + 하단 점 |
+| Work IQ | `fab-copilot` | Microsoft Copilot 컬러 리본 |
+| Foundry IQ | `az-foundry` | Microsoft Foundry 리본 |
 
-`az-foundry`(파란 리본)는 **제품으로서의 Microsoft Foundry**에 쓰고,
-Foundry IQ에는 쓰지 않는다. 둘은 다른 마크다.
+Work IQ와 Microsoft Copilot Studio가 같은 `fab-copilot`을 쓰는 것은 의도된 것이다.
+둘 다 Copilot 계열이라 브랜드 마크가 같다.
 
-`ms-foundry`는 공식 배포 아이콘 세트에 아직 없어 브랜드 마크를 보고 직접 그린 것이다.
-공식 SVG가 배포되면 교체한다.
+**브랜드 마크를 직접 그리지 않는다.** 공식 배포본에 없으면 의미가 가장 가까운 기존
+심볼을 쓰거나 아예 넣지 않는다. 손으로 그린 로고는 결국 어색해진다.
