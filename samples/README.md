@@ -7,6 +7,9 @@
 |---|---|---|
 | [`foundry-network-isolation/`](./foundry-network-isolation/) | Microsoft Foundry 네트워크 격리 | 19장 |
 
+저장소 루트의 **Why Build AI on Azure?**(49장)도 같은 스킬로 만든 문서입니다.
+스킬 소개와 사용법은 [최상위 README](../README.md)를 참고하세요.
+
 ## 각 폴더의 구성
 
 ```
