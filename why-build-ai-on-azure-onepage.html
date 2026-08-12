@@ -527,12 +527,7 @@ body{font-family:var(--f-body);color:var(--ink);
   color:#fff;line-height:1.14}
 .sb-sub{margin-top:9px;font-size:12.5px;line-height:1.55;color:var(--on-dark-dim);letter-spacing:-.01em}
 
-.sb-tools{padding:0 26px 16px;display:flex;flex-direction:column;gap:9px;flex:0 0 auto}
-.sb-search{width:100%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);
-  border-radius:2px;padding:9px 11px;color:#fff;font-family:var(--f-body);font-size:13px;
-  outline:none;transition:border-color .2s}
-.sb-search::placeholder{color:#7186A0}
-.sb-search:focus{border-color:var(--cobalt)}
+.sb-tools{padding:0 26px 18px;flex:0 0 auto}
 .sb-btns{display:flex;gap:7px}
 .sb-btn{flex:1;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
   background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);color:#A9BBD1;
@@ -546,7 +541,6 @@ body{font-family:var(--f-body);color:var(--ink);
 .sb-nav::-webkit-scrollbar{width:8px}
 .sb-nav::-webkit-scrollbar-thumb{background:#2B3B54;border-radius:6px}
 .nav-group{margin-bottom:16px}
-.nav-group.hide{display:none}
 .nav-kicker{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;
   color:var(--cobalt-soft);padding:0 12px;margin-bottom:3px}
 .nav-label{font-size:13.5px;font-weight:700;color:#fff;padding:0 12px 8px;letter-spacing:-.02em;
@@ -561,7 +555,6 @@ body{font-family:var(--f-body);color:var(--ink);
 .nav-link.active{background:rgba(44,107,237,.24)}
 .nav-link.active .nav-t{color:#fff;font-weight:700}
 .nav-link.active .nav-n{color:var(--cobalt-soft)}
-.nav-link.hide{display:none}
 
 /* --- 본문 --- */
 .main{margin-left:var(--sb-w);padding:56px 56px 120px;max-width:1580px}
@@ -672,13 +665,11 @@ body.notes-hidden .note{display:none}
   <div class="sb-head">
     <div class="sb-brand"><span class="sb-sq"></span><span class="sb-kick">Enterprise AI Platform</span></div>
     <div class="sb-title">Why Build AI<br>on Azure?</div>
-    <div class="sb-sub">데이터에서 에이전트까지 — Azure 위에서 만드는 신뢰할 수 있는 Enterprise AI Platform</div>
+    <div class="sb-sub">데이터에서 에이전트까지</div>
   </div>
   <div class="sb-tools">
-    <input class="sb-search" id="sbSearch" type="search" placeholder="섹션 검색 (예: 거버넌스)" aria-label="섹션 검색">
     <div class="sb-btns">
-      <button class="sb-btn on" id="notesBtn" title="슬라이드 설명 표시/숨김 (N)">설명</button>
-      <a class="sb-btn" href="why-build-ai-on-azure-slides.html" title="슬라이드 모드로 열기">덱 모드</a>
+      <button class="sb-btn on" id="notesBtn" title="슬라이드 설명 표시/숨김 (N)">슬라이드 설명</button>
     </div>
   </div>
   <div class="sb-nav" id="sbNav">
@@ -3362,24 +3353,7 @@ window.addEventListener('scroll', () => {
 syncSpy(); syncProgress();
 
 /* ===========================================================
-   4. 목차 검색 필터
-   =========================================================== */
-document.getElementById('sbSearch').addEventListener('input', (e) => {
-  const q = e.target.value.trim().toLowerCase();
-  document.querySelectorAll('.nav-group').forEach(g => {
-    let shown = 0;
-    g.querySelectorAll('.nav-link').forEach(a => {
-      const hit = !q || a.textContent.toLowerCase().includes(q)
-                     || (a.getAttribute('title') || '').toLowerCase().includes(q);
-      a.classList.toggle('hide', !hit);
-      if (hit) shown++;
-    });
-    g.classList.toggle('hide', shown === 0);
-  });
-});
-
-/* ===========================================================
-   5. 노트 토글 · 섹션 단위 이동 · 모바일 서랍
+   4. 슬라이드 설명 토글 · 섹션 단위 이동 · 모바일 서랍
    =========================================================== */
 const notesBtn = document.getElementById('notesBtn');
 notesBtn.addEventListener('click', () => {
@@ -3402,7 +3376,6 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'j' || e.key === 'J'){ e.preventDefault(); goto(1); }
   if (e.key === 'k' || e.key === 'K'){ e.preventDefault(); goto(-1); }
   if (e.key === 'n' || e.key === 'N'){ notesBtn.click(); }
-  if (e.key === '/'){ e.preventDefault(); document.getElementById('sbSearch').focus(); }
 });
 
 document.getElementById('toTop').addEventListener('click',
