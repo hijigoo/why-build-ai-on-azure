@@ -1,6 +1,6 @@
 ---
 name: markdown-to-scroll-deck
-description: Markdown 원고를 세로 스크롤형 HTML 슬라이드 문서로 변환합니다. 각 슬라이드는 고정 16:9 무대로 발표 자료처럼 보이고, 상세 설명은 슬라이드 바로 아래 설명란으로 분리됩니다. 왼쪽에 접이식 목차가 붙습니다. 사용자가 마크다운 문서를 슬라이드/발표자료/원페이지 문서로 만들어 달라고 하거나, 주제만 주고 발표 자료를 만들어 달라고 할 때 사용합니다.
+description: Markdown 원고를 세로 스크롤형 HTML 슬라이드 문서로 변환합니다. 각 슬라이드는 고정 16:9 무대로 발표 자료처럼 보이고, 상세 설명은 슬라이드 바로 아래 설명란으로 분리되며 왼쪽에 접이식 목차가 붙습니다. Microsoft·Azure 제품을 다루는 한국어 엔터프라이즈 기술 자료(고객 제안, 아키텍처 소개, 도입 가이드)에 최적화되어 있습니다. 사용자가 마크다운 문서를 슬라이드/발표자료/원페이지 문서로 만들어 달라고 하거나, Azure·Microsoft 관련 주제로 발표 자료를 만들어 달라고 할 때 사용합니다.
 ---
 
 # Markdown to Scroll Deck
@@ -8,6 +8,22 @@ description: Markdown 원고를 세로 스크롤형 HTML 슬라이드 문서로 
 Markdown 원고 → **세로 스크롤형 HTML 슬라이드 문서**.
 읽는 사람은 위에서 아래로 스크롤하고, 각 장은 발표 슬라이드처럼 독립적으로 보인다.
 슬라이드에 못 담은 상세는 바로 아래 **설명란**에 붙는다.
+
+## 이 스킬의 범위
+
+**최적화된 대상** — Microsoft·Azure 제품을 다루는 **한국어 엔터프라이즈 기술 자료**.
+고객 제안서, 아키텍처 소개, 도입 가이드, 기술 세미나 자료.
+
+그래서 이런 것들이 이미 들어 있다:
+
+- Azure·Microsoft·GitHub **공식 아이콘 21종**
+- 딥네이비 + 코발트의 **엔터프라이즈 톤** 단일 테마
+- **GA / Preview 성숙도 배지** (`badge ga` / `badge pv`)
+- 한글 조판(Pretendard) + 라틴 디스플레이(Manrope) 조합
+
+**맞지 않는 경우** — 브랜드 아이덴티티가 따로 있는 덱, 비-Microsoft 제품 중심 자료,
+영어권 대상, 캐주얼·크리에이티브한 톤. 이럴 땐 다른 스킬을 쓰거나 테마를 새로 만들어야 한다.
+(색상은 `deck.css`의 `:root` 토큰에 모여 있어 교체 자체는 어렵지 않다.)
 
 ## 작업 방식 (중요)
 
@@ -168,6 +184,29 @@ node .../verify.js <url> --shots 1,5,12,20 --out /tmp
 - **번호는 한 장 안에서 완결** — 앞 장의 ①②③을 다음 장에서 ④부터 잇지 않는다.
 - **설명란은 독자에게** — "강조하세요", "청중에게 물어보세요" 같은 지시문을 쓰지 않는다.
 - **성숙도는 배지로** — GA/Preview를 섞어 쓰지 말고 `<span class="badge ga">`로 구분.
+
+### 개명된 Microsoft 제품 (자주 틀리는 부분)
+
+원고가 예전 이름을 쓰고 있으면 **현재 이름으로 고쳐서** 슬라이드에 넣는다.
+
+| 옛 이름 | 현재 이름 |
+|---|---|
+| Azure Active Directory / Azure AD | **Microsoft Entra ID** |
+| Azure AI Studio | **Microsoft Foundry** |
+| Azure Cognitive Search | **Azure AI Search** |
+| Azure Cognitive Services | **Azure AI Services** |
+| GitHub Advanced Security | **GitHub Secret Protection** + **GitHub Code Security** (둘로 분리됨) |
+| Office 365 | **Microsoft 365** |
+
+아이콘 세트(V21)에는 아직 옛 이름 파일이 섞여 있으니, 파일명이 아니라 **현재 제품명 기준**으로 고른다.
+
+### GA / Preview 다루기
+
+엔터프라이즈 고객은 성숙도에 민감하다. 섞어 쓰면 신뢰를 잃는다.
+
+- 슬라이드에 Preview 기능을 넣을 땐 **반드시 배지**를 붙인다.
+- **"오늘 GA로 시작하는 법"을 함께 제시**한다. Preview에 의존하는 제안은 승인되지 않는다.
+- 설명란에 "도입 시점의 GA 여부와 한국 리전 지원을 확인해야 한다"는 단서를 남긴다.
 
 ---
 

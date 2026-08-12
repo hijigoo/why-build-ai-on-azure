@@ -8,6 +8,43 @@
 
 ---
 
+## 제품 → 아이콘 대응표
+
+**이 표를 먼저 본다.** 심볼 이름만 보고 고르면 틀린다(이번에 Fabric에 스토리지 아이콘,
+Copilot Studio에 Foundry 아이콘을 잘못 붙인 적이 있다).
+
+| 제품 | 심볼 ID |
+|---|---|
+| Azure OpenAI | `az-openai` |
+| Microsoft Foundry | `az-foundry` |
+| Azure AI Search | `az-search` |
+| Azure AI Content Safety | `az-safety` |
+| Microsoft Entra ID | `az-entra` |
+| Microsoft Defender | `az-defender` |
+| Microsoft Purview | `az-purview` |
+| Azure Data Factory | `az-adf` |
+| Azure Monitor | `az-monitor` |
+| Cost Management | `az-cost` |
+| Private Link · VNet · 망분리 | `az-vnet` |
+| Storage Accounts | `az-storage` |
+| 데이터 레이크 (일반) | `az-lake` |
+| Power Platform | `az-power` |
+| 리전 · 데이터 상주 | `az-region` |
+| **Microsoft Fabric** | `fab-fabric` |
+| **OneLake** | `fab-onelake` |
+| **Microsoft Copilot Studio** | `fab-copilot` |
+| **Fabric IQ · 지식 그래프** | `fab-graphiq` |
+| Microsoft 365 Copilot · Agent 365 · Work IQ | `ms-365` |
+| GitHub · GitHub Copilot · Actions · Code Security | `gh-mark` |
+
+`gh-mark`는 단색이므로 `ic-gh`를 함께 붙인다 (지면에 따라 색 자동 전환).
+
+```html
+<svg class="ic ic-gh" aria-hidden="true"><use href="#gh-mark"></use></svg>
+```
+
+---
+
 ## 포함된 심볼
 
 | ID | 대상 | 출처 |
