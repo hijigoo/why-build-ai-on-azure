@@ -517,8 +517,15 @@ body{font-family:var(--f-body);color:var(--ink);
 /* --- 사이드바 --- */
 .sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--sb-w);z-index:70;
   background:linear-gradient(170deg,var(--navy) 0%,var(--navy-2) 62%,var(--navy-3) 100%);
-  display:flex;flex-direction:column;color:var(--on-dark)}
-.sb-head{padding:30px 26px 20px;flex:0 0 auto}
+  display:flex;flex-direction:column;color:var(--on-dark);
+  transition:transform .3s var(--ease)}
+/* 목차를 접으면 본문이 화면 전체 폭을 쓰고 슬라이드가 커집니다 */
+body.sb-collapsed .sidebar{transform:translateX(-100%)}
+.sb-head{position:relative;padding:30px 26px 20px;flex:0 0 auto}
+.sb-close{position:absolute;right:14px;top:16px;width:30px;height:30px;border-radius:2px;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);color:#A9BBD1;
+  font-size:12px;line-height:1;cursor:pointer;transition:color .2s,border-color .2s,background .2s}
+.sb-close:hover{color:#fff;border-color:var(--cobalt);background:rgba(44,107,237,.32)}
 .sb-brand{display:flex;align-items:center;gap:12px;margin-bottom:16px}
 .sb-sq{width:13px;height:13px;background:var(--cobalt);transform:rotate(45deg);flex:0 0 auto}
 .sb-kick{font-family:var(--f-mono);font-size:10px;letter-spacing:.28em;text-transform:uppercase;
@@ -557,7 +564,9 @@ body{font-family:var(--f-body);color:var(--ink);
 .nav-link.active .nav-n{color:var(--cobalt-soft)}
 
 /* --- 본문 --- */
-.main{margin-left:var(--sb-w);padding:56px 56px 120px;max-width:1580px}
+.main{margin-left:var(--sb-w);padding:56px 56px 120px;max-width:1580px;
+  transition:margin-left .3s var(--ease),max-width .3s var(--ease)}
+body.sb-collapsed .main{margin-left:auto;margin-right:auto;max-width:1760px;padding:56px 76px 120px}
 .intro{margin-bottom:52px;padding-bottom:36px;border-bottom:2px solid rgba(14,35,64,.16)}
 .intro .ik{font-family:var(--f-mono);font-size:13px;letter-spacing:.3em;text-transform:uppercase;
   color:var(--cobalt);margin-bottom:16px}
@@ -625,14 +634,19 @@ body.notes-hidden .note{display:none}
 /* --- 모바일: 사이드바를 접이식 서랍으로 (슬라이드 시트는 계속 16:9 유지) --- */
 .sb-toggle{display:none;position:fixed;left:14px;top:14px;z-index:90;width:44px;height:44px;
   border-radius:2px;background:var(--navy);color:#fff;border:1px solid rgba(255,255,255,.2);
-  font-size:17px;cursor:pointer}
+  font-size:17px;cursor:pointer;transition:background .2s}
+.sb-toggle:hover{background:var(--cobalt)}
+body.sb-collapsed .sb-toggle{display:block}
 .sb-scrim{display:none;position:fixed;inset:0;background:rgba(8,14,24,.55);z-index:65}
 @media (max-width:1100px){
   .sb-toggle{display:block}
-  .sidebar{transform:translateX(-100%);transition:transform .3s var(--ease);box-shadow:0 0 44px rgba(0,0,0,.4)}
-  body.sb-open .sidebar{transform:translateX(0)}
+  .sidebar{transform:translateX(-100%);box-shadow:0 0 44px rgba(0,0,0,.4)}
+  /* 모바일에서는 항상 오버레이 서랍이므로 데스크톱 접힘 상태를 무시합니다 */
+  body.sb-open .sidebar,
+  body.sb-collapsed.sb-open .sidebar{transform:translateX(0)}
   body.sb-open .sb-scrim{display:block}
-  .main{margin-left:0;padding:74px 22px 90px}
+  .main,
+  body.sb-collapsed .main{margin-left:0;margin-right:0;max-width:none;padding:74px 22px 90px}
   .intro h1{font-size:40px}
   .intro p{font-size:17px}
   .ch-part{display:none}
@@ -655,7 +669,7 @@ body.notes-hidden .note{display:none}
 <body>
 
 <div class="top-prog"><span id="topProg"></span></div>
-<button class="sb-toggle" id="sbToggle" aria-label="목차 열기">☰</button>
+<button class="sb-toggle" id="sbToggle" title="목차 열기 (M)" aria-label="목차 열기">☰</button>
 <div class="sb-scrim" id="sbScrim"></div>
 
 <!-- ===========================================================
@@ -663,6 +677,7 @@ body.notes-hidden .note{display:none}
      =========================================================== -->
 <nav class="sidebar" id="sidebar" aria-label="목차">
   <div class="sb-head">
+    <button class="sb-close" id="sbClose" title="목차 접기 (M)" aria-label="목차 접기">&#10094;</button>
     <div class="sb-brand"><span class="sb-sq"></span><span class="sb-kick">Enterprise AI Platform</span></div>
     <div class="sb-title">Why Build AI<br>on Azure?</div>
     <div class="sb-sub">데이터에서 에이전트까지</div>
@@ -3376,15 +3391,39 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'j' || e.key === 'J'){ e.preventDefault(); goto(1); }
   if (e.key === 'k' || e.key === 'K'){ e.preventDefault(); goto(-1); }
   if (e.key === 'n' || e.key === 'N'){ notesBtn.click(); }
+  if (e.key === 'm' || e.key === 'M'){
+    if (isDesktop()) setCollapsed(!document.body.classList.contains('sb-collapsed'));
+    else document.body.classList.toggle('sb-open');
+  }
 });
 
 document.getElementById('toTop').addEventListener('click',
   () => window.scrollTo({top:0, behavior:'smooth'}));
 
 const sbToggle = document.getElementById('sbToggle');
+const sbClose  = document.getElementById('sbClose');
 const sbScrim  = document.getElementById('sbScrim');
-sbToggle.addEventListener('click', () => document.body.classList.toggle('sb-open'));
-sbScrim.addEventListener('click',  () => document.body.classList.remove('sb-open'));
+const SB_KEY   = 'wbaoa-sidebar-collapsed';
+const isDesktop = () => window.innerWidth > 1100;
+
+/* 접힘 상태는 다음 방문에도 유지됩니다 */
+function setCollapsed(v){
+  document.body.classList.toggle('sb-collapsed', v);
+  try { localStorage.setItem(SB_KEY, v ? '1' : '0'); } catch(e){}
+  setTimeout(() => { fitSheets(); syncProgress(); }, 330);
+}
+try { if (localStorage.getItem(SB_KEY) === '1') document.body.classList.add('sb-collapsed'); } catch(e){}
+fitSheets();
+
+sbToggle.addEventListener('click', () => {
+  if (isDesktop()) setCollapsed(false);
+  else document.body.classList.toggle('sb-open');
+});
+sbClose.addEventListener('click', () => {
+  if (isDesktop()) setCollapsed(true);
+  else document.body.classList.remove('sb-open');
+});
+sbScrim.addEventListener('click', () => document.body.classList.remove('sb-open'));
 links.forEach(a => a.addEventListener('click', () => document.body.classList.remove('sb-open')));
 </script>
 </body>
