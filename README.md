@@ -7,11 +7,11 @@
 
 ## 온라인으로 바로 보기
 
-| 형태 | 링크 | 조작 |
+| 형태 | 링크 | 조작·특징 |
 |---|---|---|
-| **원페이지** (세로 스크롤 · 좌측 목차) | **[열기 ↗](https://hijigoo.github.io/why-build-ai-on-azure/why-build-ai-on-azure-onepage.html)** | 스크롤 · `J`/`K` 이동 · `N` 설명란 · `M` 목차 |
+| **원페이지** | **[열기 ↗](https://hijigoo.github.io/why-build-ai-on-azure/why-build-ai-on-azure-onepage.html)** | 세로 스크롤 · 좌측 목차 · `J`/`K` 이동 · `N` 설명란 · `M` 목차 |
 | **발표용 덱** | **[열기 ↗](https://hijigoo.github.io/why-build-ai-on-azure/why-build-ai-on-azure-slides.html)** | `←`/`→` 이동 · `N` 설명란 |
-| **원고 (Markdown)** | [`why-build-ai-on-azure.md`](./why-build-ai-on-azure.md) | GitHub에서 Mermaid 다이어그램 20개 바로 렌더링 |
+| **원고** | [`why-build-ai-on-azure.md`](./why-build-ai-on-azure.md) | Markdown · GitHub에서 Mermaid 다이어그램 20개 바로 렌더링 |
 
 > 링크는 GitHub Pages로 호스팅됩니다. 저장소 최초 배포 직후에는 반영에 1~2분 걸릴 수 있습니다.
 
