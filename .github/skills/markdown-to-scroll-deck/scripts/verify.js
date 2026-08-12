@@ -30,27 +30,39 @@ const outDir = flag('--out') || '.';
 const wantDensity = args.includes('--density');
 
 let chromium;
+const resolvePlaywright = () => {
+  // 스킬 스크립트는 리포 어디서든 실행될 수 있다.
+  // 여러 후보 경로를 순서대로 시도한다.
+  const { execSync } = require('child_process');
+  const bases = [];
+  try { bases.push(execSync('npm root -g', { encoding: 'utf8' }).trim()); } catch (_) {}
+  if (process.env.NODE_PATH) bases.push(...process.env.NODE_PATH.split(path.delimiter));
+  bases.push(path.join(process.cwd(), 'node_modules'));
+  // 현재 디렉터리에서 위로 올라가며 node_modules 탐색
+  let dir = process.cwd();
+  for (let i = 0; i < 6; i++) {
+    bases.push(path.join(dir, 'node_modules'));
+    const up = path.dirname(dir);
+    if (up === dir) break;
+    dir = up;
+  }
+  for (const base of bases) {
+    if (!base) continue;
+    try { return require(path.join(base, 'playwright')); } catch (_) {}
+  }
+  return null;
+};
+
 try {
   ({ chromium } = require('playwright'));
 } catch (e) {
-  // 스크립트를 다른 디렉터리에서 실행하면 상대 경로로는 못 찾는다.
-  // npm root -g / 현재 작업 디렉터리 순으로 다시 찾아본다.
-  const { execSync } = require('child_process');
-  const candidates = [];
-  try { candidates.push(execSync('npm root -g', { encoding: 'utf8' }).trim()); } catch (_) {}
-  candidates.push(path.join(process.cwd(), 'node_modules'));
-  for (const base of candidates) {
-    try {
-      ({ chromium } = require(path.join(base, 'playwright')));
-      break;
-    } catch (_) {}
-  }
-  if (!chromium) {
-    console.error('playwright를 찾을 수 없습니다. 설치:');
-    console.error('  npm i playwright && npx playwright install chromium');
-    console.error('설치한 디렉터리에서 실행하거나 NODE_PATH를 지정하세요.');
-    process.exit(2);
-  }
+  const pw = resolvePlaywright();
+  if (pw) ({ chromium } = pw);
+}
+if (!chromium) {
+  console.error('playwright를 찾을 수 없습니다. 설치:');
+  console.error('  npm i playwright && npx playwright install chromium');
+  process.exit(2);
 }
 
 (async () => {
@@ -100,6 +112,21 @@ try {
       const title = (ch.querySelector('.ch-t') || {}).textContent || '';
       const issues = [];
 
+      // 등장 애니메이션이 끝나지 않은 슬라이드는 자식이 translateY만큼 내려가 있어
+      // scrollHeight가 부풀려진다. 측정 전에 최종 상태로 고정한다.
+      const restore = [];
+      if (slide && !slide.classList.contains('visible')) {
+        slide.classList.add('visible');
+        restore.push(() => slide.classList.remove('visible'));
+      }
+      const anim = ch.querySelectorAll('.reveal, .stagger > *, .cv');
+      anim.forEach((el) => {
+        const prev = el.style.transition;
+        el.style.transition = 'none';
+        restore.push(() => { el.style.transition = prev; });
+      });
+      void ch.offsetHeight; // 강제 리플로우
+
       if (sheet) {
         const sr = sheet.getBoundingClientRect();
         const ratio = sr.width / sr.height;
@@ -116,6 +143,8 @@ try {
         issues.push('frame +' + (frame.scrollHeight - 1080) + 'px');
       }
       const chars = frame ? frame.textContent.replace(/\s+/g, ' ').trim().length : 0;
+
+      restore.forEach((fn) => fn());
       return { n: n + 1, title: title.trim(), issues, chars };
     }, i);
 

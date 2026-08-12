@@ -152,7 +152,8 @@ node .github/skills/markdown-to-scroll-deck/scripts/verify.js <url> --shots 1,5,
 | 어두운 슬라이드에서 강조 글씨가 안 보임 | `<b>`가 네이비색. `.dark` 하위에서 흰색으로 올리는 규칙이 `deck.css`에 있으니 새 컴포넌트를 만들면 추가 |
 | 아이콘 색이 서로 뒤섞임 | 원본 SVG들이 같은 gradient id를 씀. 심볼마다 id를 네임스페이싱해야 한다 (`icons.md` 참조) |
 | 설명란이 원페이지에서 깨짐 | `.note-body` 안에 `<div>`를 쓰지 않는다. 문단은 `<p>`, 목록은 `<ul>`, 용어는 `<dl class="gloss">` |
-| 넘침 검사에서 오탐 | 등장 애니메이션이 끝나기 전에 측정하면 잘못 나온다. `verify.js`는 1.3초 대기 후 측정한다 |
+| 넘침 검사에서 오탐 | 원페이지는 화면 밖 슬라이드에 `.visible`이 없어 자식이 `translateY(26px)` 내려간 상태다. 그대로 재면 8~30px씩 부풀려 나온다. `verify.js`는 측정 직전에 `.visible`을 강제하고 transition을 끈다 |
+| 폰트 로드 전 측정 | 웹폰트가 적용되면 줄바꿈이 달라져 넘침 여부가 바뀐다. `document.fonts.ready`를 기다린 뒤 측정해야 한다 |
 | 제목 끝 글자만 다음 줄로 | 의미 단위에서 `<br>`로 직접 끊는다 |
 
 ---
