@@ -10,7 +10,6 @@
 | 형태 | 링크 | 조작·특징 |
 |---|---|---|
 | **원페이지** | **[열기 ↗](https://hijigoo.github.io/why-build-ai-on-azure/why-build-ai-on-azure-onepage.html)** | 세로 스크롤 · 좌측 목차 · `J`/`K` 이동 · `N` 설명란 · `M` 목차 |
-| **발표용 덱** | **[열기 ↗](https://hijigoo.github.io/why-build-ai-on-azure/why-build-ai-on-azure-slides.html)** | `←`/`→` 이동 · `N` 설명란 |
 | **원고** | [`why-build-ai-on-azure.md`](./why-build-ai-on-azure.md) | Markdown · GitHub에서 Mermaid 다이어그램 20개 바로 렌더링 |
 
 > 링크는 GitHub Pages로 호스팅됩니다. 저장소 최초 배포 직후에는 반영에 1~2분 걸릴 수 있습니다.
@@ -128,8 +127,7 @@ node .github/skills/markdown-to-scroll-deck/scripts/verify.js http://localhost:8
 /markdown-to-scroll-deck  why-build-ai-on-azure.md 를 스크롤 덱으로 만들어줘
 ```
 
-- 온라인: [원페이지 ↗](https://hijigoo.github.io/why-build-ai-on-azure/why-build-ai-on-azure-onepage.html) · [발표용 덱 ↗](https://hijigoo.github.io/why-build-ai-on-azure/why-build-ai-on-azure-slides.html)
-- 원페이지는 발표용 덱에서 파생됩니다 → `python3 build_onepage.py`
+- 온라인: [원페이지 ↗](https://hijigoo.github.io/why-build-ai-on-azure/why-build-ai-on-azure-onepage.html)
 
 ### 2. Microsoft Foundry 네트워크 격리 — 19장
 
@@ -152,14 +150,8 @@ Foundry를 사설 네트워크 경계 안에서 운영할 때의 선택지와 �
 
 ## 자료 수정하기
 
-**Why Build AI on Azure?** 는 덱과 원페이지 두 파일로 되어 있고, 원페이지는 덱에서 파생됩니다.
-따라서 **덱 파일을 먼저 수정**해야 합니다. 원페이지를 직접 고치면 다음 재생성 때 덮어써집니다.
-
-```bash
-# 1. why-build-ai-on-azure-slides.html 수정
-# 2. 원페이지 재생성
-python3 build_onepage.py
-```
+**Why Build AI on Azure?** 원페이지는 이제 단일 소스입니다.
+[`why-build-ai-on-azure-onepage.html`](./why-build-ai-on-azure-onepage.html)을 직접 수정하면 됩니다.
 
 샘플 프로젝트처럼 스킬로 만든 문서는 `slides.html`을 고치고 `build.py`로 다시 빌드합니다.
 
@@ -171,8 +163,8 @@ python3 build_onepage.py
 ## 저장소 구조
 
 ```
-why-build-ai-on-azure*.{md,html}          메인 덱 — Why Build AI on Azure? (49장)
-build_onepage.py                          덱 → 원페이지 재생성기
+why-build-ai-on-azure-onepage.html        메인 덱 — Why Build AI on Azure? (49장, 원페이지)
+why-build-ai-on-azure.md                  메인 덱 원고 (Mermaid 다이어그램 20개)
 build.js                                  PPTX 생성기
 samples/foundry-network-isolation/        샘플 — Foundry 네트워크 격리 (19장)
 .github/skills/markdown-to-scroll-deck/   스킬 본체
