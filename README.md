@@ -9,7 +9,7 @@
 
 | 형태 | 링크 | 조작·특징 |
 |---|---|---|
-| **원페이지** | **[열기 ↗](https://hijigoo.github.io/why-build-ai-on-azure/why-build-ai-on-azure-onepage.html)** | 세로 스크롤 · 좌측 목차 · `J`/`K` 이동 · `N` 설명란 · `M` 목차 |
+| **원페이지** | **[열기 ↗](https://hijigoo.github.io/why-build-ai-on-azure/why-build-ai-on-azure-onepage.html)** | 세로 스크롤 · 좌측 목차 · `J`/`K` 이동 · `N` 설명란 전체 · 장표별 설명 접기 · `M` 목차 |
 | **원고** | [`why-build-ai-on-azure.md`](./why-build-ai-on-azure.md) | Markdown · GitHub에서 Mermaid 다이어그램 20개 바로 렌더링 |
 
 > 링크는 GitHub Pages로 호스팅됩니다. 저장소 최초 배포 직후에는 반영에 1~2분 걸릴 수 있습니다.
@@ -45,6 +45,8 @@ Microsoft·Azure 제품을 다루는 **한국어 엔터프라이즈 기술 자�
 - 딥네이비 + 코발트의 엔터프라이즈 톤 단일 테마
 - **GA / Preview 성숙도 배지**
 - 한글 조판(Pretendard) + 라틴 디스플레이(Manrope) 조합
+- **한글 단어가 줄 끝에서 잘리지 않는 조판** (`word-break: keep-all`) — 줄바꿈은 어절 경계에서만
+- **장표별 설명 접기** — 전체 on/off 버튼에 더해, 설명 헤더마다 토글 버튼이 하나씩
 
 브랜드 아이덴티티가 따로 있거나, 비-Microsoft 제품 중심이거나, 캐주얼한 톤이 필요하다면 맞지 않습니다.
 색상은 `assets/deck.css`의 `:root` 토큰에 모여 있어 테마 교체 자체는 어렵지 않습니다.

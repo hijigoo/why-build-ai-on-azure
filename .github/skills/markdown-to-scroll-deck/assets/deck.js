@@ -68,15 +68,59 @@ window.addEventListener('scroll', () => {
 syncSpy(); syncProgress();
 
 /* ===========================================================
-   4. 슬라이드 설명 토글 · 섹션 단위 이동 · 모바일 서랍
+   4. 슬라이드 설명
+   두 가지 조작이 함께 있다.
+     · 사이드바 버튼 / N 키 — 설명란 전체 표시·숨김 (기존 동작)
+     · 각 설명 헤더의 토글  — 그 장표의 설명만 접기·펼치기
+   둘은 독립적이라, 전체를 껐다 켜도 장표별 접힘 상태는 그대로 남는다.
    =========================================================== */
 const notesBtn = document.getElementById('notesBtn');
-notesBtn.addEventListener('click', () => {
-  const hidden = document.body.classList.toggle('notes-hidden');
-  notesBtn.classList.toggle('on', !hidden);
-  setTimeout(syncProgress, 60);
+if (notesBtn){
+  notesBtn.addEventListener('click', () => {
+    const hidden = document.body.classList.toggle('notes-hidden');
+    notesBtn.classList.toggle('on', !hidden);
+    setTimeout(syncProgress, 60);
+  });
+}
+
+const notes = Array.from(document.querySelectorAll('.note'));
+
+function setNote(note, open){
+  note.classList.toggle('collapsed', !open);
+  const head = note.querySelector('.note-head');
+  if (!head) return;
+  head.setAttribute('aria-expanded', open ? 'true' : 'false');
+  const label = head.querySelector('.note-toggle-t');
+  if (label) label.textContent = open ? '접기' : '펼치기';
+}
+
+notes.forEach((note, i) => {
+  const head = note.querySelector('.note-head');
+  if (!head || head.querySelector('.note-toggle')) return;
+  const body = note.querySelector('.note-body');
+  if (body && !body.id) body.id = 'note-' + String(i + 1).padStart(2, '0');
+
+  const btn = document.createElement('span');
+  btn.className = 'note-toggle';
+  btn.innerHTML = '<span class="note-toggle-t">접기</span><i class="note-caret" aria-hidden="true"></i>';
+  head.appendChild(btn);
+
+  head.setAttribute('role', 'button');
+  head.setAttribute('tabindex', '0');
+  head.setAttribute('aria-expanded', 'true');
+  head.setAttribute('title', '이 장표의 설명 접기 / 펼치기');
+  if (body) head.setAttribute('aria-controls', body.id);
+
+  const toggle = () => { setNote(note, note.classList.contains('collapsed')); syncProgress(); };
+  head.addEventListener('click', toggle);
+  head.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar'){ e.preventDefault(); toggle(); }
+  });
 });
 
+/* ===========================================================
+   5. 섹션 단위 이동 · 모바일 서랍
+   =========================================================== */
 function goto(delta){
   const line = window.innerHeight * 0.34;
   let i = 0;
@@ -90,7 +134,7 @@ document.addEventListener('keydown', (e) => {
   if (tag === 'input' || tag === 'textarea') return;
   if (e.key === 'j' || e.key === 'J'){ e.preventDefault(); goto(1); }
   if (e.key === 'k' || e.key === 'K'){ e.preventDefault(); goto(-1); }
-  if (e.key === 'n' || e.key === 'N'){ notesBtn.click(); }
+  if (e.key === 'n' || e.key === 'N'){ if (notesBtn) notesBtn.click(); }
   if (e.key === 'm' || e.key === 'M'){
     if (isDesktop()) setCollapsed(!document.body.classList.contains('sb-collapsed'));
     else document.body.classList.toggle('sb-open');

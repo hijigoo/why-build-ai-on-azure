@@ -15,7 +15,6 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 
 <style>
-
 /* ===========================================================
    1. THEME TOKENS — "Cobalt Report"
    여기 값만 바꾸면 덱 전체 룩이 바뀝니다.
@@ -63,6 +62,23 @@
 }
 
 *{margin:0;padding:0;box-sizing:border-box}
+
+/* -----------------------------------------------------------
+   한글 줄바꿈 — 단어(어절)를 중간에서 자르지 않는다.
+   기본값(word-break:normal)은 한글을 음절 단위로 끊어
+   "네트워크 격" / "리" 처럼 단어가 두 줄로 갈라진다.
+     keep-all      : CJK를 어절 단위로만 끊는다.
+     overflow-wrap : 어절 하나가 줄보다 길 때만 예외적으로 끊는다(URL·긴 식별자).
+   ----------------------------------------------------------- */
+html{word-break:keep-all;overflow-wrap:break-word;line-break:strict}
+/* 코드·URL은 한글 규칙에서 빼되 break-all은 쓰지 않는다.
+   break-all은 도메인을 아무 데서나 끊어(`*.login.m` / `icrosoftonline.com`) 오히려 나빠진다.
+   normal + break-word면 줄에 못 들어갈 때만 마지막 수단으로 끊긴다. */
+code,kbd,samp,pre{word-break:normal;overflow-wrap:break-word}
+
+/* 반드시 붙어 다녀야 하는 짧은 구(제품명·수치+단위)는 이 클래스로 묶는다.
+   (`.badge.nb`는 별개의 배지 색상 변형이므로 이름을 겹치지 않게 둔다) */
+.nowrap{white-space:nowrap}
 
 /* ===========================================================
    2. FIXED 16:9 STAGE — MANDATORY BASE (viewport-base.css 전체)
@@ -630,11 +646,31 @@ body.sb-collapsed .main{margin-left:auto;margin-right:auto;max-width:1760px;padd
 /* --- 노트 카드 (밝은 지면용 재스타일) --- */
 .note{margin-top:16px;background:#FFFFFF;border:1px solid var(--line);border-top:4px solid var(--cobalt);
   border-radius:2px;padding:6px 30px 24px;box-shadow:0 2px 10px rgba(14,35,64,.06)}
+/* 사이드바 버튼(N) — 설명란 전체를 한 번에 감춘다.
+   장표별 접힘(.note.collapsed)과는 별개로 동작하며, 다시 켜면 각 장의 상태가 그대로 남는다 */
 body.notes-hidden .note{display:none}
 .note-head{font-family:var(--f-body);font-size:12.5px;font-weight:800;letter-spacing:.02em;
-  color:var(--cobalt);margin:16px 0 13px;padding-bottom:11px;border-bottom:1px solid #EFECE4}
+  color:var(--cobalt);margin:16px 0 13px;padding-bottom:11px;border-bottom:1px solid #EFECE4;
+  display:flex;align-items:center;cursor:pointer;user-select:none;transition:color .18s}
 .note-head::before{content:"";display:inline-block;width:8px;height:8px;background:var(--cobalt);
-  transform:rotate(45deg);margin-right:9px;vertical-align:1px}
+  transform:rotate(45deg);margin-right:9px;flex:0 0 auto}
+.note-head:hover{color:var(--navy)}
+.note-head:focus-visible{outline:2px solid var(--cobalt);outline-offset:3px}
+
+/* 설명 접기 버튼 — 전체 on/off가 아니라 장표마다 하나씩 붙는다 (deck.js가 주입) */
+.note-toggle{margin-left:auto;flex:0 0 auto;display:flex;align-items:center;gap:7px;
+  font-family:var(--f-mono);font-size:10.5px;font-weight:500;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted-2);background:var(--white);
+  border:1px solid var(--line);border-radius:2px;padding:4px 9px;
+  transition:color .18s,border-color .18s,background .18s}
+.note-head:hover .note-toggle{color:var(--cobalt);border-color:var(--cobalt-soft);background:var(--cobalt-tint)}
+.note-caret{display:inline-block;width:0;height:0;border-left:4px solid transparent;
+  border-right:4px solid transparent;border-top:5px solid currentColor;
+  transition:transform .2s var(--ease)}
+.note.collapsed .note-caret{transform:rotate(-90deg)}
+.note.collapsed{padding-bottom:8px}
+.note.collapsed .note-head{margin-bottom:0;padding-bottom:0;border-bottom-color:transparent}
+.note.collapsed .note-body{display:none}
 .note-body{font-size:16.5px;line-height:1.76;color:#37475A;letter-spacing:-.012em}
 .note-body p{margin-bottom:11px}
 .note-body p:last-child{margin-bottom:0}
@@ -682,6 +718,7 @@ body.sb-collapsed .sb-toggle{display:block}
   .ch-part{display:none}
   .note{padding:18px 20px 20px}
   .note-body{font-size:15px}
+  .note-toggle{letter-spacing:.08em;padding:4px 7px}
 }
 
 /* --- 인쇄: 시트 1장 = 1페이지 --- */
@@ -692,8 +729,11 @@ body.sb-collapsed .sb-toggle{display:block}
   .chapter{margin-bottom:0;break-after:page;page-break-after:always}
   .sheet{box-shadow:none;border:1px solid #ccc}
   .note{break-inside:avoid}
+  /* 접어둔 설명도 인쇄물에는 전부 나온다 */
+  .note.collapsed .note-body{display:block}
+  .note.collapsed .note-head{border-bottom-color:#EFECE4}
+  .note-toggle{display:none!important}
 }
-
 </style>
 </head>
 <body>
@@ -3488,15 +3528,59 @@ window.addEventListener('scroll', () => {
 syncSpy(); syncProgress();
 
 /* ===========================================================
-   4. 슬라이드 설명 토글 · 섹션 단위 이동 · 모바일 서랍
+   4. 슬라이드 설명
+   두 가지 조작이 함께 있다.
+     · 사이드바 버튼 / N 키 — 설명란 전체 표시·숨김 (기존 동작)
+     · 각 설명 헤더의 토글  — 그 장표의 설명만 접기·펼치기
+   둘은 독립적이라, 전체를 껐다 켜도 장표별 접힘 상태는 그대로 남는다.
    =========================================================== */
 const notesBtn = document.getElementById('notesBtn');
-notesBtn.addEventListener('click', () => {
-  const hidden = document.body.classList.toggle('notes-hidden');
-  notesBtn.classList.toggle('on', !hidden);
-  setTimeout(syncProgress, 60);
+if (notesBtn){
+  notesBtn.addEventListener('click', () => {
+    const hidden = document.body.classList.toggle('notes-hidden');
+    notesBtn.classList.toggle('on', !hidden);
+    setTimeout(syncProgress, 60);
+  });
+}
+
+const notes = Array.from(document.querySelectorAll('.note'));
+
+function setNote(note, open){
+  note.classList.toggle('collapsed', !open);
+  const head = note.querySelector('.note-head');
+  if (!head) return;
+  head.setAttribute('aria-expanded', open ? 'true' : 'false');
+  const label = head.querySelector('.note-toggle-t');
+  if (label) label.textContent = open ? '접기' : '펼치기';
+}
+
+notes.forEach((note, i) => {
+  const head = note.querySelector('.note-head');
+  if (!head || head.querySelector('.note-toggle')) return;
+  const body = note.querySelector('.note-body');
+  if (body && !body.id) body.id = 'note-' + String(i + 1).padStart(2, '0');
+
+  const btn = document.createElement('span');
+  btn.className = 'note-toggle';
+  btn.innerHTML = '<span class="note-toggle-t">접기</span><i class="note-caret" aria-hidden="true"></i>';
+  head.appendChild(btn);
+
+  head.setAttribute('role', 'button');
+  head.setAttribute('tabindex', '0');
+  head.setAttribute('aria-expanded', 'true');
+  head.setAttribute('title', '이 장표의 설명 접기 / 펼치기');
+  if (body) head.setAttribute('aria-controls', body.id);
+
+  const toggle = () => { setNote(note, note.classList.contains('collapsed')); syncProgress(); };
+  head.addEventListener('click', toggle);
+  head.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar'){ e.preventDefault(); toggle(); }
+  });
 });
 
+/* ===========================================================
+   5. 섹션 단위 이동 · 모바일 서랍
+   =========================================================== */
 function goto(delta){
   const line = window.innerHeight * 0.34;
   let i = 0;
@@ -3510,7 +3594,7 @@ document.addEventListener('keydown', (e) => {
   if (tag === 'input' || tag === 'textarea') return;
   if (e.key === 'j' || e.key === 'J'){ e.preventDefault(); goto(1); }
   if (e.key === 'k' || e.key === 'K'){ e.preventDefault(); goto(-1); }
-  if (e.key === 'n' || e.key === 'N'){ notesBtn.click(); }
+  if (e.key === 'n' || e.key === 'N'){ if (notesBtn) notesBtn.click(); }
   if (e.key === 'm' || e.key === 'M'){
     if (isDesktop()) setCollapsed(!document.body.classList.contains('sb-collapsed'));
     else document.body.classList.toggle('sb-open');
