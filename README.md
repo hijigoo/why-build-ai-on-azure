@@ -142,7 +142,7 @@ node .github/skills/markdown-to-scroll-deck/scripts/verify.js http://localhost:8
 
 이 스킬로 실제로 만든 결과물입니다. 각 문서 옆에 **어떤 명령으로 만들었는지** 함께 적었습니다.
 
-### 1. Why Build AI on Azure? — 49장
+### 1. Why Build AI on Azure? — 43장
 
 이 저장소의 메인 덱(위 [온라인으로 바로 보기](#온라인으로-바로-보기))입니다. 기존 Markdown 원고에서 출발했습니다.
 
@@ -173,10 +173,26 @@ Foundry를 사설 네트워크 경계 안에서 운영할 때의 선택지와 �
 
 ## 자료 수정하기
 
-**Why Build AI on Azure?** 원페이지는 이제 단일 소스입니다.
-[`why-build-ai-on-azure-onepage.html`](./why-build-ai-on-azure-onepage.html)을 직접 수정하면 됩니다.
+두 문서 모두 **`slides.html`을 고치고 `build.py`로 다시 빌드**합니다.
 
-샘플 프로젝트처럼 스킬로 만든 문서는 `slides.html`을 고치고 `build.py`로 다시 빌드합니다.
+```bash
+python3 .github/skills/markdown-to-scroll-deck/scripts/build.py slides.html \
+  -o why-build-ai-on-azure-onepage.html \
+  --title "Why Build AI on Azure? — 데이터에서 에이전트까지" \
+  --h1 "Why Build AI on Azure" --kicker "Enterprise AI Platform" \
+  --subtitle "데이터에서 에이전트까지" --meta "43 Sections|약 35분|v1.1"
+```
+
+Part 3의 **Enterprise AI Platform 아키텍처 다이어그램**은 이미지가 아니라 HTML입니다.
+`scripts/gen-eap-diagram.py`가 하나의 템플릿에서 **일반 버전(요구사항)** 과 **제품 버전(Microsoft 매핑)** 을
+함께 생성하므로, 라벨을 고쳐도 두 장이 어긋나지 않습니다.
+
+```bash
+python3 scripts/gen-eap-diagram.py --check          # 두 버전의 구조 동일성 검증
+python3 scripts/gen-eap-diagram.py --emit generic   # 일반 버전 마크업
+python3 scripts/gen-eap-diagram.py --emit product   # 제품 버전 마크업
+python3 scripts/gen-eap-diagram.py --emit css       # 다이어그램 CSS
+```
 
 성숙도(GA/Preview) 표기와 제품명은 **공식 문서로 확인한 뒤** 반영합니다.
 이 영역은 빠르게 바뀌어서, 예전 표기를 그대로 두면 자료 전체의 신뢰가 떨어집니다.
@@ -186,8 +202,10 @@ Foundry를 사설 네트워크 경계 안에서 운영할 때의 선택지와 �
 ## 저장소 구조
 
 ```
-why-build-ai-on-azure-onepage.html        메인 덱 — Why Build AI on Azure? (49장, 원페이지)
-why-build-ai-on-azure.md                  메인 덱 원고 (Mermaid 다이어그램 20개)
+why-build-ai-on-azure-onepage.html        메인 덱 — Why Build AI on Azure? (43장, 원페이지)
+slides.html                               메인 덱 소스 조각 (build.py 입력)
+why-build-ai-on-azure.md                  메인 덱 원고
+scripts/gen-eap-diagram.py                아키텍처 다이어그램 생성기 (일반/제품 2종)
 build.js                                  PPTX 생성기
 samples/foundry-network-isolation/        샘플 — Foundry 네트워크 격리 (19장)
 .github/skills/markdown-to-scroll-deck/   스킬 — Markdown → 스크롤형 HTML
