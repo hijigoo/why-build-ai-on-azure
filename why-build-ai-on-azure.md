@@ -213,7 +213,7 @@ AI 도입의 가장 큰 장벽은 기술이 아니라 **신뢰**입니다.
 | 질문 | 짧은 답 |
 |------|---------|
 | **데이터를 다 옮겨야 하나요?** | 아니요. 원본을 둔 채 **가상 연결(Shortcut)**로 시작하고, 필요한 것만 선별 복제합니다. |
-| **Preview 기능에 의존하나요?** | 아니요. **GA 서비스로 시작**하고 Preview(IQ 계열 등)는 로드맵으로 분리합니다. |
+| **Preview 기능에 의존하나요?** | 아니요. **정식 출시된 기능으로 시작**하고 남은 Preview는 로드맵으로 분리합니다. |
 | **보안팀 승인은 어떻게 받나요?** | Microsoft Entra ID·Microsoft Purview·Microsoft Defender로 **접근·정책·감사**를 처음부터 함께 설계해 승인 근거를 만듭니다. |
 | **ROI는 언제 확인하나요?** | 첫 파일럿에서 **사전 합의한 KPI**로 검증합니다 — 확장은 그 뒤에 결정합니다. |
 
@@ -348,11 +348,11 @@ Part 3은 두 부분으로 나뉩니다. **앞쪽 절반에는 제품 이름이 
 
 | 요구사항 | 맡는 것 | 무엇을 아는가 | 없으면 |
 |---------|--------|-------------|--------|
-| 데이터레이크 + 시맨틱 모델 | **Fabric IQ** *[Preview · 확인 필요]* | "매출"이 어떤 테이블·조인·규칙인지 | 지표가 부서마다 다르게 해석 |
-| 온톨로지 기반 비즈니스 구조 | **Work IQ** *[Preview · 확인 필요]* | 누가·언제·어떤 문서로 일하는지 | 실무 맥락 없는 일반론 답변 |
-| 기업 데이터 + 온톨로지 컨텍스트 | **Foundry IQ** *[일부 GA · 확인 필요]* | 에이전트가 참조할 지식 인덱스 | 근거 없는 답변 · 환각 |
+| 데이터레이크 + 시맨틱 모델 | **Fabric IQ** *[일부 GA — 온톨로지·플래닝은 Preview]* | "매출"이 어떤 테이블·조인·규칙인지 | 지표가 부서마다 다르게 해석 |
+| 온톨로지 기반 비즈니스 구조 | **Work IQ** *[GA]* | 누가·언제·어떤 문서로 일하는지 | 실무 맥락 없는 일반론 답변 |
+| 기업 데이터 + 온톨로지 컨텍스트 | **Foundry IQ** *[GA]* | 에이전트가 참조할 지식 인덱스 | 근거 없는 답변 · 환각 |
 
-> ⚠️ **오늘 GA로 시작하는 법** — 세 IQ를 기다릴 필요가 없습니다. **Azure AI Search**(GA)와 자체 시맨틱·메타데이터 모델링만으로 의미 계층을 지금 구성할 수 있고, IQ는 GA·한국 리전이 확정되면 **단계적으로 보완**합니다. Preview에 의존하는 제안은 승인되지 않습니다.
+> **세 IQ 모두 정식 출시됐습니다** — 기다릴 필요가 없습니다. 남은 Preview는 **Fabric IQ의 온톨로지·플래닝**뿐이며, 그 부분은 **Azure AI Search**(GA)와 자체 시맨틱·메타데이터 모델링으로 지금 대체할 수 있습니다. *(성숙도는 2026년 8월 기준 — 도입 시점에 공식 문서로 재확인)*
 
 이 계층을 건너뛰면 **"데이터는 다 모았는데 AI가 여전히 엉뚱한 답을 한다"**가 됩니다. 레이크 구축까지는 예산이 잡히는데 의미 계층은 눈에 보이지 않아 빠지기 때문에, 가장 흔한 실패 패턴입니다.
 
@@ -387,7 +387,7 @@ Part 3은 두 부분으로 나뉩니다. **앞쪽 절반에는 제품 이름이 
 
 | 왼쪽 축 요구사항 | 맡는 것 | 오른쪽 축 요구사항 | 맡는 것 |
 |---|---|---|---|
-| 버전과 이력 | **GitHub Enterprise** | 에이전트 관제 | **Microsoft Agent 365** *[GA 2026.5 · 일부 Preview]* |
+| 버전과 이력 | **GitHub Enterprise** | 에이전트 관제 | **Microsoft Agent 365** *[GA — 2026년 5월 출시, 일부 신기능 Preview]* |
 | 배포 자동화 | **GitHub Actions** | 데이터 거버넌스 | **Microsoft Purview** |
 | 제작 속도 | **GitHub Copilot** | 신원 · 접근통제 | **Microsoft Entra ID** |
 | 취약점 사전 차단 | **GitHub Code Security** · **Secret Protection** | 위협 탐지 | **Microsoft Defender** |
@@ -515,7 +515,7 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    S1["1단계<br/>데이터 통합<br/>OneLake · GA"] --> S2["2단계<br/>의미 계층<br/>Azure AI Search(GA)<br/>+ Fabric IQ(Preview)"]
+    S1["1단계<br/>데이터 통합<br/>OneLake · GA"] --> S2["2단계<br/>의미 계층<br/>Azure AI Search · Work IQ<br/>Foundry IQ · Fabric IQ (GA)"]
     S2 --> S3["3단계<br/>Agent Build<br/>Microsoft Copilot Studio/Microsoft Foundry · GA"]
     S3 --> S4["4단계<br/>확산 & 거버넌스<br/>Microsoft Purview·Microsoft Entra ID(GA)<br/>+ Microsoft Agent 365(GA)"]
     style S1 fill:#dbe7f6,color:#1a3d6d
@@ -525,13 +525,14 @@ flowchart TD
 | 단계 | 목표 | 핵심 과제 |
 |------|------|-----------|
 | **1. 기반** | 데이터를 OneLake로 연결 | 이기종 소스 통합, Shortcut 구성 |
-| **2. 의미화** | 비즈니스 의미 계층 구축 | Azure AI Search + 자체 시맨틱/메타데이터 (Fabric IQ는 Preview) |
+| **2. 의미화** | 비즈니스 의미 계층 구축 | 세 IQ + Azure AI Search (Fabric IQ 온톨로지만 Preview) |
 | **3. 제작** | 파일럿 에이전트 개발 | 1~2개 고가치 업무 선정 |
 | **4. 확산** | 전사 확대 + 거버넌스 | Microsoft Entra ID·Microsoft Purview·Microsoft Defender·Azure Monitor + Microsoft Agent 365(GA) 기반 운영, 정책 표준화 |
 
-> 🏷️ **로드맵의 GA/Preview 구분:** 1·3단계는 **GA 기능만으로 오늘 착수 가능**합니다(OneLake·Azure AI Search·Microsoft Copilot Studio·Microsoft Foundry·Azure OpenAI).
-> 2단계의 **Fabric IQ** 등 IQ 레이어는 *[Preview·확인 필요]* 로 **도입 전 GA 여부·한국 리전 지원을 검증**한 뒤 반영합니다. **Microsoft Agent 365**는 GA(2026.5)이며, 일부 신기능(Public Preview)과 한국 리전·기능 범위는 도입 시 확인하세요.
-> 즉 **GA 기반으로 시작 → Preview는 성숙 시 확장**하는 순서를 권장합니다. (2단계는 IQ 없이 Azure AI Search로 대체 착수 가능)
+> 🏷️ **로드맵의 성숙도:** 네 단계 모두 **정식 출시된 기능만으로 착수할 수 있습니다.**
+> 세 IQ(Fabric IQ·Work IQ·Foundry IQ)와 **Microsoft Agent 365**(2026년 5월 출시) 모두 정식 출시 상태입니다.
+> 남은 Preview는 **Fabric IQ의 온톨로지·플래닝**과 각 제품의 일부 신기능이며, 그 부분은 **Azure AI Search**와 자체 시맨틱 모델링으로 대체해 착수할 수 있습니다.
+> *(성숙도는 2026년 8월 기준 — 도입 시점에 한국 리전 지원과 함께 공식 문서로 재확인하세요.)*
 
 ---
 
