@@ -112,13 +112,13 @@ PERSON = ('<svg class="eap-fig" viewBox="0 0 24 24" aria-hidden="true">'
 # 일반 버전과 제품 버전의 프레임이 픽셀 단위로 같아진다.
 CSS = """
 /* Enterprise AI Platform 아키텍처 — scripts/gen-eap-diagram.py 가 생성 */
-.eap{width:1728px;height:748px;display:flex;gap:12px;font-family:var(--f-body);
+.eap{width:1728px;height:734px;display:flex;gap:12px;font-family:var(--f-body);
   color:var(--navy);letter-spacing:-.01em}
 .eap-fig{width:20px;height:20px;fill:currentColor;flex:0 0 auto}
 
 /* 좌우 페르소나 레일 — 위쪽 사용자 박스(64+24)만큼 내려 플랫폼 박스와 높이를 맞춘다 */
 .eap-rail{width:92px;flex:0 0 92px;display:flex;flex-direction:column;justify-content:center;
-  gap:18px;padding-top:88px}
+  gap:18px;padding-top:76px}
 .eap-persona{flex:0 0 224px;border:2px solid var(--navy);border-radius:7px;background:#fff;
   position:relative;display:flex;align-items:center;justify-content:center}
 .eap-ptag{position:absolute;top:-13px;left:50%;transform:translateX(-50%);white-space:nowrap;
@@ -130,8 +130,8 @@ CSS = """
 /* 상단 사용자 박스 — 좌우 여백 218px 은 가운데 계층 영역의 시작·끝과 정확히 같다
    (플랫폼 테두리 2 + 패딩 13 + 세로축 192 + 간격 11 = 218) */
 .eap-main{flex:1;min-width:0;display:flex;flex-direction:column}
-.eap-users{height:64px;flex:0 0 64px;border:2px solid var(--navy);border-radius:9px;background:#fff;
-  position:relative;display:flex;align-items:center;margin:0 218px}
+.eap-users{height:56px;flex:0 0 56px;border:2px solid var(--navy);border-radius:9px;background:#fff;
+  position:relative;display:flex;align-items:center;margin:0 216px}
 .eap-utag{position:absolute;left:-8px;top:50%;transform:translate(-100%,-50%);white-space:nowrap;
   background:var(--navy);color:#fff;font-size:17px;font-weight:700;padding:6px 15px;border-radius:5px}
 .eap-ufigs{flex:1;display:flex;color:var(--navy)}
@@ -139,13 +139,13 @@ CSS = """
 .eap-ufigs .eap-fig{width:30px;height:30px}
 /* 연결선은 사용자 박스와 같은 폭을 4등분해 각 칸 중앙에 그린다.
    (space-evenly 는 아이콘 묶음과 선의 폭 차이 때문에 중심이 어긋난다) */
-.eap-drops{height:24px;flex:0 0 24px;display:flex;margin:0 220px}
+.eap-drops{height:20px;flex:0 0 20px;display:flex;margin:0 218px}
 .eap-drops i{flex:1;position:relative}
 .eap-drops i::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:3px;
   transform:translateX(-50%);background:var(--cobalt);opacity:.62}
 
 /* 플랫폼 점선 박스 */
-.eap-plat{flex:1;min-height:0;border:2px dashed var(--muted-2);border-radius:8px;padding:13px;
+.eap-plat{flex:1;min-height:0;border:2px dashed var(--muted-2);border-radius:8px;padding:11px;
   position:relative}
 .eap-plat-tag{position:absolute;top:-14px;left:16px;background:var(--cobalt);color:#fff;
   font-size:16px;font-weight:800;padding:3px 12px;border-radius:3px}
@@ -165,13 +165,13 @@ CSS = """
 
 /* 가운데 6계층 — 계층 높이는 고정, 남는 높이는 연결 구간이 균등하게 흡수한다 */
 .eap-layers{flex:1;min-width:0;display:flex;flex-direction:column}
-.eap-layer{flex:0 0 76px;display:flex;align-items:stretch;border-radius:5px;overflow:hidden}
+.eap-layer{flex:0 0 72px;display:flex;align-items:stretch;border-radius:5px;overflow:hidden}
 .eap-lb{width:188px;flex:0 0 188px;display:flex;align-items:center;padding:0 13px;
   font-size:17px;font-weight:800;letter-spacing:.07em;line-height:1.28}
-.eap-cells{flex:1;min-width:0;display:flex;gap:8px;padding:8px;align-items:stretch}
+.eap-cells{flex:1;min-width:0;display:flex;gap:8px;padding:7px;align-items:stretch}
 .eap-cell{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;
   justify-content:center;text-align:center;background:#fff;border:1px solid rgba(14,35,64,.18);
-  border-radius:4px;font-size:19px;font-weight:600;line-height:1.30;color:var(--navy);padding:3px 8px}
+  border-radius:4px;font-size:19px;font-weight:600;line-height:1.28;color:var(--navy);padding:2px 8px}
 .eap-cell b{display:block;margin-top:3px;font-size:14.5px;font-weight:600;color:var(--muted);
   letter-spacing:0}
 
@@ -187,8 +187,8 @@ CSS = """
 .eap-conn{flex:1 1 auto;display:flex;align-items:center;justify-content:center;gap:24px}
 .eap-tri{width:0;height:0;border-left:9px solid transparent;border-right:9px solid transparent;
   border-bottom:11px solid #A9B6C6}
-.eap-pill{background:var(--navy);color:#fff;font-size:16px;font-weight:700;padding:5px 18px;
-  border-radius:14px;white-space:nowrap}
+.eap-pill{background:var(--navy);color:#fff;font-size:15.5px;font-weight:700;padding:4px 17px;
+  border-radius:13px;white-space:nowrap}
 """
 
 
