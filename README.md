@@ -178,10 +178,16 @@ Foundry를 사설 네트워크 경계 안에서 운영할 때의 선택지와 �
 ```bash
 python3 .github/skills/markdown-to-scroll-deck/scripts/build.py slides.html \
   -o why-build-ai-on-azure-onepage.html \
-  --title "Why Build AI on Azure? — 데이터에서 에이전트까지" \
-  --h1 "Why Build AI on Azure" --kicker "Enterprise AI Platform" \
-  --subtitle "데이터에서 에이전트까지" --meta "43 Sections|약 35분|v1.1"
+  --title "Why Build AI on Azure? — 원페이지" \
+  --sb-title "Why Build AI<br>on Azure?" \
+  --h1 "데이터에서 에이전트까지" --kicker "Why Build AI on Azure?" \
+  --subtitle "데이터에서 에이전트까지" \
+  --meta "43 Sections|약 35분 분량|v1.1|Microsoft Solution Engineer"
 ```
+
+목차 그룹은 `data-part` 순서대로 `PART 1`, `PART 2`… 로 매겨집니다.
+표지·마무리처럼 **파트로 세면 안 되는 그룹**은 `data-part-kicker="INTRO"` 로 라벨을 지정하면
+번호에서 빠져 본문 파트 표지와 어긋나지 않습니다.
 
 Part 3의 **Enterprise AI Platform 아키텍처 다이어그램**은 이미지가 아니라 HTML입니다.
 `scripts/gen-eap-diagram.py`가 하나의 템플릿에서 **일반 버전(요구사항)** 과 **제품 버전(Microsoft 매핑)** 을

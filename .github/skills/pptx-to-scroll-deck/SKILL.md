@@ -160,6 +160,7 @@ pdftoppm -jpeg -r 90 /tmp/원본.pdf /tmp/src   # /tmp/src-01.jpg ...
 python3 .github/skills/pptx-to-scroll-deck/scripts/build.py slides.html \
   -o 결과.html \
   --title "문서 제목 — 부제" \
+  --sb-title "사이드바 제목<br>두 줄까지" \
   --h1 "본문 큰 제목" \
   --kicker "브랜드 라벨" \
   --subtitle "사이드바 한 줄 부제" \
@@ -168,6 +169,10 @@ python3 .github/skills/pptx-to-scroll-deck/scripts/build.py slides.html \
 ```
 
 CSS·JS·아이콘 스프라이트·사이드바 목차·페이지 번호가 자동으로 붙는다.
+
+- `--sb-title` 은 생략하면 `--title` 의 ` — ` 를 줄바꿈으로 바꿔 쓴다. 원하는 위치에서 끊으려면 직접 지정한다.
+- 목차 그룹은 `data-part` 순서대로 `PART 1`, `PART 2`… 가 된다. **표지·마무리처럼 파트로 세면 안 되는 그룹**은
+  `data-part-kicker="INTRO"` 처럼 라벨을 지정한다. 지정한 그룹은 번호에서 빠져 본문 파트 표지와 어긋나지 않는다.
 
 ---
 
