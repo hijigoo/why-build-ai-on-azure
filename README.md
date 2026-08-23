@@ -142,7 +142,7 @@ node .github/skills/markdown-to-scroll-deck/scripts/verify.js http://localhost:8
 
 이 스킬로 실제로 만든 결과물입니다. 각 문서 옆에 **어떤 명령으로 만들었는지** 함께 적었습니다.
 
-### 1. Why Build AI on Azure? — 43장
+### 1. Why Build AI on Azure? — 36장
 
 이 저장소의 메인 덱(위 [온라인으로 바로 보기](#온라인으로-바로-보기))입니다. 기존 Markdown 원고에서 출발했습니다.
 
@@ -182,7 +182,7 @@ python3 .github/skills/markdown-to-scroll-deck/scripts/build.py slides.html \
   --sb-title "Why Build AI<br>on Azure?" \
   --h1 "데이터에서 에이전트까지" --kicker "Why Build AI on Azure?" \
   --subtitle "데이터에서 에이전트까지" \
-  --meta "43 Sections|약 35분 분량|v1.1|Microsoft Solution Engineer"
+  --meta "36 Sections|약 30분 분량|v1.2|Microsoft Solution Engineer"
 ```
 
 목차 그룹은 `data-part` 순서대로 `PART 1`, `PART 2`… 로 매겨집니다.
@@ -208,7 +208,7 @@ python3 scripts/gen-eap-diagram.py --emit css       # 다이어그램 CSS
 ## 저장소 구조
 
 ```
-why-build-ai-on-azure-onepage.html        메인 덱 — Why Build AI on Azure? (43장, 원페이지)
+why-build-ai-on-azure-onepage.html        메인 덱 — Why Build AI on Azure? (36장, 원페이지)
 slides.html                               메인 덱 소스 조각 (build.py 입력)
 why-build-ai-on-azure.md                  메인 덱 원고
 scripts/gen-eap-diagram.py                아키텍처 다이어그램 생성기 (일반/제품 2종)
