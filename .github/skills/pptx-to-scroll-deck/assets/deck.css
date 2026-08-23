@@ -273,6 +273,16 @@ svg {
 .card.solid h3{color:#fff}
 .card.solid p{color:rgba(255,255,255,.68)}
 .card.solid .cn{color:var(--cobalt-soft)}
+/* 짙은 배경 카드 안의 요소는 밝은 지면용 색을 그대로 쓰면 배경에 묻힌다.
+   특히 .card p b 는 네이비라 네이비 카드 위에서 대비 1.00 — 완전히 안 보인다. */
+.card.solid p b,.card.solid p strong{color:#fff;font-weight:700}
+.card.solid .svc{color:var(--cobalt-soft)}
+.card.solid .fn-n{color:var(--cobalt-soft)}
+.card.solid .colhead{color:var(--cobalt-soft);border-bottom-color:var(--cobalt-soft)}
+.card.solid .li .t{color:#fff}
+.card.solid .li .d{color:var(--on-dark-dim)}
+.card.solid .li .b{color:var(--cobalt-soft)}
+.card.solid .li{border-color:var(--line-dark)}
 
 .dark .card{background:rgba(255,255,255,.045);border-color:var(--line-dark)}
 .dark .card h3{color:#fff}
