@@ -71,7 +71,10 @@
      overflow-wrap : 어절 하나가 줄보다 길 때만 예외적으로 끊는다(URL·긴 식별자).
    ----------------------------------------------------------- */
 html{word-break:keep-all;overflow-wrap:break-word;line-break:strict}
-code,kbd,samp,pre{word-break:break-all;overflow-wrap:anywhere}
+/* 코드·URL은 한글 규칙에서 빼되 break-all은 쓰지 않는다.
+   break-all은 도메인을 아무 데서나 끊어(`*.login.m` / `icrosoftonline.com`) 오히려 나빠진다.
+   normal + break-word면 줄에 못 들어갈 때만 마지막 수단으로 끊긴다. */
+code,kbd,samp,pre{word-break:normal;overflow-wrap:break-word}
 
 /* 반드시 붙어 다녀야 하는 짧은 구(제품명·수치+단위)는 이 클래스로 묶는다.
    (`.badge.nb`는 별개의 배지 색상 변형이므로 이름을 겹치지 않게 둔다) */
