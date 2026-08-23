@@ -89,6 +89,27 @@
 </div>
 ```
 
+### 파트로 세면 안 되는 그룹
+
+빌더는 `data-part` 그룹을 순서대로 `PART 1`, `PART 2`… 로 매긴다.
+표지·요약 같은 도입부나 마무리가 앞뒤에 있으면 **본문 파트 표지의 번호와 어긋난다.**
+(본문은 `01 · 02 · 03` 인데 목차는 `PART 2 · PART 3 · PART 4` 가 되는 식이다.)
+
+이런 그룹에는 `data-part-kicker` 로 라벨을 직접 지정한다. 지정한 그룹은 번호에서 빠지고,
+나머지만 `PART 1` 부터 순서대로 매겨진다.
+
+```html
+<article class="chapter" data-part="시작하기" data-part-kicker="INTRO">
+<article class="chapter" data-part="마무리"   data-part-kicker="OUTRO">
+```
+
+| 사이드바 | 본문 파트 표지 |
+|---|---|
+| `INTRO` · 시작하기 | — |
+| `PART 1` · 왜 지금인가 | `01` |
+| `PART 2` · 전략 | `02` |
+| `OUTRO` · 마무리 | — |
+
 ---
 
 ## 슬라이드(chapter) 한 장

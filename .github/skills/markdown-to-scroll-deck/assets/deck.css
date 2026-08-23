@@ -261,6 +261,9 @@ svg {
 .card .cn{font-family:var(--f-mono);font-size:18px;letter-spacing:.22em;color:var(--cobalt);
   margin-bottom:16px}
 .card h3{font-size:33px;font-weight:800;color:var(--navy);letter-spacing:-.03em;line-height:1.26}
+/* 카드 제목 안의 강조. .hl 은 원래 .s-title 전용이라 카드에서는 먹지 않았다 */
+.card h3 .hl{color:var(--cobalt)}
+.dark .card h3 .hl,.card.solid h3 .hl{color:var(--cobalt-soft)}
 .card h3.sm{font-size:29px}
 .card p{margin-top:13px;font-size:24px;line-height:1.54;color:var(--muted);letter-spacing:-.015em}
 .card p b{color:var(--navy);font-weight:700}
@@ -273,6 +276,16 @@ svg {
 .card.solid h3{color:#fff}
 .card.solid p{color:rgba(255,255,255,.68)}
 .card.solid .cn{color:var(--cobalt-soft)}
+/* 짙은 배경 카드 안의 요소는 밝은 지면용 색을 그대로 쓰면 배경에 묻힌다.
+   특히 .card p b 는 네이비라 네이비 카드 위에서 대비 1.00 — 완전히 안 보인다. */
+.card.solid p b,.card.solid p strong{color:#fff;font-weight:700}
+.card.solid .svc{color:var(--cobalt-soft)}
+.card.solid .fn-n{color:var(--cobalt-soft)}
+.card.solid .colhead{color:var(--cobalt-soft);border-bottom-color:var(--cobalt-soft)}
+.card.solid .li .t{color:#fff}
+.card.solid .li .d{color:var(--on-dark-dim)}
+.card.solid .li .b{color:var(--cobalt-soft)}
+.card.solid .li{border-color:var(--line-dark)}
 
 .dark .card{background:rgba(255,255,255,.045);border-color:var(--line-dark)}
 .dark .card h3{color:#fff}

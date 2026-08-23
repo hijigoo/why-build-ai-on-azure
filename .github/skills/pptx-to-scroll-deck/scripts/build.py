@@ -96,6 +96,9 @@ def main():
     ap.add_argument("slides", help="chapter 조각들이 든 HTML 파일")
     ap.add_argument("-o", "--out", required=True)
     ap.add_argument("--title", required=True, help="브라우저 탭 제목 / 사이드바 제목")
+    ap.add_argument("--sb-title", default=None,
+                    help="사이드바 제목을 따로 지정한다 (HTML 허용 — 줄바꿈은 <br>). "
+                         "생략하면 --title 을 쓰고 ' — ' 를 줄바꿈으로 바꾼다")
     ap.add_argument("--h1", default=None, help="본문 상단 큰 제목 (기본: --title)")
     ap.add_argument("--subtitle", default="")
     ap.add_argument("--kicker", default="")
@@ -112,13 +115,14 @@ def main():
 
     total = len(chapters)
     rebuilt, nav_groups = [], []
-    cur_part, cur_items = None, []
+    cur_part, cur_items, cur_kick = None, [], None
 
     for i, ch in enumerate(chapters, start=1):
         nn = "%02d" % i
         sid = "s%s" % nn
 
         part = (re.search(r'data-part="([^"]*)"', ch) or [None, ""])[1]
+        kicker = (re.search(r'data-part-kicker="([^"]*)"', ch) or [None, None])[1]
         title_m = re.search(r'<h2 class="ch-t">([\s\S]*?)</h2>', ch)
         title = re.sub(r"<[^>]+>", "", title_m.group(1)).strip() if title_m else ""
 
@@ -133,18 +137,29 @@ def main():
 
         if part != cur_part:
             if cur_items:
-                nav_groups.append((cur_part, cur_items))
-            cur_part, cur_items = part, []
+                nav_groups.append((cur_part, cur_items, cur_kick))
+            cur_part, cur_items, cur_kick = part, [], None
+        if kicker and not cur_kick:
+            cur_kick = kicker
         cur_items.append((nn, sid, title))
 
     if cur_items:
-        nav_groups.append((cur_part, cur_items))
+        nav_groups.append((cur_part, cur_items, cur_kick))
 
+    # 목차 그룹 라벨. data-part-kicker 가 있으면 그대로 쓰고,
+    # 없는 그룹만 PART 1, 2, 3… 으로 번호를 매긴다.
+    # (표지·부록처럼 파트로 세면 안 되는 그룹이 있어도 본문 파트 번호와 어긋나지 않는다)
     nav = []
-    for gi, (part, items) in enumerate(nav_groups, start=1):
+    auto_n = 0
+    for part, items, kicker in nav_groups:
+        if kicker:
+            kick = kicker
+        else:
+            auto_n += 1
+            kick = "PART %d" % auto_n
         label = part or "섹션"
         nav.append('    <div class="nav-group">')
-        nav.append('      <div class="nav-kicker">PART %d</div>' % gi)
+        nav.append('      <div class="nav-kicker">%s</div>' % html.escape(kick))
         nav.append('      <div class="nav-label">%s</div>' % html.escape(label))
         nav.append('      <ul class="nav-list">')
         for nn, sid, title in items:
@@ -167,7 +182,7 @@ def main():
            .replace("__SPRITE__", read_asset("icon-sprite.html"))
            .replace("__NAV__", "\n".join(nav))
            .replace("__CHAPTERS__", "\n".join(rebuilt))
-           .replace("__SBTITLE__", html.escape(args.title).replace(" — ", "<br>"))
+           .replace("__SBTITLE__", args.sb_title or html.escape(args.title).replace(" — ", "<br>"))
            .replace("__H1__", html.escape(args.h1 or args.title))
            .replace("__TITLE__", html.escape(args.title))
            .replace("__SUBTITLE__", html.escape(args.subtitle))

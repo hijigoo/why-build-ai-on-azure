@@ -1,872 +1,3 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Why Build AI on Azure? — 원페이지</title>
-<meta name="description" content="데이터에서 에이전트까지">
-
-<!-- Manrope(라틴 디스플레이) · Pretendard(한글) · IBM Plex Mono(크롬) -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-
-<style>
-/* ===========================================================
-   1. THEME TOKENS — "Cobalt Report"
-   여기 값만 바꾸면 덱 전체 룩이 바뀝니다.
-   =========================================================== */
-:root{
-  /* Surfaces */
-  --paper:#F4F2ED;          /* 기본 밝은 지면 */
-  --paper-2:#EAE7DF;        /* 보조 지면 */
-  --white:#FFFFFF;
-  --navy:#0E2340;           /* 딥 네이비 (제목/어두운 슬라이드) */
-  --navy-2:#14304F;
-  --navy-3:#0B1D35;
-
-  /* Accent */
-  --cobalt:#2C6BED;         /* 단일 강조색 */
-  --cobalt-soft:#7FA6F2;
-  --cobalt-tint:#E5EDFD;
-
-  /* Semantic */
-  --ok:#1B6B52;   --ok-tint:#DEEFE8;      /* GA */
-  --warn:#9A6410; --warn-tint:#F7ECD8;    /* Preview */
-
-  /* Text */
-  --ink:#0B1622;
-  --muted:#5A6A7D;
-  --muted-2:#8493A4;
-  --on-dark:#EAF0F8;
-  --on-dark-dim:#9FB2C9;
-  --line:#D8D3C9;
-  --line-dark:rgba(255,255,255,.16);
-
-  /* Type scale — 1920×1080 무대 기준 고정 px */
-  --f-display:'Manrope','Pretendard Variable',sans-serif;
-  --f-body:'Pretendard Variable','Manrope',sans-serif;
-  --f-mono:'IBM Plex Mono',monospace;
-
-  /* Motion */
-  --ease:cubic-bezier(.16,.84,.34,1);
-  --dur:.62s;
-
-  /* Chrome */
-  --notes-h:300px;
-  --stage-bg:#0A1420;
-  --slide-bg:var(--paper);
-}
-
-*{margin:0;padding:0;box-sizing:border-box}
-
-/* -----------------------------------------------------------
-   한글 줄바꿈 — 단어(어절)를 중간에서 자르지 않는다.
-   기본값(word-break:normal)은 한글을 음절 단위로 끊어
-   "네트워크 격" / "리" 처럼 단어가 두 줄로 갈라진다.
-     keep-all      : CJK를 어절 단위로만 끊는다.
-     overflow-wrap : 어절 하나가 줄보다 길 때만 예외적으로 끊는다(URL·긴 식별자).
-   ----------------------------------------------------------- */
-html{word-break:keep-all;overflow-wrap:break-word;line-break:strict}
-/* 코드·URL은 한글 규칙에서 빼되 break-all은 쓰지 않는다.
-   break-all은 도메인을 아무 데서나 끊어(`*.login.m` / `icrosoftonline.com`) 오히려 나빠진다.
-   normal + break-word면 줄에 못 들어갈 때만 마지막 수단으로 끊긴다. */
-code,kbd,samp,pre{word-break:normal;overflow-wrap:break-word}
-
-/* 반드시 붙어 다녀야 하는 짧은 구(제품명·수치+단위)는 이 클래스로 묶는다.
-   (`.badge.nb`는 별개의 배지 색상 변형이므로 이름을 겹치지 않게 둔다) */
-.nowrap{white-space:nowrap}
-
-/* ===========================================================
-   2. FIXED 16:9 STAGE — MANDATORY BASE (viewport-base.css 전체)
-   슬라이드는 1920×1080으로 작성하고, 무대 전체를 한 번에 스케일합니다.
-   =========================================================== */
-
-/* 1. Lock the browser viewport */
-html,
-body {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    overflow: hidden;
-    background: var(--stage-bg, #000);
-}
-
-/* 2. Full-window deck viewport */
-.deck-viewport {
-    position: fixed;
-    inset: 0;
-    overflow: hidden;
-    background: var(--stage-bg, #000);
-}
-
-/* 3. Fixed 16:9 design canvas.
-   JavaScript sets transform: translate(...) scale(...). */
-.deck-stage {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 1920px;
-    height: 1080px;
-    overflow: hidden;
-    transform-origin: 0 0;
-    background: var(--slide-bg, #fff);
-}
-
-/* 4. Slides stack inside the fixed stage.
-   Content must be laid out at 1920×1080, not reflowed per device. */
-.slide {
-    position: absolute;
-    inset: 0;
-    width: 1920px;
-    height: 1080px;
-    overflow: hidden;
-    display: block;
-    visibility: hidden;
-    opacity: 0;
-    pointer-events: none;
-    background: var(--slide-bg, #fff);
-}
-
-.slide.active,
-.slide.visible {
-    visibility: visible;
-    opacity: 1;
-    pointer-events: auto;
-    z-index: 1;
-}
-
-/* 5. Keep media inside authored slide bounds */
-img,
-video,
-canvas,
-svg {
-    max-width: 100%;
-    max-height: 100%;
-}
-
-/* 6. Presentation chrome stays outside the slide design system */
-.deck-controls {
-    position: fixed;
-    left: 50%;
-    bottom: 22px;
-    transform: translateX(-50%);
-    z-index: 1000;
-}
-
-/* 7. Print one fixed-size slide per page */
-@media print {
-    html,
-    body {
-        width: 1920px;
-        height: auto;
-        overflow: visible;
-        background: #fff;
-    }
-
-    .deck-viewport {
-        position: static;
-        overflow: visible;
-        background: #fff;
-    }
-
-    .deck-stage {
-        position: static;
-        width: auto;
-        height: auto;
-        transform: none !important;
-        background: none;
-    }
-
-    .slide {
-        position: relative;
-        display: block !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-        pointer-events: auto !important;
-        width: 1920px;
-        height: 1080px;
-        break-after: page;
-        page-break-after: always;
-    }
-
-    .slide:last-child {
-        break-after: auto;
-        page-break-after: auto;
-    }
-
-    .deck-controls {
-        display: none !important;
-    }
-}
-
-/* 8. Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::after,
-    *::before {
-        animation-duration: 0.01ms !important;
-        transition-duration: 0.2s !important;
-    }
-}
-
-/* ===========================================================
-   5. SLIDE SHELL — 공통 여백과 헤더/본문/푸터 구조
-   =========================================================== */
-.slide{background:var(--paper);font-family:var(--f-body);color:var(--ink);
-  -webkit-font-smoothing:antialiased}
-.frame{position:absolute;inset:0;padding:92px 120px 118px;display:flex;flex-direction:column}
-
-.s-head{flex:0 0 auto}
-.kicker{font-family:var(--f-mono);font-size:21px;letter-spacing:.30em;text-transform:uppercase;
-  color:var(--cobalt);margin-bottom:22px;display:flex;align-items:center;gap:16px}
-.kicker::before{content:"";width:34px;height:3px;background:var(--cobalt);flex:0 0 auto}
-.s-title{font-family:var(--f-body);font-weight:800;font-size:82px;line-height:1.12;
-  letter-spacing:-.035em;color:var(--navy)}
-.s-title .hl{color:var(--cobalt)}
-.s-title.sm{font-size:68px}
-.s-lead{margin-top:20px;font-size:33px;line-height:1.52;color:var(--muted);
-  letter-spacing:-.02em;max-width:1480px;font-weight:500}
-.s-lead b{color:var(--navy);font-weight:700}
-
-.s-body{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;
-  margin-top:46px}
-.s-body.top{justify-content:flex-start}
-
-.s-foot{position:absolute;left:120px;right:120px;bottom:52px;display:flex;
-  justify-content:space-between;align-items:center;
-  font-family:var(--f-mono);font-size:18px;letter-spacing:.2em;color:var(--muted-2);
-  text-transform:uppercase}
-.s-foot .pg{color:var(--navy);font-weight:600}
-
-/* 어두운 슬라이드 변형 */
-.slide.dark{background:linear-gradient(118deg,var(--navy) 0%,var(--navy-2) 58%,var(--navy-3) 100%);
-  color:var(--on-dark)}
-.dark .s-title{color:#fff}
-.dark .s-title .hl{color:var(--cobalt-soft)}
-.dark .s-lead{color:var(--on-dark-dim)}
-.dark .s-lead b{color:#fff}
-.dark .kicker{color:var(--cobalt-soft)}
-.dark .kicker::before{background:var(--cobalt-soft)}
-.dark .s-foot{color:rgba(255,255,255,.42)}
-.dark .s-foot .pg{color:rgba(255,255,255,.8)}
-
-/* 어두운 슬라이드의 은은한 원형 장식 (세로선 없이 깊이감만) */
-.dark .orb{position:absolute;border:1px solid rgba(127,166,242,.16);border-radius:50%;pointer-events:none}
-.dark .orb.o1{width:760px;height:760px;right:-210px;top:-230px}
-.dark .orb.o2{width:440px;height:440px;right:60px;top:-40px;border-color:rgba(127,166,242,.10)}
-
-/* ===========================================================
-   6. COMPONENTS
-   원칙: 세로 구분선을 쓰지 않습니다. 강조는 항상 "상단 액센트 바"와
-   가로 헤어라인으로만 표현합니다.
-   =========================================================== */
-
-/* --- 6.1 카드 그리드 --- */
-.grid{display:grid;gap:24px}
-.g2{grid-template-columns:repeat(2,1fr)}
-.g3{grid-template-columns:repeat(3,1fr)}
-.g4{grid-template-columns:repeat(4,1fr)}
-.g5{grid-template-columns:repeat(5,1fr)}
-
-.card{position:relative;background:var(--white);border:1px solid var(--line);
-  padding:34px 30px 30px;border-radius:2px;overflow:hidden}
-.card::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:var(--cobalt)}
-.card .cn{font-family:var(--f-mono);font-size:18px;letter-spacing:.22em;color:var(--cobalt);
-  margin-bottom:16px}
-.card h3{font-size:33px;font-weight:800;color:var(--navy);letter-spacing:-.03em;line-height:1.26}
-/* 카드 제목 안의 강조. .hl 은 원래 .s-title 전용이라 카드에서는 먹지 않았다 */
-.card h3 .hl{color:var(--cobalt)}
-.dark .card h3 .hl,.card.solid h3 .hl{color:var(--cobalt-soft)}
-.card h3.sm{font-size:29px}
-.card p{margin-top:13px;font-size:24px;line-height:1.54;color:var(--muted);letter-spacing:-.015em}
-.card p b{color:var(--navy);font-weight:700}
-.card .svc{margin-top:16px;font-family:var(--f-mono);font-size:17px;letter-spacing:.06em;
-  color:var(--cobalt);line-height:1.5}
-.card.tone-2::before{background:#4E86F0}
-.card.tone-3::before{background:#6FA0F4}
-.card.tone-4::before{background:#93B9F7}
-.card.solid{background:var(--navy);border-color:var(--navy)}
-.card.solid h3{color:#fff}
-.card.solid p{color:rgba(255,255,255,.68)}
-.card.solid .cn{color:var(--cobalt-soft)}
-/* 짙은 배경 카드 안의 요소는 밝은 지면용 색을 그대로 쓰면 배경에 묻힌다.
-   특히 .card p b 는 네이비라 네이비 카드 위에서 대비 1.00 — 완전히 안 보인다. */
-.card.solid p b,.card.solid p strong{color:#fff;font-weight:700}
-.card.solid .svc{color:var(--cobalt-soft)}
-.card.solid .fn-n{color:var(--cobalt-soft)}
-.card.solid .colhead{color:var(--cobalt-soft);border-bottom-color:var(--cobalt-soft)}
-.card.solid .li .t{color:#fff}
-.card.solid .li .d{color:var(--on-dark-dim)}
-.card.solid .li .b{color:var(--cobalt-soft)}
-.card.solid .li{border-color:var(--line-dark)}
-
-.dark .card{background:rgba(255,255,255,.045);border-color:var(--line-dark)}
-.dark .card h3{color:#fff}
-.dark .card p{color:var(--on-dark-dim)}
-.dark .card .cn{color:var(--cobalt-soft)}
-.dark .card .svc{color:var(--cobalt-soft)}
-
-/* --- 6.2 리스트 (가로 헤어라인만) --- */
-.list{display:flex;flex-direction:column}
-.li{display:flex;gap:30px;align-items:flex-start;padding:24px 0;
-  border-bottom:1px solid var(--line)}
-.li:first-child{padding-top:4px}
-.li:last-child{border-bottom:0;padding-bottom:0}
-.li .b{font-family:var(--f-mono);font-size:21px;color:var(--cobalt);flex:0 0 52px;padding-top:8px;
-  letter-spacing:.06em}
-.li .tx{flex:1;min-width:0}
-.li .t{font-size:35px;font-weight:700;color:var(--navy);letter-spacing:-.028em;line-height:1.32}
-.li .d{margin-top:9px;font-size:26px;line-height:1.52;color:var(--muted);letter-spacing:-.015em}
-.li .d b{color:var(--navy);font-weight:700}
-.dark .li{border-color:var(--line-dark)}
-.dark .li .t{color:#fff}
-.dark .li .d{color:var(--on-dark-dim)}
-.dark .li .b{color:var(--cobalt-soft)}
-.list.tight .li{padding:17px 0}
-.list.tight .li .t{font-size:31px}
-.list.tight .li .d{font-size:24px;margin-top:6px}
-/* 항목이 7개 이상일 때 쓰는 초압축 변형 */
-.list.xtight .li{padding:9px 0}
-.list.xtight .li .t{font-size:29px}
-.list.xtight .li .d{font-size:23px;margin-top:5px;line-height:1.46}
-.list.xtight .li .b{padding-top:5px}
-
-/* --- 6.3 표 (세로선 없음) --- */
-.tbl{width:100%;border-collapse:collapse;table-layout:fixed}
-.tbl th{font-family:var(--f-mono);font-size:19px;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--muted);text-align:left;padding:0 26px 15px 0;border-bottom:2px solid var(--navy);
-  font-weight:500;vertical-align:bottom}
-.tbl td{font-size:26px;line-height:1.46;color:var(--ink);padding:19px 26px 19px 0;
-  border-bottom:1px solid var(--line);vertical-align:top;letter-spacing:-.015em}
-.tbl th:last-child,.tbl td:last-child{padding-right:0}
-.tbl tr:last-child td{border-bottom:0}
-.tbl td strong{color:var(--navy);font-weight:700}
-.tbl td .sub{display:block;margin-top:5px;font-size:21px;color:var(--muted-2);line-height:1.45}
-.tbl.sm td{font-size:24px;padding:15px 22px 15px 0}
-.tbl.sm th{font-size:17px;padding-right:22px}
-.tbl .c{text-align:center}
-.dark .tbl th{color:var(--on-dark-dim);border-bottom-color:var(--cobalt-soft)}
-.dark .tbl td{color:var(--on-dark);border-bottom-color:var(--line-dark)}
-.dark .tbl td strong{color:#fff}
-
-/* --- 6.4 가로 플로우 --- */
-.flow{display:flex;align-items:stretch}
-.fnode{flex:1;position:relative;background:var(--white);border:1px solid var(--line);
-  padding:30px 24px;text-align:center;border-radius:2px;display:flex;flex-direction:column;
-  justify-content:center;overflow:hidden}
-.fnode::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:var(--cobalt-soft)}
-.fnode.acc::before{background:var(--cobalt)}
-.fnode.end{background:var(--navy);border-color:var(--navy)}
-.fnode.end::before{background:var(--cobalt-soft)}
-.fnode.end .fn-t{color:#fff}
-.fnode.end .fn-d{color:rgba(255,255,255,.66)}
-.fn-n{font-family:var(--f-mono);font-size:17px;letter-spacing:.2em;color:var(--cobalt);margin-bottom:11px}
-.fnode.end .fn-n{color:var(--cobalt-soft)}
-.fn-t{font-size:30px;font-weight:800;color:var(--navy);letter-spacing:-.03em;line-height:1.28}
-.fn-t.sm{font-size:27px}
-.fn-d{margin-top:9px;font-size:22px;line-height:1.46;color:var(--muted)}
-.farrow{flex:0 0 62px;display:flex;align-items:center;justify-content:center;position:relative}
-.farrow::before{content:"";width:30px;height:2px;background:var(--cobalt);opacity:.5}
-.farrow::after{content:"";position:absolute;right:16px;width:0;height:0;
-  border-left:11px solid var(--cobalt);border-top:7px solid transparent;border-bottom:7px solid transparent;opacity:.75}
-.farrow .lb{position:absolute;top:-32px;left:50%;transform:translateX(-50%);white-space:nowrap;
-  font-family:var(--f-mono);font-size:16px;letter-spacing:.08em;color:var(--muted-2)}
-.dark .fnode{background:rgba(255,255,255,.05);border-color:var(--line-dark)}
-.dark .fn-t{color:#fff}
-.dark .fn-d{color:var(--on-dark-dim)}
-
-/* --- 6.5 세로 스택 (계층 다이어그램) --- */
-.stack{display:flex;flex-direction:column;gap:9px}
-.layer{display:flex;align-items:center;gap:26px;padding:19px 28px;border-radius:2px;
-  background:var(--white);border:1px solid var(--line);border-top:3px solid var(--cobalt);position:relative}
-.layer .lx{font-family:var(--f-mono);font-size:18px;color:var(--muted-2);flex:0 0 40px;letter-spacing:.08em}
-.layer .ln{font-size:29px;font-weight:800;color:var(--navy);letter-spacing:-.03em;flex:0 0 300px}
-.layer .ld{font-size:23px;color:var(--muted);line-height:1.42;flex:1;letter-spacing:-.015em}
-.layer .lsvc{font-family:var(--f-mono);font-size:17px;color:var(--cobalt);letter-spacing:.04em;
-  text-align:right;flex:0 0 430px;line-height:1.45}
-.layer.hot{background:var(--navy);border-color:var(--navy);border-top-color:var(--cobalt-soft)}
-.layer.hot .ln{color:#fff}
-.layer.hot .ld{color:rgba(255,255,255,.7)}
-.layer.hot .lx{color:rgba(255,255,255,.45)}
-.layer.hot .lsvc{color:var(--cobalt-soft)}
-.dark .layer{background:rgba(255,255,255,.05);border-color:var(--line-dark);border-top-color:var(--cobalt)}
-.dark .layer .ln{color:#fff}
-.dark .layer .ld{color:var(--on-dark-dim)}
-.dark .layer .lsvc{color:var(--cobalt-soft)}
-.vsep{height:16px;display:flex;align-items:center;justify-content:center;
-  font-family:var(--f-mono);font-size:15px;letter-spacing:.2em;color:var(--cobalt);opacity:.65}
-
-/* --- 6.6 통계 / KPI --- */
-.stats{display:flex;gap:0;flex-wrap:wrap}
-.stat{flex:1;padding-right:44px}
-.stat .k{font-family:var(--f-mono);font-size:18px;letter-spacing:.22em;text-transform:uppercase;
-  color:var(--muted-2);margin-bottom:14px}
-.stat .v{font-size:52px;font-weight:800;color:var(--navy);letter-spacing:-.04em;line-height:1.14}
-.stat .v i{font-style:normal;color:var(--cobalt)}
-.stat .sd{margin-top:11px;font-size:23px;color:var(--muted);line-height:1.5}
-.dark .stat .v{color:#fff}
-.dark .stat .v i{color:var(--cobalt-soft)}
-.dark .stat .sd{color:var(--on-dark-dim)}
-
-/* --- 6.7 배지 · 강조 박스 --- */
-.badge{display:inline-block;font-family:var(--f-mono);font-size:16px;letter-spacing:.14em;
-  padding:4px 11px;border-radius:2px;vertical-align:middle;font-weight:500}
-.badge.ga{background:var(--ok-tint);color:var(--ok)}
-.badge.pv{background:var(--warn-tint);color:var(--warn)}
-.badge.nb{background:var(--cobalt-tint);color:var(--cobalt)}
-
-.callout{background:var(--cobalt-tint);border-top:4px solid var(--cobalt);padding:28px 34px;
-  border-radius:2px;font-size:28px;line-height:1.5;color:var(--navy);letter-spacing:-.02em}
-.callout b{font-weight:800}
-.callout.warn{background:var(--warn-tint);border-top-color:var(--warn);color:#5B4008}
-.callout.plain{background:var(--paper-2);border-top-color:var(--navy);color:var(--ink)}
-.dark .callout{background:rgba(127,166,242,.13);border-top-color:var(--cobalt-soft);color:#fff}
-
-.quote{font-size:58px;font-weight:800;line-height:1.42;letter-spacing:-.035em;color:#fff}
-.quote .hl{color:var(--cobalt-soft)}
-
-/* --- 6.8 두 칼럼 --- */
-.cols{display:flex;gap:56px;align-items:flex-start}
-.cols .c1{flex:1;min-width:0}
-.cols .c2{flex:1;min-width:0}
-.cols.w6-4 .c1{flex:6}.cols.w6-4 .c2{flex:4}
-.cols.w4-6 .c1{flex:4}.cols.w4-6 .c2{flex:6}
-.colhead{font-family:var(--f-mono);font-size:18px;letter-spacing:.22em;text-transform:uppercase;
-  color:var(--cobalt);padding-bottom:12px;border-bottom:2px solid var(--navy);margin-bottom:22px}
-.dark .colhead{color:var(--cobalt-soft);border-bottom-color:var(--cobalt-soft)}
-
-/* --- 6.9 이미지 슬라이드 --- */
-/* 이미지는 절대 배치 + object-fit으로 무대 밖으로 절대 넘치지 않게 합니다 */
-.figwrap{flex:1;min-height:0;position:relative;overflow:hidden}
-.figwrap img{position:absolute;inset:0;width:100%;height:100%;max-width:100%;max-height:100%;
-  object-fit:contain;background:transparent;border-radius:2px}
-
-/* --- 6.10 표지 / 파트 표지 --- */
-.cover-top{position:absolute;left:0;top:0;width:1920px;height:648px;background:var(--paper);overflow:hidden}
-.cover-top::after{content:"";position:absolute;left:0;right:0;bottom:0;height:6px;background:var(--cobalt)}
-.cover-bot{position:absolute;left:0;top:648px;width:1920px;height:432px;overflow:hidden;
-  background:linear-gradient(115deg,var(--navy) 0%,var(--navy-2) 62%,var(--navy-3) 100%)}
-.cover-brand{position:absolute;left:130px;top:96px;display:flex;align-items:center;gap:22px}
-.cover-sq{width:22px;height:22px;background:var(--cobalt);transform:rotate(45deg)}
-.cover-kick{font-family:var(--f-mono);font-size:20px;letter-spacing:.34em;text-transform:uppercase;color:var(--muted)}
-.cover-h1{position:absolute;left:126px;top:190px;width:1540px;font-family:var(--f-display);
-  font-weight:800;font-size:138px;line-height:.96;letter-spacing:-.045em;color:var(--navy)}
-.cover-h1 .q{color:var(--cobalt)}
-.cover-rule{position:absolute;left:130px;top:486px;height:5px;width:236px;background:var(--navy);opacity:.85}
-.cover-sub{position:absolute;left:132px;top:528px;width:1420px;font-size:36px;font-weight:500;
-  line-height:1.48;color:var(--muted);letter-spacing:-.02em}
-.cover-pillars{position:absolute;left:130px;top:96px;display:flex}
-.cover-p{width:452px;padding-right:56px}
-.cover-p .n{font-family:var(--f-mono);font-size:17px;letter-spacing:.28em;color:var(--cobalt-soft);margin-bottom:20px}
-.cover-p .t{font-size:34px;font-weight:700;color:#fff;line-height:1.34;letter-spacing:-.025em}
-.cover-p .d{margin-top:14px;font-size:23px;font-weight:400;line-height:1.55;color:rgba(255,255,255,.62)}
-.cover-foot{position:absolute;left:130px;bottom:52px;right:130px;display:flex;justify-content:space-between;
-  font-family:var(--f-mono);font-size:18px;letter-spacing:.2em;color:rgba(255,255,255,.42)}
-
-/* 파트 표지 */
-.part-no{font-family:var(--f-display);font-size:210px;font-weight:800;letter-spacing:-.06em;
-  line-height:.86;color:transparent;-webkit-text-stroke:2px rgba(127,166,242,.55)}
-.part-t{margin-top:22px;font-size:96px;font-weight:800;letter-spacing:-.04em;color:#fff;line-height:1.1}
-.part-d{margin-top:26px;font-size:34px;line-height:1.5;color:var(--on-dark-dim);max-width:1180px;font-weight:500}
-.part-idx{margin-top:52px;display:flex;flex-wrap:wrap;gap:14px 40px;max-width:1260px}
-.part-idx span{font-family:var(--f-mono);font-size:22px;letter-spacing:.1em;color:rgba(255,255,255,.55)}
-.part-idx span b{color:var(--cobalt-soft);font-weight:500;margin-right:10px}
-
-/* ===========================================================
-   6.11 DARK SURFACE 강조 텍스트 보정 (중요)
-   밝은 슬라이드용 <b>/<strong> 색(네이비)이 어두운 배경에서
-   묻히지 않도록, 어두운 슬라이드에서는 항상 흰색으로 올립니다.
-   =========================================================== */
-.dark .li .d b, .dark .li .d strong,
-.dark .card p b, .dark .card p strong,
-.dark .fn-d b,  .dark .fn-d strong,
-.dark .layer .ld b, .dark .layer .ld strong,
-.dark .stat .sd b,  .dark .stat .sd strong,
-.dark .part-d b,    .dark .part-d strong,
-.dark .li .t b,     .dark .li .t strong{color:#FFFFFF;font-weight:700}
-.dark .callout b, .dark .callout strong{color:#FFFFFF}
-
-
-/* ===========================================================
-   6.12 AZURE SERVICE ICONS (공식 아이콘 스프라이트)
-   원본 SVG를 <symbol>로 담아 <use>로 참조합니다.
-   장식이 아니라 '어떤 서비스인지'를 빠르게 알리는 용도로만 씁니다.
-   =========================================================== */
-.ic{width:1em;height:1em;flex:0 0 auto;vertical-align:-.14em}
-
-/* 카드 헤더 옆 아이콘 — 제목과 나란히 */
-.card h3 .ic{width:34px;height:34px;margin-right:12px;vertical-align:-8px}
-.card h3.sm .ic{width:30px;height:30px;vertical-align:-6px}
-
-/* 카드 우상단 워터마크 아이콘 */
-.card .ic-badge{position:absolute;right:22px;top:22px;width:38px;height:38px;opacity:.9}
-.dark .card .ic-badge{opacity:.95}
-/* GitHub 마크는 단색(currentColor) — 지면에 맞춰 대비를 맞춥니다 */
-.ic-gh{color:var(--navy)}
-.dark .ic-gh{color:#FFFFFF;opacity:.92}
-
-/* 리스트 항목 제목 앞 아이콘 */
-.li .t .ic{width:30px;height:30px;margin-right:11px;vertical-align:-7px}
-
-/* 표 셀 안 인라인 아이콘 */
-.tbl td .ic{width:22px;height:22px;margin-right:7px;vertical-align:-5px}
-
-/* 서비스 라벨(.svc) 앞 아이콘 묶음 */
-.svc .ic{width:19px;height:19px;margin-right:5px;vertical-align:-4px}
-.ic-row{display:flex;align-items:center;gap:9px;margin-top:15px}
-.ic-row .ic{width:26px;height:26px}
-
-/* ===========================================================
-   7. ENTRANCE ANIMATIONS — 활성 슬라이드에서 순차 등장
-   =========================================================== */
-.reveal{opacity:0;transform:translateY(30px);
-  transition:opacity var(--dur) var(--ease),transform var(--dur) var(--ease)}
-.slide.visible .reveal{opacity:1;transform:translateY(0)}
-.reveal.r1{transition-delay:.06s}.reveal.r2{transition-delay:.16s}
-.reveal.r3{transition-delay:.26s}.reveal.r4{transition-delay:.36s}
-.reveal.r5{transition-delay:.46s}.reveal.r6{transition-delay:.56s}
-.reveal.r7{transition-delay:.66s}.reveal.r8{transition-delay:.76s}
-
-/* 그리드/리스트 자식 자동 스태거 */
-.stagger > *{opacity:0;transform:translateY(26px);
-  transition:opacity .58s var(--ease),transform .58s var(--ease)}
-.slide.visible .stagger > *{opacity:1;transform:translateY(0)}
-.slide.visible .stagger > *:nth-child(1){transition-delay:.18s}
-.slide.visible .stagger > *:nth-child(2){transition-delay:.26s}
-.slide.visible .stagger > *:nth-child(3){transition-delay:.34s}
-.slide.visible .stagger > *:nth-child(4){transition-delay:.42s}
-.slide.visible .stagger > *:nth-child(5){transition-delay:.50s}
-.slide.visible .stagger > *:nth-child(6){transition-delay:.58s}
-.slide.visible .stagger > *:nth-child(7){transition-delay:.66s}
-.slide.visible .stagger > *:nth-child(8){transition-delay:.74s}
-.slide.visible .stagger > *:nth-child(9){transition-delay:.82s}
-.slide.visible .stagger > *:nth-child(n+10){transition-delay:.90s}
-
-/* 표지 전용 모션 */
-@keyframes coverRise{from{opacity:0;transform:translateY(38px)}to{opacity:1;transform:translateY(0)}}
-@keyframes coverGrow{from{width:0}to{width:236px}}
-.slide.visible .cv{opacity:0;animation:coverRise .95s var(--ease) forwards}
-.slide.visible .cv1{animation-delay:.10s}.slide.visible .cv2{animation-delay:.26s}
-.slide.visible .cv3{animation-delay:.42s}.slide.visible .cv4{animation-delay:.62s}
-.slide.visible .cv5{animation-delay:.74s}.slide.visible .cv6{animation-delay:.86s}
-.slide.visible .cv7{animation-delay:1.0s}
-.slide.visible .cover-rule{width:0;animation:coverGrow .9s var(--ease) .5s forwards}
-
-
-/* ===========================================================
-   ONE-PAGE SHELL — 왼쪽 고정 목차 + 세로 스크롤 본문
-   슬라이드 자체는 1920×1080 고정 무대를 그대로 유지하고,
-   16:9 시트 안에서 전체를 균일 축소합니다. (내부 재배치 없음)
-   =========================================================== */
-:root{--sb-w:314px;--page-bg:#E9E5DC;--page-bg-2:#DFDACF}
-
-html,body{width:auto;height:auto;overflow:visible;background:var(--page-bg)}
-body{font-family:var(--f-body);color:var(--ink);
-  -webkit-font-smoothing:antialiased;scroll-behavior:smooth}
-@media (prefers-reduced-motion: reduce){body{scroll-behavior:auto}}
-
-/* --- 상단 진행 바 --- */
-.top-prog{position:fixed;left:0;right:0;top:0;height:3px;background:rgba(14,35,64,.12);z-index:80}
-.top-prog span{display:block;height:100%;width:0;background:var(--cobalt)}
-
-/* --- 사이드바 --- */
-.sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--sb-w);z-index:70;
-  background:linear-gradient(170deg,var(--navy) 0%,var(--navy-2) 62%,var(--navy-3) 100%);
-  display:flex;flex-direction:column;color:var(--on-dark);
-  transition:transform .3s var(--ease)}
-/* 목차를 접으면 본문이 화면 전체 폭을 쓰고 슬라이드가 커집니다 */
-body.sb-collapsed .sidebar{transform:translateX(-100%)}
-.sb-head{position:relative;padding:30px 26px 20px;flex:0 0 auto}
-.sb-close{position:absolute;right:14px;top:16px;width:30px;height:30px;border-radius:2px;
-  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);color:#A9BBD1;
-  font-size:12px;line-height:1;cursor:pointer;transition:color .2s,border-color .2s,background .2s}
-.sb-close:hover{color:#fff;border-color:var(--cobalt);background:rgba(44,107,237,.32)}
-.sb-brand{display:flex;align-items:center;gap:12px;margin-bottom:16px}
-.sb-sq{width:13px;height:13px;background:var(--cobalt);transform:rotate(45deg);flex:0 0 auto}
-.sb-kick{font-family:var(--f-mono);font-size:10px;letter-spacing:.28em;text-transform:uppercase;
-  color:var(--cobalt-soft)}
-.sb-title{font-family:var(--f-display);font-size:26px;font-weight:800;letter-spacing:-.035em;
-  color:#fff;line-height:1.14}
-.sb-sub{margin-top:9px;font-size:12.5px;line-height:1.55;color:var(--on-dark-dim);letter-spacing:-.01em}
-
-.sb-tools{padding:0 26px 18px;flex:0 0 auto}
-.sb-btns{display:flex;gap:7px}
-.sb-btn{flex:1;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
-  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);color:#A9BBD1;
-  padding:8px 6px;border-radius:2px;cursor:pointer;transition:color .2s,border-color .2s,background .2s;
-  text-align:center;text-decoration:none;line-height:1.3}
-.sb-btn:hover{color:#fff;border-color:var(--cobalt)}
-.sb-btn.on{color:#fff;border-color:var(--cobalt);background:rgba(44,107,237,.34)}
-
-/* --- 목차 --- */
-.sb-nav{flex:1;min-height:0;overflow-y:auto;padding:6px 14px 30px}
-.sb-nav::-webkit-scrollbar{width:8px}
-.sb-nav::-webkit-scrollbar-thumb{background:#2B3B54;border-radius:6px}
-.nav-group{margin-bottom:16px}
-.nav-kicker{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;
-  color:var(--cobalt-soft);padding:0 12px;margin-bottom:3px}
-.nav-label{font-size:13.5px;font-weight:700;color:#fff;padding:0 12px 8px;letter-spacing:-.02em;
-  border-bottom:1px solid rgba(255,255,255,.10);margin-bottom:5px}
-.nav-list{list-style:none;margin:0;padding:0}
-.nav-link{display:flex;gap:10px;align-items:baseline;padding:6px 12px;border-radius:2px;
-  text-decoration:none;transition:background .18s,color .18s}
-.nav-link:hover{background:rgba(255,255,255,.07)}
-.nav-n{font-family:var(--f-mono);font-size:10.5px;color:#69809C;flex:0 0 auto;letter-spacing:.06em}
-.nav-t{font-size:13px;line-height:1.42;color:#B4C4D8;letter-spacing:-.012em;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.nav-link.active{background:rgba(44,107,237,.24)}
-.nav-link.active .nav-t{color:#fff;font-weight:700}
-.nav-link.active .nav-n{color:var(--cobalt-soft)}
-
-/* --- 본문 --- */
-.main{margin-left:var(--sb-w);padding:56px 56px 120px;max-width:1580px;
-  transition:margin-left .3s var(--ease),max-width .3s var(--ease)}
-body.sb-collapsed .main{margin-left:auto;margin-right:auto;max-width:1760px;padding:56px 76px 120px}
-.intro{margin-bottom:52px;padding-bottom:36px;border-bottom:2px solid rgba(14,35,64,.16)}
-.intro .ik{font-family:var(--f-mono);font-size:13px;letter-spacing:.3em;text-transform:uppercase;
-  color:var(--cobalt);margin-bottom:16px}
-.intro h1{font-family:var(--f-display);font-size:62px;font-weight:800;letter-spacing:-.045em;
-  color:var(--navy);line-height:1.04}
-.intro h1 .q{color:var(--cobalt)}
-.intro p{margin-top:18px;font-size:20px;line-height:1.6;color:var(--muted);max-width:940px;
-  letter-spacing:-.02em;font-weight:500}
-.intro .meta{margin-top:24px;display:flex;flex-wrap:wrap;gap:10px 26px;
-  font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;color:var(--muted-2);text-transform:uppercase}
-
-.chapter{margin-bottom:64px;scroll-margin-top:24px}
-.ch-head{display:flex;align-items:baseline;gap:14px;margin-bottom:14px;
-  padding-bottom:11px;border-bottom:1px solid rgba(14,35,64,.16)}
-.ch-n{font-family:var(--f-mono);font-size:13px;letter-spacing:.14em;color:var(--cobalt);flex:0 0 auto}
-.ch-t{font-size:21px;font-weight:800;color:var(--navy);letter-spacing:-.028em;line-height:1.3;
-  flex:1;min-width:0}
-.ch-part{font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--muted-2);flex:0 0 auto;white-space:nowrap}
-.ch-link{font-family:var(--f-mono);font-size:15px;color:var(--muted-2);text-decoration:none;
-  opacity:0;transition:opacity .2s,color .2s;flex:0 0 auto}
-.chapter:hover .ch-link{opacity:1}
-.ch-link:hover{color:var(--cobalt)}
-
-/* --- 16:9 시트 (슬라이드를 통째로 축소) --- */
-.sheet{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:3px;
-  background:var(--paper);box-shadow:0 14px 44px rgba(14,35,64,.18),0 2px 6px rgba(14,35,64,.10)}
-.sheet .slide{position:absolute;left:0;top:0;width:1920px;height:1080px;
-  visibility:visible;opacity:1;pointer-events:auto;transform-origin:0 0;overflow:hidden}
-
-/* --- 노트 카드 (밝은 지면용 재스타일) --- */
-.note{margin-top:16px;background:#FFFFFF;border:1px solid var(--line);border-top:4px solid var(--cobalt);
-  border-radius:2px;padding:6px 30px 24px;box-shadow:0 2px 10px rgba(14,35,64,.06)}
-/* 사이드바 버튼(N) — 설명란 전체를 한 번에 감춘다.
-   장표별 접힘(.note.collapsed)과는 별개로 동작하며, 다시 켜면 각 장의 상태가 그대로 남는다 */
-body.notes-hidden .note{display:none}
-.note-head{font-family:var(--f-body);font-size:12.5px;font-weight:800;letter-spacing:.02em;
-  color:var(--cobalt);margin:16px 0 13px;padding-bottom:11px;border-bottom:1px solid #EFECE4;
-  display:flex;align-items:center;cursor:pointer;user-select:none;transition:color .18s}
-.note-head::before{content:"";display:inline-block;width:8px;height:8px;background:var(--cobalt);
-  transform:rotate(45deg);margin-right:9px;flex:0 0 auto}
-.note-head:hover{color:var(--navy)}
-.note-head:focus-visible{outline:2px solid var(--cobalt);outline-offset:3px}
-
-/* 설명 접기 버튼 — 전체 on/off가 아니라 장표마다 하나씩 붙는다 (deck.js가 주입) */
-.note-toggle{margin-left:auto;flex:0 0 auto;display:flex;align-items:center;gap:7px;
-  font-family:var(--f-mono);font-size:10.5px;font-weight:500;letter-spacing:.12em;
-  text-transform:uppercase;color:var(--muted-2);background:var(--white);
-  border:1px solid var(--line);border-radius:2px;padding:4px 9px;
-  transition:color .18s,border-color .18s,background .18s}
-.note-head:hover .note-toggle{color:var(--cobalt);border-color:var(--cobalt-soft);background:var(--cobalt-tint)}
-.note-caret{display:inline-block;width:0;height:0;border-left:4px solid transparent;
-  border-right:4px solid transparent;border-top:5px solid currentColor;
-  transition:transform .2s var(--ease)}
-.note.collapsed .note-caret{transform:rotate(-90deg)}
-.note.collapsed{padding-bottom:8px}
-.note.collapsed .note-head{margin-bottom:0;padding-bottom:0;border-bottom-color:transparent}
-.note.collapsed .note-body{display:none}
-.note-body{font-size:16.5px;line-height:1.76;color:#37475A;letter-spacing:-.012em}
-.note-body p{margin-bottom:11px}
-.note-body p:last-child{margin-bottom:0}
-.note-body b,.note-body strong{color:var(--navy);font-weight:700}
-.note-body em{font-style:normal;color:var(--cobalt);font-weight:700}
-.note-body ul{margin:6px 0 13px;padding-left:21px}
-.note-body li{margin-bottom:7px}
-.note-body li::marker{color:var(--cobalt)}
-.note-body .q{display:block;margin-top:13px;padding-top:11px;
-  border-top:1px solid var(--line);color:var(--muted);font-size:15.5px}
-.note-body .badge{font-size:12px;padding:3px 8px}
-/* 용어·제품 설명 블록 */
-.note-body dl.gloss{margin:14px 0 4px;border-top:1px solid var(--line);padding-top:13px}
-.note-body dl.gloss::before{content:"용어 · 제품 설명";display:block;font-family:var(--f-body);
-  font-size:12.5px;font-weight:800;letter-spacing:.02em;color:var(--cobalt);margin-bottom:10px}
-.note-body dl.gloss dt{font-weight:700;color:var(--navy);font-size:16.5px;margin-top:11px}
-.note-body dl.gloss dt:first-of-type{margin-top:0}
-.note-body dl.gloss dd{margin:3px 0 0;color:#4A5B70;font-size:16px;line-height:1.72}
-
-/* --- 맨 위로 --- */
-.to-top{position:fixed;right:26px;bottom:26px;z-index:75;width:44px;height:44px;border-radius:2px;
-  background:var(--navy);color:#fff;border:1px solid rgba(255,255,255,.2);cursor:pointer;
-  font-size:15px;opacity:0;pointer-events:none;transition:opacity .25s,background .2s}
-.to-top.show{opacity:1;pointer-events:auto}
-.to-top:hover{background:var(--cobalt)}
-
-/* --- 모바일: 사이드바를 접이식 서랍으로 (슬라이드 시트는 계속 16:9 유지) --- */
-.sb-toggle{display:none;position:fixed;left:14px;top:14px;z-index:90;width:44px;height:44px;
-  border-radius:2px;background:var(--navy);color:#fff;border:1px solid rgba(255,255,255,.2);
-  font-size:17px;cursor:pointer;transition:background .2s}
-.sb-toggle:hover{background:var(--cobalt)}
-body.sb-collapsed .sb-toggle{display:block}
-.sb-scrim{display:none;position:fixed;inset:0;background:rgba(8,14,24,.55);z-index:65}
-@media (max-width:1100px){
-  .sb-toggle{display:block}
-  .sidebar{transform:translateX(-100%);box-shadow:0 0 44px rgba(0,0,0,.4)}
-  /* 모바일에서는 항상 오버레이 서랍이므로 데스크톱 접힘 상태를 무시합니다 */
-  body.sb-open .sidebar,
-  body.sb-collapsed.sb-open .sidebar{transform:translateX(0)}
-  body.sb-open .sb-scrim{display:block}
-  .main,
-  body.sb-collapsed .main{margin-left:0;margin-right:0;max-width:none;padding:74px 22px 90px}
-  .intro h1{font-size:40px}
-  .intro p{font-size:17px}
-  .ch-part{display:none}
-  .note{padding:18px 20px 20px}
-  .note-body{font-size:15px}
-  .note-toggle{letter-spacing:.08em;padding:4px 7px}
-}
-
-/* --- 인쇄: 시트 1장 = 1페이지 --- */
-@media print{
-  .sidebar,.sb-toggle,.sb-scrim,.top-prog,.to-top,.intro .meta{display:none!important}
-  body{background:#fff}
-  .main{margin-left:0;padding:0;max-width:none}
-  .chapter{margin-bottom:0;break-after:page;page-break-after:always}
-  .sheet{box-shadow:none;border:1px solid #ccc}
-  .note{break-inside:avoid}
-  /* 접어둔 설명도 인쇄물에는 전부 나온다 */
-  .note.collapsed .note-body{display:block}
-  .note.collapsed .note-head{border-bottom-color:#EFECE4}
-  .note-toggle{display:none!important}
-}
-</style>
-</head>
-<body>
-
-<svg class="az-sprite" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">
-  <symbol id="ms-foundry" viewBox="0 0 24 24"><image href="data:image/png;base64,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" x="0" y="0" width="24" height="24" preserveAspectRatio="xMidYMid meet"/></symbol>
-  <symbol id="gh-mark" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"></path></symbol>
-  <symbol id="ms-365" viewBox="0 0 24 24"><path fill="#F25022" d="M2 2h9.5v9.5H2z"></path><path fill="#7FBA00" d="M12.5 2H22v9.5h-9.5z"></path><path fill="#00A4EF" d="M2 12.5h9.5V22H2z"></path><path fill="#FFB900" d="M12.5 12.5H22V22h-9.5z"></path></symbol>
-  <symbol id="az-lake" viewBox="0 0 18 18"><defs><linearGradient id="az-lake-g0" x1="9.24" y1="0.96" x2="8.85" y2="16.52" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#32d4f5" /><stop offset="0.23" stop-color="#31d0f1" /><stop offset="0.46" stop-color="#2cc3e6" /><stop offset="0.7" stop-color="#25afd4" /><stop offset="0.94" stop-color="#1c92ba" /><stop offset="1" stop-color="#198ab3" /></linearGradient></defs><title>Icon-analytics-150</title><path d="M17.1,3.6H9.69a.34.34,0,0,1-.22-.07L7.35,2.12a.43.43,0,0,0-.22-.06H.9a.4.4,0,0,0-.4.39v13.1a.4.4,0,0,0,.4.39H17.1a.4.4,0,0,0,.4-.39V4A.4.4,0,0,0,17.1,3.6Z" fill="#005ba1" /><rect x="2.05" y="2.82" width="3.86" height="0.77" rx="0.16" fill="#fff" /><rect x="2.05" y="2.82" width="0.77" height="0.77" rx="0.11" fill="#1ac3f2" /><path d="M17.1,3.58H9a.36.36,0,0,0-.28.12L7.37,5a.43.43,0,0,1-.28.11H.9a.4.4,0,0,0-.4.4v10a.4.4,0,0,0,.4.39H17.1a.4.4,0,0,0,.4-.39V4A.4.4,0,0,0,17.1,3.58Z" fill="url(#az-lake-g0)" /><path d="M10.18,5.7a.15.15,0,0,0-.08,0s-.09,0-.13.07L6.81,10.36a.16.16,0,0,0,0,.16.19.19,0,0,0,.15.1H8.83L8,13.4a.13.13,0,0,0,.07.18.1.1,0,0,0,.07,0c.06,0,.09,0,.13-.07l3.26-4.66s0-.06,0-.1a.17.17,0,0,0-.17-.16h-2l.81-2.73A.13.13,0,0,0,10.18,5.7Z" fill="#fff" /></symbol>
-  <symbol id="az-power" viewBox="0 0 18 18"><defs><mask id="az-power-g6" x="1" y="0.621" width="16" height="16.759" maskUnits="userSpaceOnUse"><g id="az-power-g0"><path d="M7.02.621h7.231a2.745,2.745,0,0,1,2.477,3.928l.135-.268L14.35,9.307l-.022.045-.393.785.393-.786a2.746,2.746,0,0,1-2.456,1.518H7.53L4.455,17.018a.654.654,0,0,1-1.17,0l-2.148-4.3a1.267,1.267,0,0,1,.006-1.158l2.365-4.73a1.31,1.31,0,0,1,1.171-.723h9.062a2.706,2.706,0,0,0-1.868-.732H5.3a.655.655,0,0,1-.585-.948L6.434.982A.656.656,0,0,1,7.02.621Z" fill="#fff" /></g></mask><linearGradient id="az-power-g1" x1="262.943" y1="-361.368" x2="264.773" y2="-368.322" gradientTransform="matrix(1, 0, 0, -1, -259, -351)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#159455" /><stop offset="1" stop-color="#3fbda9" /></linearGradient><linearGradient id="az-power-g4" x1="263.98" y1="-352.196" x2="274.597" y2="-356.916" gradientTransform="matrix(1, 0, 0, -1, -259, -351)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#23a794" /><stop offset="0.568" stop-color="#007a84" /><stop offset="1" stop-color="#005158" /></linearGradient><linearGradient id="az-power-g7" x1="271.456" y1="-359.139" x2="269.534" y2="-354.107" gradientTransform="matrix(1, 0, 0, -1, -259, -351)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#004a8b" /><stop offset="0.406" stop-color="#105da8" stop-opacity="0.5" /><stop offset="1" stop-color="#2170c6" stop-opacity="0" /></linearGradient><linearGradient id="az-power-g5" x1="263.151" y1="-356.537" x2="272.758" y2="-361.295" gradientTransform="matrix(1, 0, 0, -1, -259, -351)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#7fd9a2" /><stop offset="0.196" stop-color="#47bf79" /><stop offset="0.714" stop-color="#009280" /><stop offset="1" stop-color="#007a84" /></linearGradient><linearGradient id="az-power-g2" x1="263.08" y1="-356.705" x2="265.276" y2="-357.803" gradientTransform="matrix(1, 0, 0, -1, -259, -351)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#a8e47c" stop-opacity="0.86" /><stop offset="0.367" stop-color="#87d152" stop-opacity="0.2" /><stop offset="1" stop-color="#58be5a" stop-opacity="0" /></linearGradient></defs><g><g id="az-power-g3"><path d="M7.02.621h7.231a2.745,2.745,0,0,1,2.477,3.928l.135-.268L14.35,9.307l-.022.045-.393.785.393-.786a2.746,2.746,0,0,1-2.456,1.518H7.53L4.455,17.018a.654.654,0,0,1-1.17,0l-2.148-4.3a1.267,1.267,0,0,1,.006-1.158l2.365-4.73a1.31,1.31,0,0,1,1.171-.723h9.062a2.706,2.706,0,0,0-1.868-.732H5.3a.655.655,0,0,1-.585-.948L6.434.982A.656.656,0,0,1,7.02.621Z" fill="#fff" /></g><g mask="url(#az-power-g6)"><g><path d="M2.283,10.869H7.53L4.455,17.018a.655.655,0,0,1-1.171,0l-2.147-4.3A1.28,1.28,0,0,1,2.283,10.869Z" fill="url(#az-power-g1)" /><path d="M7.019.621h7.232a2.745,2.745,0,0,1,2.456,3.972L14.349,9.307l-.021.045-.393.785.414-.83a2.744,2.744,0,0,0-2.476-3.928H5.3a.655.655,0,0,1-.585-.948L6.434.982A.656.656,0,0,1,7.019.621Z" fill="url(#az-power-g4)" /><path d="M7.019.621h7.232a2.745,2.745,0,0,1,2.456,3.972L14.344,9.318l-.017.034-.209.419.226-.453a2.745,2.745,0,0,0-2.471-3.939H5.3a.655.655,0,0,1-.585-.948L6.434.982A.656.656,0,0,1,7.019.621Z" fill="url(#az-power-g7)" /><path d="M11.872,10.942H2.3a1.31,1.31,0,0,0-1.171.723L3.508,6.907a1.31,1.31,0,0,1,1.171-.723h9.572A2.744,2.744,0,0,0,16.7,4.67l.159-.316-2.535,5.07A2.746,2.746,0,0,1,11.872,10.942Z" fill-opacity="0.24" /><path d="M11.872,11.235H2.3a1.31,1.31,0,0,0-1.171.723L3.508,7.2a1.31,1.31,0,0,1,1.171-.723h9.572A2.744,2.744,0,0,0,16.7,4.963l.159-.316-2.535,5.07A2.746,2.746,0,0,1,11.872,11.235Z" fill-opacity="0.32" /><path d="M11.872,10.869H2.3a1.31,1.31,0,0,0-1.171.723L3.508,6.834a1.31,1.31,0,0,1,1.171-.723h9.572A2.744,2.744,0,0,0,16.7,4.6l.159-.316-2.535,5.07A2.746,2.746,0,0,1,11.872,10.869Z" fill="url(#az-power-g5)" /><path d="M11.867,10.869H2.307a1.31,1.31,0,0,0-1.171.723L3.515,6.834a1.31,1.31,0,0,1,1.171-.723H14.3A2.666,2.666,0,0,0,16.68,4.647L14.321,9.353A2.744,2.744,0,0,1,11.867,10.869Z" opacity="0.7" fill="url(#az-power-g2)" style="isolation: isolate" /></g></g></g></symbol>
-  <symbol id="az-region" viewBox="0 0 18 18"><defs><radialGradient id="az-region-g1" cx="7.98" cy="6.94" r="6.17" gradientUnits="userSpaceOnUse"><stop offset="0.22" stop-color="#0078d4" /><stop offset="0.42" stop-color="#0075cf" /><stop offset="0.67" stop-color="#006dc0" /><stop offset="0.94" stop-color="#005ea7" /><stop offset="1" stop-color="#005ba1" /></radialGradient></defs><g id="az-region-g0"><g><path d="M8.42,14.07h-.7a.26.26,0,0,0-.26.3c.15,1.56-.81,1.86-2.41,1.89a.26.26,0,0,0-.26.26V17a.27.27,0,0,0,.26.27h5.8a.27.27,0,0,0,.26-.27v-.47a.26.26,0,0,0-.26-.26c-1.58,0-2.34-.33-2.17-1.89A.26.26,0,0,0,8.42,14.07Z" fill="#ef7100" /><g><path d="M8.71,11A.85.85,0,0,1,9,10.79a.72.72,0,0,1,.29-.06.8.8,0,0,1,.3.06A1,1,0,0,1,9.8,11L8.59,9.75a.75.75,0,0,1,0-1.08.73.73,0,0,1,.54-.23.76.76,0,0,1,.54.23L10,9l.25.22.59.6a.77.77,0,0,0,1.08,0,.76.76,0,0,0,0-1.09l-.59-.59L11,7.76,9.15,6a.75.75,0,0,1,0-1.08.73.73,0,0,1,.54-.23.76.76,0,0,1,.54.23l.79.79a.77.77,0,0,1,.54-1.31.79.79,0,0,1,.54.22l2,2.05A6.18,6.18,0,0,0,8.6.77l.92.92a1,1,0,0,1,.28.68,1,1,0,0,1-1,1,.94.94,0,0,1-.68-.29l-.63-.62a1,1,0,0,0-1.64.68.93.93,0,0,0,.28.68L7.39,5a.94.94,0,0,1,.29.68.92.92,0,0,1-.29.68,1,1,0,0,1-.68.29A1,1,0,0,1,6,6.39L4.67,5a.91.91,0,0,1,0,.65,1,1,0,0,1-1,.71,1,1,0,0,1-.6-.28l1,1a.93.93,0,0,1,.28.68,1,1,0,0,1-.07.37,1,1,0,0,1-.52.52,1,1,0,0,1-.37.07.94.94,0,0,1-.37-.07.85.85,0,0,1-.31-.21l-.92-.92A6.18,6.18,0,0,0,9.57,12.9L8.71,12a.77.77,0,0,1,0-1.08Z" fill="url(#az-region-g1)" /><path d="M14.14,6.63l-2-2a.79.79,0,0,0-.54-.22.76.76,0,0,0-.54.22.76.76,0,0,0,0,1.09l-.79-.79a.76.76,0,0,0-.54-.23.73.73,0,0,0-.54.23A.75.75,0,0,0,9.15,6L11,7.76l.37.37.59.59a.76.76,0,0,1,0,1.09.77.77,0,0,1-1.08,0l-.59-.59L10,9l-.32-.32a.76.76,0,0,0-.54-.23.73.73,0,0,0-.54.23.75.75,0,0,0,0,1.08L9.79,11a.76.76,0,0,0-.54-.23.8.8,0,0,0-.54.23.77.77,0,0,0,0,1.08l.86.86a6.24,6.24,0,0,0,2.77-1.6,6.15,6.15,0,0,0,1.4-2.15A6,6,0,0,0,14.14,6.63ZM4.1,8.47a1.06,1.06,0,0,0,.21-.31,1,1,0,0,0,.07-.37.9.9,0,0,0-.07-.37A1,1,0,0,0,4.1,7.1l-1-1a1,1,0,0,0,.25.33,1.11,1.11,0,0,0,.37.2,1,1,0,0,0,.42,0,1,1,0,0,0,.39-.16.84.84,0,0,0,.28-.31A.79.79,0,0,0,5,5.8a1,1,0,0,0,0-.41A1,1,0,0,0,4.67,5L6,6.39a1,1,0,0,0,.68.29A1,1,0,0,0,7.39,5L6.16,3.79a1,1,0,0,1-.29-.68,1,1,0,0,1,1.65-.68l.63.62a.94.94,0,0,0,.68.29.92.92,0,0,0,.68-.29.92.92,0,0,0,.29-.68.94.94,0,0,0-.29-.68L8.6.77A6.19,6.19,0,0,0,1.82,7.55l.91.92a1,1,0,0,0,.32.21.94.94,0,0,0,.37.07,1,1,0,0,0,.37-.07A1.06,1.06,0,0,0,4.1,8.47Z" fill="#9cebff" /></g><path d="M8,15.16a8.14,8.14,0,0,1-5.82-2.41A.5.5,0,0,1,2,12.56a.54.54,0,0,1,0-.22.57.57,0,0,1,0-.22.46.46,0,0,1,.13-.18.46.46,0,0,1,.18-.13.57.57,0,0,1,.22,0,.54.54,0,0,1,.22,0,.5.5,0,0,1,.19.13,7.15,7.15,0,0,0,2.3,1.54A7,7,0,0,0,8,14a7,7,0,0,0,2.72-.53A7.15,7.15,0,0,0,13,11.94a7.09,7.09,0,0,0,0-10,.58.58,0,0,1-.17-.41A.54.54,0,0,1,13,1.1a.56.56,0,0,1,.4-.17.57.57,0,0,1,.41.17,8.24,8.24,0,0,1,0,11.65A8.17,8.17,0,0,1,8,15.16Z" fill="#faa21d" /></g></g></symbol>
-  <symbol id="fab-graphiq" viewBox="0 0 24 24"><path fill="url(#fab-graphiq-g6)" d="M15.267 2C17.872 2 20 4.104 20 6.7c0 3.187-2.71 4.61-6.233 4.257-1.064-.219-2.665-.572-3.582-1.555.177-1.211.275-2.387.431-3.546C10.925 3.56 12.876 2 15.266 2"/><path fill="url(#fab-graphiq-g1)" d="M15.267 2C17.872 2 20 4.104 20 6.7c0 3.187-2.71 4.61-6.233 4.257-1.064-.219-2.665-.572-3.582-1.555.177-1.211.275-2.387.431-3.546C10.925 3.56 12.876 2 15.266 2"/><path fill="url(#fab-graphiq-g3)" d="M8.846 15.434c.805-.131 1.684-.434 3.26-.381l.72.087c1.902.308 3.174 1.583 3.174 3.428C16 20.463 14.522 22 12.68 22c-1.843 0-3.336-1.537-3.336-3.432 0-1.235-.442-2.628-1.817-3.071l.121.003c.418 0 .79 0 1.198-.066"/><path fill="url(#fab-graphiq-g5)" d="M8.846 15.434c.805-.131 1.684-.434 3.26-.381l.72.087c1.902.308 3.174 1.583 3.174 3.428C16 20.463 14.522 22 12.68 22c-1.843 0-3.336-1.537-3.336-3.432 0-1.235-.442-2.628-1.817-3.071l.121.003c.418 0 .79 0 1.198-.066"/><path fill="url(#fab-graphiq-g4)" d="M7.656 8.5c.98 0 1.87.257 2.52.894.926 1 2.558 1.352 3.625 1.57-1.746 0-3.301.146-3.301 2.114 0 .943.815 1.709 1.664 1.977-1.613-.062-2.503.246-3.318.379-.409.066-.78.066-1.198.066-1.997 0-3.608-1.492-3.608-3.5s1.619-3.5 3.616-3.5"/><path fill="url(#fab-graphiq-g0)" fill-opacity=".2" d="M7.656 8.5c.98 0 1.87.257 2.52.894.926 1 2.558 1.352 3.625 1.57-1.746 0-3.301.146-3.301 2.114 0 .943.815 1.709 1.664 1.977-1.613-.062-2.503.246-3.318.379-.409.066-.78.066-1.198.066-1.997 0-3.608-1.492-3.608-3.5s1.619-3.5 3.616-3.5"/><path fill="url(#fab-graphiq-g2)" fill-opacity=".8" d="M7.656 8.5c.98 0 1.87.257 2.52.894.926 1 2.558 1.352 3.625 1.57-1.746 0-3.301.146-3.301 2.114 0 .943.815 1.709 1.664 1.977-1.613-.062-2.503.246-3.318.379-.409.066-.78.066-1.198.066-1.997 0-3.608-1.492-3.608-3.5s1.619-3.5 3.616-3.5"/><defs><radialGradient id="fab-graphiq-g6" cx="0" cy="0" r="1" gradientTransform="matrix(-7.33995 8.40061 -31.72745 -27.72153 17.653 2)" gradientUnits="userSpaceOnUse"><stop offset=".034" stop-color="#FF6F47"/><stop offset=".207" stop-color="#FB5937"/><stop offset=".404" stop-color="#F83F54"/><stop offset=".721" stop-color="#CA2134"/></radialGradient><linearGradient id="fab-graphiq-g1" x1="12.354" x2="9.791" y1="7.845" y2="10.308" gradientUnits="userSpaceOnUse"><stop stop-color="#560B14" stop-opacity="0"/><stop offset="1" stop-color="#560B14" stop-opacity=".9"/></linearGradient><radialGradient id="fab-graphiq-g3" cx="0" cy="0" r="1" gradientTransform="matrix(-5.88995 5.87106 -7.85286 -7.87812 15.5 16.129)" gradientUnits="userSpaceOnUse"><stop offset=".019" stop-color="#E82C41"/><stop offset=".529" stop-color="#AA1D2D"/><stop offset=".889" stop-color="#70101B"/></radialGradient><radialGradient id="fab-graphiq-g5" cx="0" cy="0" r="1" gradientTransform="matrix(1.24816 2.55803 -10.68931 5.2157 9.107 14.933)" gradientUnits="userSpaceOnUse"><stop offset=".045" stop-color="#560B14"/><stop offset="1" stop-color="#8B1321" stop-opacity="0"/></radialGradient><linearGradient id="fab-graphiq-g4" x1="9.838" x2="5.744" y1="8.364" y2="18.573" gradientUnits="userSpaceOnUse"><stop stop-color="#FF6F47"/><stop offset=".718" stop-color="#E82C41"/></linearGradient><linearGradient id="fab-graphiq-g0" x1="6.101" x2="11.906" y1="15.375" y2="12.048" gradientUnits="userSpaceOnUse"><stop offset=".364" stop-color="#FF6F47" stop-opacity="0"/><stop offset=".745" stop-color="#FF835C"/></linearGradient><linearGradient id="fab-graphiq-g2" x1="11.389" x2="7.606" y1="5.661" y2="16.794" gradientUnits="userSpaceOnUse"><stop offset=".253" stop-color="#FFE4BE"/><stop offset="1" stop-color="#FFC470" stop-opacity="0"/></linearGradient></defs></symbol>
-  <symbol id="fab-copilot" viewBox="0 0 24 24"><path fill="url(#fab-copilot-g2)" d="M17.072 3.662A2.315 2.315 0 0 0 14.852 2h-.678a2.315 2.315 0 0 0-2.277 1.895l-1.185 6.43.322-1.103a2.315 2.315 0 0 1 2.222-1.666h3.921l1.647.641 1.588-.641h-.464a2.315 2.315 0 0 1-2.22-1.663z"/><path fill="url(#fab-copilot-g4)" d="M7.166 20.328A2.315 2.315 0 0 0 9.389 22h1.454c1.248 0 2.271-.99 2.314-2.237l.214-6.343-.403 1.365a2.315 2.315 0 0 1-2.22 1.66H6.787l-1.412-.766-1.528.765h.456c1.03 0 1.937.682 2.223 1.672z"/><path fill="url(#fab-copilot-g1)" d="M14.75 2H6.73C4.44 2 3.064 5.028 2.147 8.056 1.061 11.643-.359 16.44 3.751 16.44h3.464a2.315 2.315 0 0 0 2.227-1.679c.602-2.106 1.658-5.78 2.486-8.576.422-1.421.772-2.642 1.311-3.402A1.81 1.81 0 0 1 14.751 2"/><path fill="url(#fab-copilot-g0)" d="M14.75 2H6.73C4.44 2 3.064 5.028 2.147 8.056 1.061 11.643-.359 16.44 3.751 16.44h3.464a2.315 2.315 0 0 0 2.227-1.679c.602-2.106 1.658-5.78 2.486-8.576.422-1.421.772-2.642 1.311-3.402A1.81 1.81 0 0 1 14.751 2"/><path fill="url(#fab-copilot-g3)" d="M9.25 22h8.02c2.291 0 3.666-3.028 4.583-6.055 1.086-3.588 2.507-8.385-1.604-8.385h-3.464a2.315 2.315 0 0 0-2.227 1.679c-.602 2.106-1.658 5.78-2.486 8.576-.421 1.421-.772 2.642-1.31 3.402A1.81 1.81 0 0 1 9.25 22"/><path fill="url(#fab-copilot-g5)" d="M9.25 22h8.02c2.291 0 3.666-3.028 4.583-6.055 1.086-3.588 2.507-8.385-1.604-8.385h-3.464a2.315 2.315 0 0 0-2.227 1.679c-.602 2.106-1.658 5.78-2.486 8.576-.421 1.421-.772 2.642-1.31 3.402A1.81 1.81 0 0 1 9.25 22"/><defs><radialGradient id="fab-copilot-g2" cx="0" cy="0" r="1" gradientTransform="matrix(-5.49693 -6.79348 6.37302 -5.15672 19 10.38)" gradientUnits="userSpaceOnUse"><stop offset=".096" stop-color="#00AEFF"/><stop offset=".773" stop-color="#2253CE"/><stop offset="1" stop-color="#0736C4"/></radialGradient><radialGradient id="fab-copilot-g4" cx="0" cy="0" r="1" gradientTransform="matrix(4.98016 6.47044 -6.24456 4.8063 5.575 16.245)" gradientUnits="userSpaceOnUse"><stop stop-color="#FFB657"/><stop offset=".634" stop-color="#FF5F3D"/><stop offset=".923" stop-color="#C02B3C"/></radialGradient><linearGradient id="fab-copilot-g1" x1="6.25" x2="7.394" y1="3.75" y2="16.985" gradientUnits="userSpaceOnUse"><stop offset=".156" stop-color="#0D91E1"/><stop offset=".487" stop-color="#52B471"/><stop offset=".652" stop-color="#98BD42"/><stop offset=".937" stop-color="#FFC800"/></linearGradient><linearGradient id="fab-copilot-g0" x1="7.25" x2="7.875" y1="2" y2="16.44" gradientUnits="userSpaceOnUse"><stop stop-color="#3DCBFF"/><stop offset=".247" stop-color="#0588F7" stop-opacity="0"/></linearGradient><radialGradient id="fab-copilot-g3" cx="0" cy="0" r="1" gradientTransform="rotate(109.282 8.15 10.403)scale(19.1879 22.994)" gradientUnits="userSpaceOnUse"><stop offset=".066" stop-color="#8C48FF"/><stop offset=".5" stop-color="#F2598A"/><stop offset=".896" stop-color="#FFB152"/></radialGradient><linearGradient id="fab-copilot-g5" x1="21.294" x2="21.286" y1="6.678" y2="10.611" gradientUnits="userSpaceOnUse"><stop offset=".058" stop-color="#F8ADFA"/><stop offset=".708" stop-color="#A86EDD" stop-opacity="0"/></linearGradient></defs></symbol>
-  <symbol id="fab-fabric" viewBox="0 0 24 24"><path fill="url(#fab-fabric-g1)" fill-rule="evenodd" d="m2.82 15.802-.293 1.072c-.11.343-.262.847-.345 1.295a2.815 2.815 0 0 0 2.32 3.795c.396.057.844.054 1.346-.02l2.307-.318a1.46 1.46 0 0 0 1.21-1.064l1.588-5.832z" clip-rule="evenodd"/><path fill="url(#fab-fabric-g7)" d="M5.07 16.078c-2.431.376-2.93 2.211-2.93 2.211l2.328-8.556 12.168-1.646-1.66 6.027a.85.85 0 0 1-.693.622l-.068.011-9.213 1.342z"/><path fill="url(#fab-fabric-g2)" fill-opacity=".8" d="M5.07 16.078c-2.431.376-2.93 2.211-2.93 2.211l2.328-8.556 12.168-1.646-1.66 6.027a.85.85 0 0 1-.693.622l-.068.011-9.213 1.342z"/><path fill="url(#fab-fabric-g5)" d="m6.45 10.619 13.47-1.99a.8.8 0 0 0 .662-.586l1.39-5.03a.797.797 0 0 0-.87-1.006L8.25 3.905a3.59 3.59 0 0 0-2.89 2.597L3.507 13.22c.372-1.36.6-2.178 2.943-2.602Z"/><path fill="url(#fab-fabric-g6)" d="m6.45 10.619 13.47-1.99a.8.8 0 0 0 .662-.586l1.39-5.03a.797.797 0 0 0-.87-1.006L8.25 3.905a3.59 3.59 0 0 0-2.89 2.597L3.507 13.22c.372-1.36.6-2.178 2.943-2.602Z"/><path fill="url(#fab-fabric-g8)" fill-opacity=".4" d="m6.45 10.619 13.47-1.99a.8.8 0 0 0 .662-.586l1.39-5.03a.797.797 0 0 0-.87-1.006L8.25 3.905a3.59 3.59 0 0 0-2.89 2.597L3.507 13.22c.372-1.36.6-2.178 2.943-2.602Z"/><path fill="url(#fab-fabric-g4)" d="M6.45 10.619c-1.95.353-2.435.981-2.757 1.966L2.139 18.29s.497-1.816 2.899-2.205l9.177-1.337.068-.01a.85.85 0 0 0 .694-.623l1.365-4.958z"/><path fill="url(#fab-fabric-g0)" fill-opacity=".2" d="M6.45 10.619c-1.95.353-2.435.981-2.757 1.966L2.139 18.29s.497-1.816 2.899-2.205l9.177-1.337.068-.01a.85.85 0 0 0 .694-.623l1.365-4.958z"/><path fill="url(#fab-fabric-g3)" fill-rule="evenodd" d="M5.038 16.086c-2.03.328-2.697 1.673-2.856 2.082a2.817 2.817 0 0 0 2.32 3.796c.396.057.844.054 1.346-.02l2.307-.318a1.46 1.46 0 0 0 1.21-1.064l1.448-5.317z" clip-rule="evenodd"/><defs><linearGradient id="fab-fabric-g1" x1="6.477" x2="6.477" y1="22.003" y2="14.73" gradientUnits="userSpaceOnUse"><stop offset=".056" stop-color="#2AAC94"/><stop offset=".155" stop-color="#239C87"/><stop offset=".372" stop-color="#177E71"/><stop offset=".588" stop-color="#0E6961"/><stop offset=".799" stop-color="#095D57"/><stop offset="1" stop-color="#085954"/></linearGradient><linearGradient id="fab-fabric-g7" x1="15.667" x2="8.644" y1="16.726" y2="9.087" gradientUnits="userSpaceOnUse"><stop offset=".042" stop-color="#ABE88E"/><stop offset=".549" stop-color="#2AAA92"/><stop offset=".906" stop-color="#117865"/></linearGradient><linearGradient id="fab-fabric-g2" x1="-1.592" x2="5.092" y1="16.354" y2="14.075" gradientUnits="userSpaceOnUse"><stop stop-color="#6AD6F9"/><stop offset="1" stop-color="#6AD6F9" stop-opacity="0"/></linearGradient><linearGradient id="fab-fabric-g5" x1="3.507" x2="21.297" y1="7.61" y2="7.61" gradientUnits="userSpaceOnUse"><stop offset=".043" stop-color="#25FFD4"/><stop offset=".874" stop-color="#55DDB9"/></linearGradient><linearGradient id="fab-fabric-g6" x1="3.507" x2="19.532" y1="5.124" y2="12.565" gradientUnits="userSpaceOnUse"><stop stop-color="#6AD6F9"/><stop offset=".23" stop-color="#60E9D0"/><stop offset=".651" stop-color="#6DE9BB"/><stop offset=".994" stop-color="#ABE88E"/></linearGradient><linearGradient id="fab-fabric-g8" x1="4.989" x2="13.703" y1="6.516" y2="8.444" gradientUnits="userSpaceOnUse"><stop stop-color="#fff" stop-opacity="0"/><stop offset=".459" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><linearGradient id="fab-fabric-g4" x1="7.879" x2="8.085" y1="13.981" y2="7.87" gradientUnits="userSpaceOnUse"><stop offset=".205" stop-color="#063D3B" stop-opacity="0"/><stop offset=".586" stop-color="#063D3B" stop-opacity=".237"/><stop offset=".872" stop-color="#063D3B" stop-opacity=".75"/></linearGradient><linearGradient id="fab-fabric-g0" x1="1.405" x2="8.851" y1="13.373" y2="14.774" gradientUnits="userSpaceOnUse"><stop stop-color="#fff" stop-opacity="0"/><stop offset=".459" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient><linearGradient id="fab-fabric-g3" x1="6.784" x2="5.331" y1="19.988" y2="12.884" gradientUnits="userSpaceOnUse"><stop offset=".064" stop-color="#063D3B" stop-opacity="0"/><stop offset=".17" stop-color="#063D3B" stop-opacity=".135"/><stop offset=".562" stop-color="#063D3B" stop-opacity=".599"/><stop offset=".85" stop-color="#063D3B" stop-opacity=".9"/><stop offset="1" stop-color="#063D3B"/></linearGradient></defs></symbol>
-  <symbol id="fab-onelake" viewBox="0 0 24 24"><path fill="url(#fab-onelake-g5)" d="M11.104 16.279c2.745-1.585 3.649-5.16 2.018-7.984-1.63-2.824-5.178-3.829-7.923-2.244s-3.649 5.16-2.018 7.984c1.63 2.824 5.178 3.829 7.923 2.244"/><path fill="url(#fab-onelake-g2)" d="M14.687 8.361c1.426-1.425 1.392-3.77-.076-5.237s-3.812-1.5-5.237-.074-1.391 3.77.076 5.237 3.812 1.5 5.237.074"/><path fill="url(#fab-onelake-g0)" d="M13.15 21.62a8.594 8.594 0 1 0 0-17.188 8.594 8.594 0 0 0 0 17.188"/><path fill="url(#fab-onelake-g4)" fill-rule="evenodd" d="M9.782 2.693c-5.045 3.117-6.808 9.681-3.91 14.932q.293.534.638 1.02l.225.035 4.986 1.664 4.737-3.173c-.793.024-4.092-1.848-6.248-5.94-2.702-5.127-1.588-7.495-.423-8.538z" clip-rule="evenodd"/><path fill="url(#fab-onelake-g3)" fill-opacity=".2" fill-rule="evenodd" d="M9.782 2.693c-5.045 3.117-6.808 9.681-3.91 14.932q.293.534.638 1.02l.225.035 4.986 1.664 4.737-3.173c-.793.024-4.092-1.848-6.248-5.94-2.702-5.127-1.588-7.495-.423-8.538z" clip-rule="evenodd"/><path fill="url(#fab-onelake-g1)" fill-rule="evenodd" d="M19.686 18.608a8.6 8.6 0 0 0 1.82-3.557c-.854-2.44-4.292-3.126-6.174-1.217-1.444 1.464-2.946 2.694-4.075 2.914-6.527 1.282-9.297-4.132-8.826-6.574a9.9 9.9 0 0 0 .025 3.867c1.099 5.384 6.352 8.857 11.735 7.758a9.9 9.9 0 0 0 4.367-2.092s.02-.015.027-.023a10 10 0 0 0 1.101-1.079z" clip-rule="evenodd"/><defs><radialGradient id="fab-onelake-g0" cx="0" cy="0" r="1" gradientTransform="matrix(-9.13264 9.187 -11.8519 -11.78177 18.386 .396)" gradientUnits="userSpaceOnUse"><stop offset=".39" stop-color="#028FDC"/><stop offset=".59" stop-color="#0078D4"/><stop offset="1" stop-color="#1A508B"/></radialGradient><radialGradient id="fab-onelake-g4" cx="0" cy="0" r="1" gradientTransform="matrix(-8.85627 7.58002 -9.35265 -10.92736 15.633 8.122)" gradientUnits="userSpaceOnUse"><stop offset=".46" stop-color="#40D9FA"/><stop offset=".9" stop-color="#0095E6"/></radialGradient><radialGradient id="fab-onelake-g3" cx="0" cy="0" r="1" gradientTransform="rotate(96.16 2.072 6.948)scale(12.3697 8.78506)" gradientUnits="userSpaceOnUse"><stop offset=".77" stop-opacity="0"/><stop offset="1"/></radialGradient><radialGradient id="fab-onelake-g1" cx="0" cy="0" r="1" gradientTransform="matrix(1.35279 19.2013 -35.01301 2.46677 15.098 14.77)" gradientUnits="userSpaceOnUse"><stop offset=".1" stop-color="#BDF5FF"/><stop offset=".47" stop-color="#40D9FA"/></radialGradient><linearGradient id="fab-onelake-g5" x1="19.759" x2="2.218" y1="8.49" y2="12.535" gradientUnits="userSpaceOnUse"><stop offset=".2" stop-color="#028FDC"/><stop offset=".51" stop-color="#0078D4"/><stop offset="1" stop-color="#0B315B"/></linearGradient><linearGradient id="fab-onelake-g2" x1="21.003" x2="9.414" y1="13.927" y2="3.307" gradientUnits="userSpaceOnUse"><stop offset=".04" stop-color="#028FDC"/><stop offset=".46" stop-color="#0078D4"/><stop offset="1" stop-color="#0B315B"/></linearGradient></defs></symbol>
-  <symbol id="az-openai" viewBox="0 0 18 18"><defs><radialGradient id="az-openai-g0" cx="-67.981" cy="793.199" r=".45" gradientTransform="translate(-17939.03 20368.029) rotate(45) scale(25.091 -34.149)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#83b9f9" /><stop offset="1" stop-color="#0078d4" /></radialGradient></defs><path d="m0,2.7v12.6c0,1.491,1.209,2.7,2.7,2.7h12.6c1.491,0,2.7-1.209,2.7-2.7V2.7c0-1.491-1.209-2.7-2.7-2.7H2.7C1.209,0,0,1.209,0,2.7ZM10.8,0v3.6c0,3.976,3.224,7.2,7.2,7.2h-3.6c-3.976,0-7.199,3.222-7.2,7.198v-3.598c0-3.976-3.224-7.2-7.2-7.2h3.6c3.976,0,7.2-3.224,7.2-7.2Z" fill="url(#az-openai-g0)" stroke-width="0" /></symbol>
-  <symbol id="az-foundry" viewBox="0 0 18 18"><defs><linearGradient id="az-foundry-g1" x1="-603.563" y1="-218.378" x2="-606.6" y2="-206.22" gradientTransform="translate(617.126 -205.758) scale(1 -1)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#712575" /><stop offset=".09" stop-color="#9a2884" /><stop offset=".18" stop-color="#bf2c92" /><stop offset=".27" stop-color="#da2e9c" /><stop offset=".34" stop-color="#eb30a2" /><stop offset=".4" stop-color="#f131a5" /><stop offset=".5" stop-color="#ec30a3" /><stop offset=".61" stop-color="#df2f9e" /><stop offset=".72" stop-color="#c92d96" /><stop offset=".83" stop-color="#aa2a8a" /><stop offset=".95" stop-color="#83267c" /><stop offset="1" stop-color="#712575" /></linearGradient><linearGradient id="az-foundry-g0" x1="-602.412" y1="-206.025" x2="-602.412" y2="-223.175" gradientTransform="translate(617.126 -205.758) scale(1 -1)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#da7ed0" /><stop offset=".08" stop-color="#b17bd5" /><stop offset=".19" stop-color="#8778db" /><stop offset=".3" stop-color="#6276e1" /><stop offset=".41" stop-color="#4574e5" /><stop offset=".54" stop-color="#2e72e8" /><stop offset=".67" stop-color="#1d71eb" /><stop offset=".81" stop-color="#1471ec" /><stop offset="1" stop-color="#1171ed" /></linearGradient><linearGradient id="az-foundry-g2" x1="-603.438" y1="-206.414" x2="-614.807" y2="-224.644" gradientTransform="translate(617.126 -205.758) scale(1 -1)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#da7ed0" /><stop offset=".05" stop-color="#b77bd4" /><stop offset=".11" stop-color="#9079da" /><stop offset=".18" stop-color="#6e77df" /><stop offset=".25" stop-color="#5175e3" /><stop offset=".33" stop-color="#3973e7" /><stop offset=".42" stop-color="#2772e9" /><stop offset=".54" stop-color="#1a71eb" /><stop offset=".68" stop-color="#1371ec" /><stop offset="1" stop-color="#1171ed" /></linearGradient></defs><path d="m12.061.012c.534,0,1.008.401,1.178.984s1.166,4.19,1.166,4.19v7.166h-3.607l.073-12.352h1.19v.012Z" fill="url(#az-foundry-g1)" fill-rule="evenodd" stroke-width="0" /><path d="m17.356,5.611c0-.255-.206-.449-.449-.449h-2.126c-1.494,0-2.709,1.215-2.709,2.709v4.494h2.575c1.494,0,2.709-1.215,2.709-2.709v-4.045Z" fill="url(#az-foundry-g0)" stroke-width="0" /><path d="m12.061.012c-.413,0-.741.328-.741.741l-.073,13.64c0,1.992-1.615,3.607-3.607,3.607H1.093c-.316,0-.522-.304-.425-.595L5.915,2.429C6.425.984,7.785.012,9.316.012h2.757-.012Z" fill="url(#az-foundry-g2)" fill-rule="evenodd" stroke-width="0" /></symbol>
-  <symbol id="az-search" viewBox="0 0 18 18"><defs><linearGradient id="az-search-g0" x1="9" y1="0.36" x2="9" y2="18.31" gradientUnits="userSpaceOnUse"><stop offset="0.18" stop-color="#5ea0ef" /><stop offset="1" stop-color="#0078d4" /></linearGradient></defs><title>Icon-web-44</title><path d="M18,11.32a4.12,4.12,0,0,0-3.51-4,5.15,5.15,0,0,0-5.25-5,5.25,5.25,0,0,0-5,3.49A4.86,4.86,0,0,0,0,10.59a5,5,0,0,0,5.07,4.82l.44,0h8.21a.78.78,0,0,0,.22,0A4.13,4.13,0,0,0,18,11.32Z" fill="url(#az-search-g0)" /><path d="M12.33,6.59a3.07,3.07,0,0,0-5.61.85,3.16,3.16,0,0,0,.33,2.27L4.71,12.08a.79.79,0,0,0,0,1.12.78.78,0,0,0,.56.23.76.76,0,0,0,.56-.23l2.33-2.36a3.14,3.14,0,0,0,.81.33,3.08,3.08,0,0,0,3.36-4.58Zm-.54,2.1A2.16,2.16,0,0,1,9.7,10.34a1.79,1.79,0,0,1-.51-.07,1.87,1.87,0,0,1-.7-.32,2.13,2.13,0,0,1-.56-.56,2.17,2.17,0,0,1-.31-1.73A2.14,2.14,0,0,1,9.7,6a2.31,2.31,0,0,1,.52.06,2.18,2.18,0,0,1,1.32,1A2.13,2.13,0,0,1,11.79,8.69Z" fill="#f2f2f2" /><ellipse cx="9.69" cy="8.18" rx="2.15" ry="2.16" fill="#83b9f9" /></symbol>
-  <symbol id="az-safety" viewBox="0 0 18 18"><defs><linearGradient id="az-safety-g0" x1="7.997" y1="14.863" x2="7.997" y2="2.057" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#0078d4" /><stop offset=".82" stop-color="#5ea0ef" /></linearGradient><linearGradient id="az-safety-g2" x1="-558.124" y1="1021.188" x2="-558.124" y2="1019.083" gradientTransform="translate(564 1025.516) scale(1 -1)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity=".7" /><stop offset="1" stop-color="#fff" stop-opacity=".6" /></linearGradient></defs><path d="m.362,3.138C.162,3.138,0,2.976,0,2.777h0V.361C0,.162.162,0,.362,0h2.266c.2,0,.362.162.362.361,0,.199-.162.361-.362.361H.724v2.053c0,.199-.161.362-.361.362,0,0,0,0-.001,0Zm17.638-.361V.361C18,.162,17.838,0,17.638,0h-2.266c-.2,0-.362.162-.362.361s.162.361.362.361h1.904v2.053c0,.199.162.361.362.361.2,0,.361-.162.362-.361h0ZM2.99,17.639c0-.199-.162-.361-.362-.361H.724v-2.053c0-.199-.162-.361-.362-.361-.2,0-.362.162-.362.361v2.415c0,.199.163.36.362.36h2.266c.2,0,.362-.162.362-.361Zm15.01.001v-2.415c0-.199-.162-.361-.362-.361-.2,0-.361.162-.362.361v2.053h-1.904c-.2,0-.362.162-.362.362,0,.199.162.361.362.361h2.266c.199,0,.361-.161.362-.36Z" fill="#76bc2d" /><g><path d="m13.864,8.047c0,3.822-4.627,6.907-5.632,7.544-.12.066-.265.066-.386,0-1.073-.687-5.716-3.772-5.716-7.544V3.386c0-.197.155-.36.352-.369,3.604-.101,2.783-1.676,5.482-1.676s1.861,1.576,5.465,1.676c.197.009.352.171.352.369l.084,4.66Z" fill="#0078d4" /><path d="m8.04,14.863c-4.683-3.064-5.194-5.781-5.194-6.816V3.719c1.873-.106,2.625-.637,3.236-1.068.489-.345.843-.594,1.881-.594s1.387.249,1.872.593c.607.431,1.355.962,3.235,1.069l.078,4.34c0,.817-.372,3.733-5.109,6.804Z" fill="url(#az-safety-g0)" /></g><g><rect x="8.155" y="4.328" width="3.721" height=".691" rx=".141" ry=".141" fill="#fff" opacity=".7" /><rect x="8.155" y="5.742" width="3.721" height=".691" rx=".141" ry=".141" fill="#fff" opacity=".6" /><rect x="4.117" y="9.983" width="4.472" height=".691" rx=".141" ry=".141" fill="#fff" opacity=".3" /><rect x="4.117" y="8.57" width="7.76" height=".691" rx=".141" ry=".141" fill="#fff" opacity=".4" /><rect x="4.117" y="7.156" width="7.076" height=".691" rx=".14" ry=".14" fill="#fff" opacity=".5" /><g id="az-safety-g1"><path d="m4.235,4.328h3.282c.065,0,.118.046.118.102v1.901c0,.057-.053.102-.118.102h-3.282c-.065,0-.118-.046-.118-.102v-1.901c0-.057.053-.102.118-.102Z" fill="url(#az-safety-g2)" /></g></g><g><circle cx="12.449" cy="13.203" r="3.442" fill="#76bc2d" /><g><path d="m12.096,14.356l-.316.316c-.054.054-.141.054-.195,0h0l-1.256-1.256c-.054-.054-.054-.141,0-.195h0l.219-.219c.054-.054.141-.054.195,0h0l1.353,1.353h0Z" fill="#fff" /><path d="m11.591,14.676l-.316-.316h0l2.888-2.888c.054-.054.141-.054.195,0h0l.219.219c.054.054.054.141,0,.195h0l-2.791,2.791c-.054.054-.141.054-.195,0h0Z" fill="#f0f0f0" /></g></g></symbol>
-  <symbol id="az-entra" viewBox="0 0 18 18"><defs><linearGradient id="az-entra-g0" x1="10.901" y1="4.385" x2="10.901" y2="18.783" gradientUnits="userSpaceOnUse"><stop offset=".085" stop-color="#ef7100" /><stop offset=".999" stop-color="#f78d1e" /></linearGradient><linearGradient id="az-entra-g1" x1="-79.452" y1="778.657" x2="-79.452" y2="786.378" gradientTransform="translate(94 795.516) scale(1 -1)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#0078d4" /><stop offset=".06" stop-color="#0a7cd7" /><stop offset=".34" stop-color="#2e8ce1" /><stop offset=".59" stop-color="#4897e9" /><stop offset=".82" stop-color="#589eed" /><stop offset="1" stop-color="#5ea0ef" /></linearGradient></defs><g><polygon points="4.636 9.985 4.688 10.017 9 12.713 9.001 12.713 9.001 12.713 9.001 5.062 9 5.061 4.636 9.985" fill="#ffb34d" isolation="isolate" opacity=".9" stroke-width="0" /><path d="m10.146,1.294c-.299-.338-.722-.507-1.145-.507h0c-.424-.001-.847.168-1.147.506h-.001L.353,9.753c-.579.654-.428,1.642.323,2.111,0,0,2.776,1.735,3.126,1.954.388.242,1.033.511,1.715.511.621,0,1.198-.18,1.676-.487,0,0,0,0,.002,0l1.805-1.128-4.364-2.728,4.365-4.924.109-.123c.55-.627,1.377-1.026,2.302-1.026.472,0,.916.107,1.313.291l-2.579-2.909Z" fill="#faa21d" stroke-width="0" /><polygon points="13.365 9.985 13.365 9.985 13.365 9.985 9.001 5.062 9.001 12.712 13.365 9.985" fill="#f78d1e" stroke-width="0" /><path d="m17.647,9.753l-4.921-5.551c-.397-.185-.842-.291-1.313-.291-.925,0-1.752.399-2.302,1.026l-.109.123,4.364,4.924-4.266,2.666-.099.062v.003s-.001-.002-.001-.002l-1.805,1.128s-.002,0-.002,0c-.478.307-1.055.487-1.676.487-.682,0-1.327-.269-1.715-.511l4.374,2.734c.25.156.538.234.824.234h0s.001,0,.001,0c.287,0,.573-.078.823-.234l1.73-1.081h0s5.77-3.607,5.77-3.607h0c.751-.468.902-1.456.323-2.11Z" fill="url(#az-entra-g0)" stroke-width="0" /></g><path d="m18,12.721c0,2.265-2.739,4.088-3.338,4.46-.068.044-.156.044-.224,0-.599-.367-3.338-2.19-3.338-4.46v-2.725c0-.119.093-.215.21-.218,2.134-.055,1.642-.991,3.241-.991s1.106.937,3.241.991c.117.003.21.1.21.218v2.725Z" fill="#0078d4" stroke-width="0" /><path d="m17.717,12.741c0,2.081-2.515,3.751-3.065,4.088-.063.039-.142.039-.205,0-.551-.337-3.065-2.007-3.065-4.088v-2.478c-.019-.111.054-.216.163-.235.011-.002.021-.003.032-.003,1.959-.035,1.511-.887,2.973-.887s1.014.852,2.973.887c.107.003.192.09.195.198v2.517Z" fill="url(#az-entra-g1)" stroke-width="0" /></symbol>
-  <symbol id="az-defender" viewBox="0 0 18 18"><defs><linearGradient id="az-defender-g0" x1="9" y1="16.795" x2="9" y2="1.205" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#5e9624" /><stop offset="0.321" stop-color="#639d26" /><stop offset="0.794" stop-color="#6fb12a" /><stop offset="0.999" stop-color="#76bc2d" /></linearGradient></defs><g><path d="M16.083,8.438c0,4.571-5.626,8.25-6.85,9a.449.449,0,0,1-.466,0c-1.224-.747-6.85-4.426-6.85-9v-5.5A.44.44,0,0,1,2.351,2.5C6.728,2.386,5.72.5,9,.5s2.272,1.886,6.649,2a.44.44,0,0,1,.434.435Z" fill="#76bc2d" /><path d="M15.5,8.485c0,4.191-5.16,7.566-6.282,8.25a.412.412,0,0,1-.428,0C7.664,16.051,2.5,12.676,2.5,8.485V3.441a.4.4,0,0,1,.4-.4C6.916,2.935,5.992,1.205,9,1.205s2.084,1.73,6.1,1.837a.4.4,0,0,1,.4.4Z" fill="url(#az-defender-g0)" /><path d="M11.853,7.66h-.408l0-1.417a2.652,2.652,0,0,0-.7-1.809,2.358,2.358,0,0,0-3.483,0,2.606,2.606,0,0,0-.7,1.808V7.66H6.147a.328.328,0,0,0-.326.32v3.682a.329.329,0,0,0,.326.32h5.706a.329.329,0,0,0,.326-.32V7.98A.328.328,0,0,0,11.853,7.66Zm-1.549,0H7.7V6.219a1.434,1.434,0,0,1,.41-.99,1.2,1.2,0,0,1,1.788,0,1.394,1.394,0,0,1,.153.2h0a1.445,1.445,0,0,1,.258.791Z" fill="#fff" /><path d="M6.148,7.658h5.705a.328.328,0,0,1,.21.08L5.938,11.9a.313.313,0,0,1-.116-.241V7.979A.328.328,0,0,1,6.148,7.658Z" fill="#b3b3b3" opacity="0.15" /><path d="M11.853,7.658H6.147a.328.328,0,0,0-.209.08L12.062,11.9a.314.314,0,0,0,.117-.241V7.979A.329.329,0,0,0,11.853,7.658Z" fill="#a3a3a3" opacity="0.09" /></g></symbol>
-  <symbol id="az-purview" viewBox="0 0 18 18"><defs><linearGradient id="az-purview-g0" x1="8.977" y1="11.134" x2="8.977" y2="7.178" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#29bade" /><stop offset="1" stop-color="#50e6ff" /></linearGradient><linearGradient id="az-purview-g3" x1="6.446" y1="14.626" x2="6.446" y2="3.374" gradientUnits="userSpaceOnUse"><stop offset="0.041" stop-color="#32bedd" /><stop offset="0.495" stop-color="#50e6ff" /><stop offset="0.92" stop-color="#c3f1ff" /></linearGradient><linearGradient id="az-purview-g1" x1="7.464" y1="10.047" x2="7.464" y2="0.254" gradientUnits="userSpaceOnUse"><stop offset="0.244" stop-color="#0078d4" /><stop offset="0.6" stop-color="#2e8ce1" /><stop offset="0.933" stop-color="#589eed" /></linearGradient><linearGradient id="az-purview-g2" x1="13.628" y1="14.626" x2="13.628" y2="4.193" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#005ba1" /><stop offset="0.399" stop-color="#0078d4" /><stop offset="0.857" stop-color="#5ea0ef" /></linearGradient></defs><path d="M10.577,8.8a1.622,1.622,0,0,1-1.622-1.62,1.979,1.979,0,1,0,1.961,1.583A1.638,1.638,0,0,1,10.577,8.8Z" fill="url(#az-purview-g0)" /><path d="M12.862,11.231a5.051,5.051,0,0,0-.656-2.024A3.218,3.218,0,0,1,9,12.227c-.077,0-.149-.017-.224-.023a6.735,6.735,0,0,1-4.559-1.86A8.724,8.724,0,0,1,1.936,6.661,20.447,20.447,0,0,0,.294,8.335a.909.909,0,0,0,0,1.336A16.887,16.887,0,0,0,4.16,13.079,8.8,8.8,0,0,0,9.131,14.62a7.2,7.2,0,0,0,3.318-.789c.065-.03.121-.07.185-.1A6.926,6.926,0,0,0,12.862,11.231Z" fill="url(#az-purview-g3)" /><path d="M6.158,10.5a3.177,3.177,0,0,1,.591-3.807,6.414,6.414,0,0,1,3.245-2.3,7.915,7.915,0,0,1,2.182-.344,8.377,8.377,0,0,0-1.857-.56,7.978,7.978,0,0,0-5.107.843A14.276,14.276,0,0,0,2.752,5.95a7.836,7.836,0,0,0,2.1,3.615A5.977,5.977,0,0,0,6.158,10.5Z" fill="url(#az-purview-g1)" /><path d="M17.73,8.379A17.2,17.2,0,0,0,14.374,5.3a7.439,7.439,0,0,0-3.991.02A5.724,5.724,0,0,0,9.256,5.8a3.209,3.209,0,0,1,1.562.536.453.453,0,0,1,.118.053,6.712,6.712,0,0,1,2.891,4.544,7.629,7.629,0,0,1-.033,2.161,16.951,16.951,0,0,0,3.932-3.457A.862.862,0,0,0,17.73,8.379Z" fill="url(#az-purview-g2)" /></symbol>
-  <symbol id="az-adf" viewBox="0 0 18 18"><defs><linearGradient id="az-adf-g0" x1="0.5" y1="9.77" x2="9" y2="9.77" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#005ba1" /><stop offset="0.07" stop-color="#0060a9" /><stop offset="0.36" stop-color="#0071c8" /><stop offset="0.52" stop-color="#0078d4" /><stop offset="0.64" stop-color="#0074cd" /><stop offset="0.81" stop-color="#006abb" /><stop offset="0.99" stop-color="#005ba1" /></linearGradient></defs><title>Icon-databases-126</title><g><path d="M13.25,10.48V6.57a.14.14,0,0,0-.24-.1l-4,4L4.85,14.63V17.5H16.93a.56.56,0,0,0,.57-.57V6.57a.14.14,0,0,0-.24-.1Z" fill="#005ba1" /><path d="M4.75,3.58C2.4,3.58.5,2.89.5,2V7.67h0v9.26a.56.56,0,0,0,.57.57H9V2C9,2.89,7.1,3.58,4.75,3.58Z" fill="url(#az-adf-g0)" /><rect x="12.91" y="12.97" width="2.27" height="2.27" rx="0.28" fill="#fff" /><rect x="8.97" y="12.97" width="2.27" height="2.27" rx="0.28" fill="#fff" /><rect x="5.03" y="12.97" width="2.27" height="2.27" rx="0.28" fill="#fff" /><path d="M9,2c0,.85-1.9,1.54-4.25,1.54S.5,2.89.5,2,2.4.5,4.75.5,9,1.19,9,2" fill="#eaeaea" /><path d="M8,1.91c0,.55-1.46,1-3.26,1s-3.26-.43-3.26-1S3,.94,4.75.94,8,1.37,8,1.91" fill="#50e6ff" /><path d="M4.75,2.14a8.07,8.07,0,0,0-2.58.37,7.64,7.64,0,0,0,2.58.38,7.64,7.64,0,0,0,2.58-.38A8.07,8.07,0,0,0,4.75,2.14Z" fill="#198ab3" /></g></symbol>
-  <symbol id="az-monitor" viewBox="0 0 18 18"><defs><radialGradient id="az-monitor-g1" cx="5.72" cy="7.45" r="8.42" gradientTransform="translate(3.23 1.51) scale(1.01 1.01)" gradientUnits="userSpaceOnUse"><stop offset="0.18" stop-color="#5ea0ef" /><stop offset="0.56" stop-color="#5c9fee" /><stop offset="0.69" stop-color="#559ced" /><stop offset="0.78" stop-color="#4a97e9" /><stop offset="0.86" stop-color="#3990e4" /><stop offset="0.93" stop-color="#2387de" /><stop offset="0.99" stop-color="#087bd6" /><stop offset="1" stop-color="#0078d4" /></radialGradient><radialGradient id="az-monitor-g0" cx="28.18" cy="202.29" r="2.7" gradientTransform="translate(-17.77 -185.01) scale(0.95)" gradientUnits="userSpaceOnUse"><stop offset="0.19" stop-color="#8c8e90" /><stop offset="0.35" stop-color="#848688" /><stop offset="0.6" stop-color="#6e7071" /><stop offset="0.91" stop-color="#4a4b4c" /><stop offset="1" stop-color="#3e3f3f" /></radialGradient></defs><title>Icon-manage-317</title><ellipse cx="9" cy="9" rx="8.5" ry="8.47" fill="url(#az-monitor-g1)" /><ellipse cx="9" cy="9" rx="7.4" ry="7.37" fill="#fff" /><path d="M2.72,9.44a6.24,6.24,0,0,0,1.82,4l2-2a3.53,3.53,0,0,1-1-2Z" fill="#9cebff" /><path d="M13.13,4.27A6.25,6.25,0,0,0,9.44,2.74V5.53a3.41,3.41,0,0,1,1.71.7Z" fill="#32bedd" /><path d="M4.87,4.27l2,2a3.41,3.41,0,0,1,1.71-.7V2.74A6.25,6.25,0,0,0,4.87,4.27Z" fill="#32bedd" /><path d="M11.78,6.85a3.6,3.6,0,0,1,.71,1.71h2.79a6.16,6.16,0,0,0-1.53-3.67Z" fill="#32bedd" /><path d="M6.22,6.85l-2-2A6.16,6.16,0,0,0,2.72,8.56H5.51A3.6,3.6,0,0,1,6.22,6.85Z" fill="#50e6ff" /><path d="M14.14,7a.45.45,0,0,0-.57-.25L9.45,8.41l.32.81,4.12-1.63A.44.44,0,0,0,14.14,7Z" fill="#f04049" /><ellipse cx="9" cy="9" rx="1.2" ry="1.2" fill="url(#az-monitor-g0)" /></symbol>
-  <symbol id="az-cost" viewBox="0 0 18 18"><defs><linearGradient id="az-cost-g1" x1="9" y1="1.48" x2="9" y2="17.07" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#76bc2d" /><stop offset="0.32" stop-color="#73b82c" /><stop offset="0.65" stop-color="#6cab29" /><stop offset="0.99" stop-color="#5e9724" /><stop offset="1" stop-color="#5e9624" /></linearGradient><linearGradient id="az-cost-g0" x1="6.13" y1="9.28" x2="11.87" y2="9.28" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" /><stop offset="1" stop-color="#fff" /></linearGradient></defs><title>Icon-general-19</title><path d="M12.35,1.48H5.65a2,2,0,0,0-1.73,1L.58,8.28a2,2,0,0,0,0,2l3.34,5.79a2,2,0,0,0,1.73,1h6.7a2,2,0,0,0,1.73-1l3.34-5.79a2,2,0,0,0,0-2l-3.34-5.8A2,2,0,0,0,12.35,1.48Z" fill="url(#az-cost-g1)" /><path d="M9.07,4.81A.82.82,0,0,1,8.25,4,.82.82,0,0,1,9.89,4,.82.82,0,0,1,9.07,4.81Zm-.82,9.75a.82.82,0,1,0,1.64,0,.82.82,0,0,0-1.64,0Zm.84-2.7A1.5,1.5,0,0,1,7.58,11l-1.45.28A2.68,2.68,0,0,0,9,13c1.69,0,2.91-.89,2.91-2.13a2.07,2.07,0,0,0-1.12-2A13,13,0,0,0,9,8.33c-.67-.16-1.1-.53-1.1-1A1,1,0,0,1,9,6.46a1.4,1.4,0,0,1,1.29.69l1.25-.4A2.56,2.56,0,0,0,9,5.45c-1.18,0-2.55.52-2.55,2,0,1.81,1.11,2.17,2.69,2.48.37.07,1.23.32,1.23,1C10.33,11.31,10,11.86,9.09,11.86Z" opacity="0.9" fill="url(#az-cost-g0)" /></symbol>
-  <symbol id="az-vnet" viewBox="0 0 18 18"><defs><linearGradient id="az-vnet-g0" x1="7.699" y1="259.22" x2="7.699" y2="263.711" gradientTransform="translate(0 -250)" gradientUnits="userSpaceOnUse"><stop offset="0.23" stop-color="#5ea0ef" /><stop offset="0.32" stop-color="#5b9fee" /><stop offset="0.48" stop-color="#509aeb" /><stop offset="0.57" stop-color="#3f92e6" /><stop offset="0.75" stop-color="#2688df" /><stop offset="0.93" stop-color="#127fd9" /></linearGradient><linearGradient id="az-vnet-g1" x1="9.927" y1="261.091" x2="9.927" y2="265.582" gradientTransform="translate(0 -250)" gradientUnits="userSpaceOnUse"><stop offset="0.02" stop-color="#5ea0ef" /><stop offset="0.14" stop-color="#5b9fee" /><stop offset="0.23" stop-color="#5b9fee" /><stop offset="0.34" stop-color="#509aeb" /><stop offset="0.44" stop-color="#3f92e6" /><stop offset="0.63" stop-color="#2688df" /><stop offset="0.93" stop-color="#127fd9" /></linearGradient></defs><path d="M8.252,2.521H9.374V9.594H8.252Z" fill="#7a7a7a" /><path d="M10.459,2.3A1.647,1.647,0,1,1,8.813.65h0A1.646,1.646,0,0,1,10.459,2.3Z" fill="#1490df" /><path d="M8.588,9.22h-1.8a2.246,2.246,0,0,0-.348,4.461,2.415,2.415,0,0,1,.022-.835,1.418,1.418,0,0,1,.326-2.8h1.8a1.422,1.422,0,0,1,0,2.844H8.094a1.078,1.078,0,0,0-.1.45,1.022,1.022,0,0,0,.071.374h.527a2.246,2.246,0,1,0,0-4.491Z" fill="url(#az-vnet-g0)" /><path d="M11.182,11.121a2.642,2.642,0,0,1,.026.344,2.317,2.317,0,0,1-.049.491,1.418,1.418,0,0,1-.325,2.8h-1.8a1.423,1.423,0,0,1,0-2.845h.494a1.042,1.042,0,0,0,.1-.449,1.018,1.018,0,0,0-.071-.374H9.037a2.246,2.246,0,0,0,0,4.491h1.8a2.246,2.246,0,0,0,.348-4.461Z" fill="url(#az-vnet-g1)" /><path d="M5.58,16.525l-.412.415a.28.28,0,0,1-.4,0l-4.607-4.6a.566.566,0,0,1,0-.8l.416-.412,5,4.992a.276.276,0,0,1,0,.391h0Z" fill="#50e6ff" /><path d="M5.082,7.02l.46.46a.282.282,0,0,1,0,.4L.625,12.809l-.461-.457a.566.566,0,0,1,0-.8L4.685,7.02A.28.28,0,0,1,5.082,7.02Z" fill="#1490df" /><path d="M12.417,16.851a.278.278,0,0,1-.006-.392h0l.006,0,5-4.989.416.416a.566.566,0,0,1,0,.8l-4.611,4.588a.277.277,0,0,1-.391.006h0l-.006-.005Z" fill="#50e6ff" /><path d="M13.311,7.349l4.525,4.536a.563.563,0,0,1,0,.793l-.461.46L12.454,8.206a.289.289,0,0,1,0-.4l.46-.456A.282.282,0,0,1,13.311,7.349Z" fill="#1490df" /></symbol>
-  <symbol id="az-storage" viewBox="0 0 18 18"><defs><linearGradient id="az-storage-g0" x1="9" y1="15.83" x2="9" y2="5.79" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#b3b3b3" /><stop offset="0.26" stop-color="#c1c1c1" /><stop offset="1" stop-color="#e6e6e6" /></linearGradient></defs><title>Icon-storage-86</title><path d="M.5,5.79h17a0,0,0,0,1,0,0v9.48a.57.57,0,0,1-.57.57H1.07a.57.57,0,0,1-.57-.57V5.79A0,0,0,0,1,.5,5.79Z" fill="url(#az-storage-g0)" /><path d="M1.07,2.17H16.93a.57.57,0,0,1,.57.57V5.79a0,0,0,0,1,0,0H.5a0,0,0,0,1,0,0V2.73A.57.57,0,0,1,1.07,2.17Z" fill="#37c2b1" /><path d="M2.81,6.89H15.18a.27.27,0,0,1,.26.27v1.4a.27.27,0,0,1-.26.27H2.81a.27.27,0,0,1-.26-.27V7.16A.27.27,0,0,1,2.81,6.89Z" fill="#fff" /><path d="M2.82,9.68H15.19a.27.27,0,0,1,.26.27v1.41a.27.27,0,0,1-.26.27H2.82a.27.27,0,0,1-.26-.27V10A.27.27,0,0,1,2.82,9.68Z" fill="#37c2b1" /><path d="M2.82,12.5H15.19a.27.27,0,0,1,.26.27v1.41a.27.27,0,0,1-.26.27H2.82a.27.27,0,0,1-.26-.27V12.77A.27.27,0,0,1,2.82,12.5Z" fill="#258277" /></symbol>
-</svg>
-
-<div class="top-prog"><span id="topProg"></span></div>
-<button class="sb-toggle" id="sbToggle" title="목차 열기 (M)" aria-label="목차 열기">☰</button>
-<div class="sb-scrim" id="sbScrim"></div>
-
-<nav class="sidebar" id="sidebar" aria-label="목차">
-  <div class="sb-head">
-    <button class="sb-close" id="sbClose" title="목차 접기 (M)" aria-label="목차 접기">&#10094;</button>
-    <div class="sb-brand"><span class="sb-sq"></span><span class="sb-kick">Why Build AI on Azure?</span></div>
-    <div class="sb-title">Why Build AI<br>on Azure?</div>
-    <div class="sb-sub">데이터에서 에이전트까지</div>
-  </div>
-  <div class="sb-tools">
-    <button class="sb-btn on" id="notesBtn" title="슬라이드 설명 표시/숨김 (N)">슬라이드 설명</button>
-  </div>
-  <div class="sb-nav" id="sbNav">
-    <div class="nav-group">
-      <div class="nav-kicker">INTRO</div>
-      <div class="nav-label">시작하기</div>
-      <ul class="nav-list">
-        <li><a class="nav-link" href="#s01" data-target="s01" title="표지 — Why Build AI on Azure?"><span class="nav-n">01</span><span class="nav-t">표지 — Why Build AI on Azure?</span></a></li>
-        <li><a class="nav-link" href="#s02" data-target="s02" title="3줄 요약 — 오늘 기억할 세 가지"><span class="nav-n">02</span><span class="nav-t">3줄 요약 — 오늘 기억할 세 가지</span></a></li>
-        <li><a class="nav-link" href="#s03" data-target="s03" title="목차 — 신뢰에서 실현까지"><span class="nav-n">03</span><span class="nav-t">목차 — 신뢰에서 실현까지</span></a></li>
-      </ul>
-    </div>
-    <div class="nav-group">
-      <div class="nav-kicker">PART 1</div>
-      <div class="nav-label">왜 지금, 왜 Azure인가</div>
-      <ul class="nav-list">
-        <li><a class="nav-link" href="#s04" data-target="s04" title="PART 1 — 왜 지금, 왜 Azure인가"><span class="nav-n">04</span><span class="nav-t">PART 1 — 왜 지금, 왜 Azure인가</span></a></li>
-        <li><a class="nav-link" href="#s05" data-target="s05" title="AI 패러다임의 전환 — 예측에서 실행으로"><span class="nav-n">05</span><span class="nav-t">AI 패러다임의 전환 — 예측에서 실행으로</span></a></li>
-        <li><a class="nav-link" href="#s06" data-target="s06" title="왜 지금인가 — 미루면 벌어지는 격차"><span class="nav-n">06</span><span class="nav-t">왜 지금인가 — 미루면 벌어지는 격차</span></a></li>
-        <li><a class="nav-link" href="#s07" data-target="s07" title="고객이 마주한 6가지 벽"><span class="nav-n">07</span><span class="nav-t">고객이 마주한 6가지 벽</span></a></li>
-        <li><a class="nav-link" href="#s08" data-target="s08" title="Microsoft를 신뢰할 수 있는 4가지 이유"><span class="nav-n">08</span><span class="nav-t">Microsoft를 신뢰할 수 있는 4가지 이유</span></a></li>
-        <li><a class="nav-link" href="#s09" data-target="s09" title="AI 리더십 — 최신 모델부터 실사용까지"><span class="nav-n">09</span><span class="nav-t">AI 리더십 — 최신 모델부터 실사용까지</span></a></li>
-        <li><a class="nav-link" href="#s10" data-target="s10" title="Responsible AI &amp;amp; 엔터프라이즈 신뢰"><span class="nav-n">10</span><span class="nav-t">Responsible AI &amp;amp; 엔터프라이즈 신뢰</span></a></li>
-        <li><a class="nav-link" href="#s11" data-target="s11" title="AI를 어디서 구축·운영할 것인가 — 6가지 판단 기준"><span class="nav-n">11</span><span class="nav-t">AI를 어디서 구축·운영할 것인가 — 6가지 판단 기준</span></a></li>
-        <li><a class="nav-link" href="#s12" data-target="s12" title="우리의 관점 — 제품이 아니라 비즈니스 성과"><span class="nav-n">12</span><span class="nav-t">우리의 관점 — 제품이 아니라 비즈니스 성과</span></a></li>
-        <li><a class="nav-link" href="#s13" data-target="s13" title="성과와 ROI를 보는 틀"><span class="nav-n">13</span><span class="nav-t">성과와 ROI를 보는 틀</span></a></li>
-      </ul>
-    </div>
-    <div class="nav-group">
-      <div class="nav-kicker">PART 2</div>
-      <div class="nav-label">AX 3대 전략</div>
-      <ul class="nav-list">
-        <li><a class="nav-link" href="#s14" data-target="s14" title="PART 2 — AX 3대 전략"><span class="nav-n">14</span><span class="nav-t">PART 2 — AX 3대 전략</span></a></li>
-        <li><a class="nav-link" href="#s15" data-target="s15" title="AX(AI Transformation)를 떠받치는 3대 전략"><span class="nav-n">15</span><span class="nav-t">AX(AI Transformation)를 떠받치는 3대 전략</span></a></li>
-        <li><a class="nav-link" href="#s16" data-target="s16" title="에이전트 = 디지털 직원 관점으로 이해하기"><span class="nav-n">16</span><span class="nav-t">에이전트 = 디지털 직원 관점으로 이해하기</span></a></li>
-      </ul>
-    </div>
-    <div class="nav-group">
-      <div class="nav-kicker">PART 3</div>
-      <div class="nav-label">Enterprise AI Platform</div>
-      <ul class="nav-list">
-        <li><a class="nav-link" href="#s17" data-target="s17" title="PART 3 — Enterprise AI Platform"><span class="nav-n">17</span><span class="nav-t">PART 3 — Enterprise AI Platform</span></a></li>
-        <li><a class="nav-link" href="#s18" data-target="s18" title="전사로 확산하려면 무엇이 갖춰져야 하는가"><span class="nav-n">18</span><span class="nav-t">전사로 확산하려면 무엇이 갖춰져야 하는가</span></a></li>
-        <li><a class="nav-link" href="#s19" data-target="s19" title="필요한 플랫폼의 모습 — 6계층과 두 세로축"><span class="nav-n">19</span><span class="nav-t">필요한 플랫폼의 모습 — 6계층과 두 세로축</span></a></li>
-        <li><a class="nav-link" href="#s20" data-target="s20" title="6계층은 각각 왜 필요한가 — 없으면 생기는 일"><span class="nav-n">20</span><span class="nav-t">6계층은 각각 왜 필요한가 — 없으면 생기는 일</span></a></li>
-        <li><a class="nav-link" href="#s21" data-target="s21" title="세로 두 축 — 개발 체계와 거버넌스는 왜 전 계층에 걸치는가"><span class="nav-n">21</span><span class="nav-t">세로 두 축 — 개발 체계와 거버넌스는 왜 전 계층에 걸치는가</span></a></li>
-        <li><a class="nav-link" href="#s22" data-target="s22" title="그래서 Microsoft는 — 같은 그림, 채워진 버전"><span class="nav-n">22</span><span class="nav-t">그래서 Microsoft는 — 같은 그림, 채워진 버전</span></a></li>
-        <li><a class="nav-link" href="#s23" data-target="s23" title="계층 1·2 — 기존 시스템을 그대로 두고 하나로 잇기"><span class="nav-n">23</span><span class="nav-t">계층 1·2 — 기존 시스템을 그대로 두고 하나로 잇기</span></a></li>
-        <li><a class="nav-link" href="#s24" data-target="s24" title="계층 3 — 데이터를 회사의 의미로 바꾸는 곳"><span class="nav-n">24</span><span class="nav-t">계층 3 — 데이터를 회사의 의미로 바꾸는 곳</span></a></li>
-        <li><a class="nav-link" href="#s25" data-target="s25" title="계층 4 — 현업과 개발자가 각자의 방식으로 만든다"><span class="nav-n">25</span><span class="nav-t">계층 4 — 현업과 개발자가 각자의 방식으로 만든다</span></a></li>
-        <li><a class="nav-link" href="#s26" data-target="s26" title="계층 5·6 — 개인에서 전사로, 일하는 곳에서 바로"><span class="nav-n">26</span><span class="nav-t">계층 5·6 — 개인에서 전사로, 일하는 곳에서 바로</span></a></li>
-        <li><a class="nav-link" href="#s27" data-target="s27" title="세로 두 축 — 개발 체계와 거버넌스를 채우는 것"><span class="nav-n">27</span><span class="nav-t">세로 두 축 — 개발 체계와 거버넌스를 채우는 것</span></a></li>
-        <li><a class="nav-link" href="#s28" data-target="s28" title="통합의 가치 — 통합은 플랫폼이, 여러분은 비즈니스만"><span class="nav-n">28</span><span class="nav-t">통합의 가치 — 통합은 플랫폼이, 여러분은 비즈니스만</span></a></li>
-      </ul>
-    </div>
-    <div class="nav-group">
-      <div class="nav-kicker">PART 4</div>
-      <div class="nav-label">실현 · 다음 단계</div>
-      <ul class="nav-list">
-        <li><a class="nav-link" href="#s29" data-target="s29" title="PART 4 — 실현 · 다음 단계"><span class="nav-n">29</span><span class="nav-t">PART 4 — 실현 · 다음 단계</span></a></li>
-        <li><a class="nav-link" href="#s30" data-target="s30" title="역할별 여정 — 누가 이 플랫폼을 사용하는가"><span class="nav-n">30</span><span class="nav-t">역할별 여정 — 누가 이 플랫폼을 사용하는가</span></a></li>
-        <li><a class="nav-link" href="#s31" data-target="s31" title="시나리오 6개 요약 — Quick Win 후보"><span class="nav-n">31</span><span class="nav-t">시나리오 6개 요약 — Quick Win 후보</span></a></li>
-        <li><a class="nav-link" href="#s32" data-target="s32" title="시나리오 #1 상세 — 코딩 없이 빠르게 나만의 AI Agent"><span class="nav-n">32</span><span class="nav-t">시나리오 #1 상세 — 코딩 없이 빠르게 나만의 AI Agent</span></a></li>
-        <li><a class="nav-link" href="#s33" data-target="s33" title="무엇부터, 어떤 순서로 시작할까"><span class="nav-n">33</span><span class="nav-t">무엇부터, 어떤 순서로 시작할까</span></a></li>
-        <li><a class="nav-link" href="#s34" data-target="s34" title="핵심 요약 (Key Takeaways)"><span class="nav-n">34</span><span class="nav-t">핵심 요약 (Key Takeaways)</span></a></li>
-        <li><a class="nav-link" href="#s35" data-target="s35" title="Why Build AI on Azure? — 한 문장으로"><span class="nav-n">35</span><span class="nav-t">Why Build AI on Azure? — 한 문장으로</span></a></li>
-        <li><a class="nav-link" href="#s36" data-target="s36" title="함께 생각해볼 질문 · 제안하는 다음 단계"><span class="nav-n">36</span><span class="nav-t">함께 생각해볼 질문 · 제안하는 다음 단계</span></a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
-
-<main class="main">
-  <header class="intro">
-    <div class="ik">Why Build AI on Azure?</div>
-    <h1>데이터에서 에이전트까지<span class="q">.</span></h1>
-    <p>엔터프라이즈 의사결정자를 위한 Azure AI 기술 자료입니다. 신뢰 → 가치 → 플랫폼 → 실현의 순서로,
-       전체 36개 섹션을 위에서 아래로 이어서 읽을 수 있습니다. 각 장 아래에는 슬라이드 설명이 함께 있습니다.</p>
-    <div class="meta"><span>36 Sections</span><span>약 30분 분량</span><span>v1.2</span><span>Microsoft Solution Engineer</span></div>
-  </header>
-
 <article class="chapter" id="s01" data-n="01" data-part="시작하기" data-part-kicker="INTRO">
   <div class="ch-head">
     <span class="ch-n">01</span>
@@ -907,6 +38,7 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
+
 <article class="chapter" id="s02" data-n="02" data-part="시작하기" data-part-kicker="INTRO">
   <div class="ch-head">
     <span class="ch-n">02</span>
@@ -936,7 +68,7 @@ body.sb-collapsed .sb-toggle{display:block}
           <p>가짜 숫자 대신 여러분의 데이터로 증명합니다. <b>성과가 확인된 것부터 확장합니다.</b></p></div>
       </div>
     </div>
-    <div class="s-foot"><span>Why Build AI on Azure?</span><span class="pg">02 / 36</span></div>
+    <div class="s-foot"><span>Why Build AI on Azure?</span><span class="pg"></span></div>
   </div>
     </div>
   </div>
@@ -957,6 +89,7 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
+
 <article class="chapter" id="s03" data-n="03" data-part="시작하기" data-part-kicker="INTRO">
   <div class="ch-head">
     <span class="ch-n">03</span>
@@ -991,7 +124,7 @@ body.sb-collapsed .sb-toggle{display:block}
           <div class="svc">8장</div></div>
       </div>
     </div>
-    <div class="s-foot"><span>Why Build AI on Azure?</span><span class="pg">03 / 36</span></div>
+    <div class="s-foot"><span>Why Build AI on Azure?</span><span class="pg"></span></div>
   </div>
     </div>
   </div>
@@ -1005,6 +138,7 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
+
 <article class="chapter" id="s04" data-n="04" data-part="왜 지금, 왜 Azure인가">
   <div class="ch-head">
     <span class="ch-n">04</span>
@@ -1028,7 +162,7 @@ body.sb-collapsed .sb-toggle{display:block}
         <span>우리의 관점 — 제품이 아니라 비즈니스 성과</span>
       </div>
     </div>
-    <div class="s-foot"><span>Part 1 · 신뢰</span><span class="pg">04 / 36</span></div>
+    <div class="s-foot"><span>Part 1 · 신뢰</span><span class="pg"></span></div>
   </div>
     </div>
   </div>
@@ -1041,7 +175,8 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
-<article class="chapter" id="s05" data-n="05" data-part="왜 지금, 왜 Azure인가">
+
+<article class="chapter" data-part="왜 지금, 왜 Azure인가">
   <div class="ch-head">
     <span class="ch-n">05</span>
     <h2 class="ch-t">AI 패러다임의 전환 — 예측에서 실행으로</h2>
@@ -1079,7 +214,7 @@ body.sb-collapsed .sb-toggle{display:block}
               <p>어려움<br><b>→ 상시 가능</b></p></div>
           </div>
         </div>
-        <div class="s-foot"><span>Why Build AI on Azure?</span><span class="pg">05 / 36</span></div>
+        <div class="s-foot"><span>Why Build AI on Azure?</span><span class="pg"></span></div>
       </div>
     </div>
   </div>
@@ -1103,12 +238,13 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
-<article class="chapter" id="s06" data-n="06" data-part="왜 지금, 왜 Azure인가">
+
+<article class="chapter" id="s07" data-n="07" data-part="왜 지금, 왜 Azure인가">
   <div class="ch-head">
-    <span class="ch-n">06</span>
+    <span class="ch-n">07</span>
     <h2 class="ch-t">왜 지금인가 — 미루면 벌어지는 격차</h2>
     <span class="ch-part">왜 지금, 왜 Azure인가</span>
-    <a class="ch-link" href="#s06" aria-label="이 섹션 링크 복사">#</a>
+    <a class="ch-link" href="#s07" aria-label="이 섹션 링크 복사">#</a>
   </div>
   <div class="sheet">
     <div class="slide dark">
@@ -1134,7 +270,7 @@ body.sb-collapsed .sb-toggle{display:block}
         이미 <b>Microsoft 365 · GitHub · Microsoft Fabric</b>을 쓰고 있다면, '지금' 시작하기 가장 가까운 곳은 그 위에 얹히는 <b>Azure</b>입니다.
       </div>
     </div>
-    <div class="s-foot"><span>Part 1 · 신뢰</span><span class="pg">06 / 36</span></div>
+    <div class="s-foot"><span>Part 1 · 신뢰</span><span class="pg"></span></div>
   </div>
     </div>
   </div>
@@ -1151,12 +287,13 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
-<article class="chapter" id="s07" data-n="07" data-part="왜 지금, 왜 Azure인가">
+
+<article class="chapter" id="s08" data-n="08" data-part="왜 지금, 왜 Azure인가">
   <div class="ch-head">
-    <span class="ch-n">07</span>
+    <span class="ch-n">08</span>
     <h2 class="ch-t">고객이 마주한 6가지 벽</h2>
     <span class="ch-part">왜 지금, 왜 Azure인가</span>
-    <a class="ch-link" href="#s07" aria-label="이 섹션 링크 복사">#</a>
+    <a class="ch-link" href="#s08" aria-label="이 섹션 링크 복사">#</a>
   </div>
   <div class="sheet">
     <div class="slide">
@@ -1183,7 +320,7 @@ body.sb-collapsed .sb-toggle{display:block}
           <div class="d">AI가 민감 데이터를 유출할 위험을 <b>사전에 차단</b>할 방법이 없습니다.</div></div></div>
       </div>
     </div>
-    <div class="s-foot"><span>Why Build AI on Azure?</span><span class="pg">07 / 36</span></div>
+    <div class="s-foot"><span>Why Build AI on Azure?</span><span class="pg"></span></div>
   </div>
     </div>
   </div>
@@ -1208,12 +345,13 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
-<article class="chapter" id="s08" data-n="08" data-part="왜 지금, 왜 Azure인가">
+
+<article class="chapter" id="s09" data-n="09" data-part="왜 지금, 왜 Azure인가">
   <div class="ch-head">
-    <span class="ch-n">08</span>
+    <span class="ch-n">09</span>
     <h2 class="ch-t">Microsoft를 신뢰할 수 있는 4가지 이유</h2>
     <span class="ch-part">왜 지금, 왜 Azure인가</span>
-    <a class="ch-link" href="#s08" aria-label="이 섹션 링크 복사">#</a>
+    <a class="ch-link" href="#s09" aria-label="이 섹션 링크 복사">#</a>
   </div>
   <div class="sheet">
     <div class="slide dark">
@@ -1244,7 +382,7 @@ body.sb-collapsed .sb-toggle{display:block}
         <br>①②는 이어지는 두 장에서, <b>③④는 Part 3에서 계층별로</b> 풉니다.
       </div>
     </div>
-    <div class="s-foot"><span>Part 1 · 신뢰</span><span class="pg">08 / 36</span></div>
+    <div class="s-foot"><span>Part 1 · 신뢰</span><span class="pg"></span></div>
   </div>
     </div>
   </div>
@@ -1262,12 +400,13 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
-<article class="chapter" id="s09" data-n="09" data-part="왜 지금, 왜 Azure인가">
+
+<article class="chapter" id="s11" data-n="11" data-part="왜 지금, 왜 Azure인가">
   <div class="ch-head">
-    <span class="ch-n">09</span>
+    <span class="ch-n">11</span>
     <h2 class="ch-t">AI 리더십 — 최신 모델부터 실사용까지</h2>
     <span class="ch-part">왜 지금, 왜 Azure인가</span>
-    <a class="ch-link" href="#s09" aria-label="이 섹션 링크 복사">#</a>
+    <a class="ch-link" href="#s11" aria-label="이 섹션 링크 복사">#</a>
   </div>
   <div class="sheet">
     <div class="slide">
@@ -1289,7 +428,7 @@ body.sb-collapsed .sb-toggle{display:block}
           <p>글로벌 Azure 리전에서 <b>엔터프라이즈 SLA</b>로 제공됩니다. 연구용으로 좋은 모델과 <b>운영 가능한 모델</b>은 다릅니다.</p></div>
       </div>
     </div>
-    <div class="s-foot"><span>Why Build AI on Azure?</span><span class="pg">09 / 36</span></div>
+    <div class="s-foot"><span>Why Build AI on Azure?</span><span class="pg"></span></div>
   </div>
     </div>
   </div>
@@ -1307,12 +446,13 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
-<article class="chapter" id="s10" data-n="10" data-part="왜 지금, 왜 Azure인가">
+
+<article class="chapter" id="s12" data-n="12" data-part="왜 지금, 왜 Azure인가">
   <div class="ch-head">
-    <span class="ch-n">10</span>
+    <span class="ch-n">12</span>
     <h2 class="ch-t">Responsible AI &amp; 엔터프라이즈 신뢰</h2>
     <span class="ch-part">왜 지금, 왜 Azure인가</span>
-    <a class="ch-link" href="#s10" aria-label="이 섹션 링크 복사">#</a>
+    <a class="ch-link" href="#s12" aria-label="이 섹션 링크 복사">#</a>
   </div>
   <div class="sheet">
     <div class="slide">
@@ -1335,7 +475,7 @@ body.sb-collapsed .sb-toggle{display:block}
         </tbody>
       </table>
     </div>
-    <div class="s-foot"><span>Why Build AI on Azure?</span><span class="pg">10 / 36</span></div>
+    <div class="s-foot"><span>Why Build AI on Azure?</span><span class="pg"></span></div>
   </div>
     </div>
   </div>
@@ -1355,12 +495,13 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
-<article class="chapter" id="s11" data-n="11" data-part="왜 지금, 왜 Azure인가">
+
+<article class="chapter" data-part="왜 지금, 왜 Azure인가">
   <div class="ch-head">
-    <span class="ch-n">11</span>
+    <span class="ch-n">10</span>
     <h2 class="ch-t">AI를 어디서 구축·운영할 것인가 — 6가지 판단 기준</h2>
     <span class="ch-part">왜 지금, 왜 Azure인가</span>
-    <a class="ch-link" href="#s11" aria-label="이 섹션 링크 복사">#</a>
+    <a class="ch-link" href="#s10" aria-label="이 섹션 링크 복사">#</a>
   </div>
   <div class="sheet">
     <div class="slide">
@@ -1393,7 +534,7 @@ body.sb-collapsed .sb-toggle{display:block}
             <b>한곳에서 통제</b>할 수 있는 운영 관점입니다. 각 항목을 어떤 서비스가 맡는지는 <b>Part 3</b>에서 계층별로 다룹니다.
           </div>
         </div>
-        <div class="s-foot"><span>Why Build AI on Azure?</span><span class="pg">11 / 36</span></div>
+        <div class="s-foot"><span>Why Build AI on Azure?</span><span class="pg"></span></div>
       </div>
     </div>
   </div>
@@ -1413,12 +554,13 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
-<article class="chapter" id="s12" data-n="12" data-part="왜 지금, 왜 Azure인가">
+
+<article class="chapter" id="s16" data-n="16" data-part="왜 지금, 왜 Azure인가">
   <div class="ch-head">
-    <span class="ch-n">12</span>
+    <span class="ch-n">16</span>
     <h2 class="ch-t">우리의 관점 — 제품이 아니라 비즈니스 성과</h2>
     <span class="ch-part">왜 지금, 왜 Azure인가</span>
-    <a class="ch-link" href="#s12" aria-label="이 섹션 링크 복사">#</a>
+    <a class="ch-link" href="#s16" aria-label="이 섹션 링크 복사">#</a>
   </div>
   <div class="sheet">
     <div class="slide">
@@ -1455,7 +597,7 @@ body.sb-collapsed .sb-toggle{display:block}
         </div>
       </div>
     </div>
-    <div class="s-foot"><span>Why Build AI on Azure?</span><span class="pg">12 / 36</span></div>
+    <div class="s-foot"><span>Why Build AI on Azure?</span><span class="pg"></span></div>
   </div>
     </div>
   </div>
@@ -1473,12 +615,13 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
-<article class="chapter" id="s13" data-n="13" data-part="왜 지금, 왜 Azure인가">
+
+<article class="chapter" data-part="왜 지금, 왜 Azure인가">
   <div class="ch-head">
-    <span class="ch-n">13</span>
+    <span class="ch-n">12</span>
     <h2 class="ch-t">성과와 ROI를 보는 틀</h2>
     <span class="ch-part">왜 지금, 왜 Azure인가</span>
-    <a class="ch-link" href="#s13" aria-label="이 섹션 링크 복사">#</a>
+    <a class="ch-link" href="#s12" aria-label="이 섹션 링크 복사">#</a>
   </div>
   <div class="sheet">
     <div class="slide">
@@ -1522,7 +665,7 @@ body.sb-collapsed .sb-toggle{display:block}
             </div>
           </div>
         </div>
-        <div class="s-foot"><span>Why Build AI on Azure?</span><span class="pg">13 / 36</span></div>
+        <div class="s-foot"><span>Why Build AI on Azure?</span><span class="pg"></span></div>
       </div>
     </div>
   </div>
@@ -1541,12 +684,13 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
-<article class="chapter" id="s14" data-n="14" data-part="AX 3대 전략">
+
+<article class="chapter" id="s19" data-n="19" data-part="AX 3대 전략">
   <div class="ch-head">
-    <span class="ch-n">14</span>
+    <span class="ch-n">19</span>
     <h2 class="ch-t">PART 2 — AX 3대 전략</h2>
     <span class="ch-part">AX 3대 전략</span>
-    <a class="ch-link" href="#s14" aria-label="이 섹션 링크 복사">#</a>
+    <a class="ch-link" href="#s19" aria-label="이 섹션 링크 복사">#</a>
   </div>
   <div class="sheet">
     <div class="slide dark">
@@ -1562,7 +706,7 @@ body.sb-collapsed .sb-toggle{display:block}
         <span>에이전트 = 디지털 직원</span>
               </div>
     </div>
-    <div class="s-foot"><span>Part 2 · 가치</span><span class="pg">14 / 36</span></div>
+    <div class="s-foot"><span>Part 2 · 가치</span><span class="pg"></span></div>
   </div>
     </div>
   </div>
@@ -1577,12 +721,13 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
-<article class="chapter" id="s15" data-n="15" data-part="AX 3대 전략">
+
+<article class="chapter" id="s20" data-n="20" data-part="AX 3대 전략">
   <div class="ch-head">
-    <span class="ch-n">15</span>
+    <span class="ch-n">20</span>
     <h2 class="ch-t">AX(AI Transformation)를 떠받치는 3대 전략</h2>
     <span class="ch-part">AX 3대 전략</span>
-    <a class="ch-link" href="#s15" aria-label="이 섹션 링크 복사">#</a>
+    <a class="ch-link" href="#s20" aria-label="이 섹션 링크 복사">#</a>
   </div>
   <div class="sheet">
     <div class="slide">
@@ -1608,7 +753,7 @@ body.sb-collapsed .sb-toggle{display:block}
         <b>Microsoft 제언:</b> 차별화되지 않는 기반 구축에 인력을 묶어두기보다, Azure 기반의 <b>통합 Enterprise AI Platform</b>을 활용해 매출·비용·리스크에 직접 연결되는 유스케이스에 집중하세요.
       </div>
     </div>
-    <div class="s-foot"><span>Part 2 · 가치</span><span class="pg">15 / 36</span></div>
+    <div class="s-foot"><span>Part 2 · 가치</span><span class="pg"></span></div>
   </div>
     </div>
   </div>
@@ -1625,12 +770,13 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
-<article class="chapter" id="s16" data-n="16" data-part="AX 3대 전략">
+
+<article class="chapter" id="s21" data-n="21" data-part="AX 3대 전략">
   <div class="ch-head">
-    <span class="ch-n">16</span>
+    <span class="ch-n">21</span>
     <h2 class="ch-t">에이전트 = 디지털 직원 관점으로 이해하기</h2>
     <span class="ch-part">AX 3대 전략</span>
-    <a class="ch-link" href="#s16" aria-label="이 섹션 링크 복사">#</a>
+    <a class="ch-link" href="#s21" aria-label="이 섹션 링크 복사">#</a>
   </div>
   <div class="sheet">
     <div class="slide">
@@ -1664,7 +810,7 @@ body.sb-collapsed .sb-toggle{display:block}
         이 세 축이 <b>실제 아키텍처에서 어느 자리에 놓이는지</b>는 Part 3에서 계층으로 봅니다.
       </div>
     </div>
-    <div class="s-foot"><span>Part 2 · 가치</span><span class="pg">16 / 36</span></div>
+    <div class="s-foot"><span>Part 2 · 가치</span><span class="pg"></span></div>
   </div>
     </div>
   </div>
@@ -1687,7 +833,8 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
-<article class="chapter" id="s17" data-n="17" data-part="Enterprise AI Platform">
+
+<article class="chapter" data-part="Enterprise AI Platform">
   <style>
 /* Enterprise AI Platform 아키텍처 — scripts/gen-eap-diagram.py 가 생성 */
 .eap{width:1728px;height:734px;display:flex;gap:12px;font-family:var(--f-body);
@@ -1770,10 +917,10 @@ body.sb-collapsed .sb-toggle{display:block}
   </style>
 
   <div class="ch-head">
-    <span class="ch-n">17</span>
+    <span class="ch-n">23</span>
     <h2 class="ch-t">PART 3 — Enterprise AI Platform</h2>
     <span class="ch-part">Enterprise AI Platform</span>
-    <a class="ch-link" href="#s17" aria-label="이 섹션 링크 복사">#</a>
+    <a class="ch-link" href="#s23" aria-label="이 섹션 링크 복사">#</a>
   </div>
   <div class="sheet">
     <div class="slide dark">
@@ -1788,7 +935,7 @@ body.sb-collapsed .sb-toggle{display:block}
             <span>필요한 것을 정의한다</span><span>6계층 · 두 세로축</span><span>Microsoft로 채우기</span><span>통합의 가치</span>
           </div>
         </div>
-        <div class="s-foot"><span>Part 3 · 플랫폼</span><span class="pg">17 / 36</span></div>
+        <div class="s-foot"><span>Part 3 · 플랫폼</span><span class="pg"></span></div>
       </div>
     </div>
   </div>
@@ -1801,12 +948,13 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
-<article class="chapter" id="s18" data-n="18" data-part="Enterprise AI Platform">
+
+<article class="chapter" data-part="Enterprise AI Platform">
   <div class="ch-head">
-    <span class="ch-n">18</span>
+    <span class="ch-n">24</span>
     <h2 class="ch-t">전사로 확산하려면 무엇이 갖춰져야 하는가</h2>
     <span class="ch-part">Enterprise AI Platform</span>
-    <a class="ch-link" href="#s18" aria-label="이 섹션 링크 복사">#</a>
+    <a class="ch-link" href="#s24" aria-label="이 섹션 링크 복사">#</a>
   </div>
   <div class="sheet">
     <div class="slide">
@@ -1851,7 +999,7 @@ body.sb-collapsed .sb-toggle{display:block}
             </div>
           </div>
         </div>
-        <div class="s-foot"><span>Part 3 · 요구사항</span><span class="pg">18 / 36</span></div>
+        <div class="s-foot"><span>Part 3 · 요구사항</span><span class="pg"></span></div>
       </div>
     </div>
   </div>
@@ -1868,12 +1016,13 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
-<article class="chapter" id="s19" data-n="19" data-part="Enterprise AI Platform">
+
+<article class="chapter" data-part="Enterprise AI Platform">
   <div class="ch-head">
-    <span class="ch-n">19</span>
+    <span class="ch-n">25</span>
     <h2 class="ch-t">필요한 플랫폼의 모습 — 6계층과 두 세로축</h2>
     <span class="ch-part">Enterprise AI Platform</span>
-    <a class="ch-link" href="#s19" aria-label="이 섹션 링크 복사">#</a>
+    <a class="ch-link" href="#s25" aria-label="이 섹션 링크 복사">#</a>
   </div>
   <div class="sheet">
     <div class="slide">
@@ -1945,7 +1094,7 @@ body.sb-collapsed .sb-toggle{display:block}
 <div class="eap-rail"><div class="eap-persona"><div class="eap-ptag">거버넌스 &amp; 보안</div><div class="eap-pbody"><svg class="eap-fig" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12.6c2.5 0 4.5-2.2 4.5-4.9S14.5 2.8 12 2.8 7.5 5 7.5 7.7s2 4.9 4.5 4.9Z"/><path d="M12 14.2c-3.9 0-7.1 2.7-7.1 6.1 0 .5.4.9.9.9h12.4c.5 0 .9-.4.9-.9 0-3.4-3.2-6.1-7.1-6.1Z"/></svg><svg class="eap-fig" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12.6c2.5 0 4.5-2.2 4.5-4.9S14.5 2.8 12 2.8 7.5 5 7.5 7.7s2 4.9 4.5 4.9Z"/><path d="M12 14.2c-3.9 0-7.1 2.7-7.1 6.1 0 .5.4.9.9.9h12.4c.5 0 .9-.4.9-.9 0-3.4-3.2-6.1-7.1-6.1Z"/></svg><svg class="eap-fig" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12.6c2.5 0 4.5-2.2 4.5-4.9S14.5 2.8 12 2.8 7.5 5 7.5 7.7s2 4.9 4.5 4.9Z"/><path d="M12 14.2c-3.9 0-7.1 2.7-7.1 6.1 0 .5.4.9.9.9h12.4c.5 0 .9-.4.9-.9 0-3.4-3.2-6.1-7.1-6.1Z"/></svg></div></div></div>
 </div></div>
         </div>
-        <div class="s-foot"><span>Part 3 · 요구사항</span><span class="pg">19 / 36</span></div>
+        <div class="s-foot"><span>Part 3 · 요구사항</span><span class="pg"></span></div>
       </div>
     </div>
   </div>
@@ -1963,12 +1112,13 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
-<article class="chapter" id="s20" data-n="20" data-part="Enterprise AI Platform">
+
+<article class="chapter" data-part="Enterprise AI Platform">
   <div class="ch-head">
-    <span class="ch-n">20</span>
+    <span class="ch-n">26</span>
     <h2 class="ch-t">6계층은 각각 왜 필요한가 — 없으면 생기는 일</h2>
     <span class="ch-part">Enterprise AI Platform</span>
-    <a class="ch-link" href="#s20" aria-label="이 섹션 링크 복사">#</a>
+    <a class="ch-link" href="#s26" aria-label="이 섹션 링크 복사">#</a>
   </div>
   <div class="sheet">
     <div class="slide">
@@ -1994,7 +1144,7 @@ body.sb-collapsed .sb-toggle{display:block}
             아래에서 위로 쌓입니다. <b>레이크 없이 온톨로지를 만들 수 없고, 온톨로지 없이 만든 에이전트는 근거를 갖지 못합니다.</b>
           </div>
         </div>
-        <div class="s-foot"><span>Part 3 · 요구사항</span><span class="pg">20 / 36</span></div>
+        <div class="s-foot"><span>Part 3 · 요구사항</span><span class="pg"></span></div>
       </div>
     </div>
   </div>
@@ -2015,12 +1165,13 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
-<article class="chapter" id="s21" data-n="21" data-part="Enterprise AI Platform">
+
+<article class="chapter" data-part="Enterprise AI Platform">
   <div class="ch-head">
-    <span class="ch-n">21</span>
+    <span class="ch-n">27</span>
     <h2 class="ch-t">세로 두 축 — 개발 체계와 거버넌스는 왜 전 계층에 걸치는가</h2>
     <span class="ch-part">Enterprise AI Platform</span>
-    <a class="ch-link" href="#s21" aria-label="이 섹션 링크 복사">#</a>
+    <a class="ch-link" href="#s27" aria-label="이 섹션 링크 복사">#</a>
   </div>
   <div class="sheet">
     <div class="slide">
@@ -2066,7 +1217,7 @@ body.sb-collapsed .sb-toggle{display:block}
             </div>
           </div>
         </div>
-        <div class="s-foot"><span>Part 3 · 요구사항</span><span class="pg">21 / 36</span></div>
+        <div class="s-foot"><span>Part 3 · 요구사항</span><span class="pg"></span></div>
       </div>
     </div>
   </div>
@@ -2083,12 +1234,13 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
-<article class="chapter" id="s22" data-n="22" data-part="Enterprise AI Platform">
+
+<article class="chapter" data-part="Enterprise AI Platform">
   <div class="ch-head">
-    <span class="ch-n">22</span>
+    <span class="ch-n">28</span>
     <h2 class="ch-t">그래서 Microsoft는 — 같은 그림, 채워진 버전</h2>
     <span class="ch-part">Enterprise AI Platform</span>
-    <a class="ch-link" href="#s22" aria-label="이 섹션 링크 복사">#</a>
+    <a class="ch-link" href="#s28" aria-label="이 섹션 링크 복사">#</a>
   </div>
   <div class="sheet">
     <div class="slide">
@@ -2160,7 +1312,7 @@ body.sb-collapsed .sb-toggle{display:block}
 <div class="eap-rail"><div class="eap-persona"><div class="eap-ptag">거버넌스 &amp; 보안</div><div class="eap-pbody"><svg class="eap-fig" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12.6c2.5 0 4.5-2.2 4.5-4.9S14.5 2.8 12 2.8 7.5 5 7.5 7.7s2 4.9 4.5 4.9Z"/><path d="M12 14.2c-3.9 0-7.1 2.7-7.1 6.1 0 .5.4.9.9.9h12.4c.5 0 .9-.4.9-.9 0-3.4-3.2-6.1-7.1-6.1Z"/></svg><svg class="eap-fig" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12.6c2.5 0 4.5-2.2 4.5-4.9S14.5 2.8 12 2.8 7.5 5 7.5 7.7s2 4.9 4.5 4.9Z"/><path d="M12 14.2c-3.9 0-7.1 2.7-7.1 6.1 0 .5.4.9.9.9h12.4c.5 0 .9-.4.9-.9 0-3.4-3.2-6.1-7.1-6.1Z"/></svg><svg class="eap-fig" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12.6c2.5 0 4.5-2.2 4.5-4.9S14.5 2.8 12 2.8 7.5 5 7.5 7.7s2 4.9 4.5 4.9Z"/><path d="M12 14.2c-3.9 0-7.1 2.7-7.1 6.1 0 .5.4.9.9.9h12.4c.5 0 .9-.4.9-.9 0-3.4-3.2-6.1-7.1-6.1Z"/></svg></div></div></div>
 </div></div>
         </div>
-        <div class="s-foot"><span>Part 3 · 매핑</span><span class="pg">22 / 36</span></div>
+        <div class="s-foot"><span>Part 3 · 매핑</span><span class="pg"></span></div>
       </div>
     </div>
   </div>
@@ -2178,12 +1330,13 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
-<article class="chapter" id="s23" data-n="23" data-part="Enterprise AI Platform">
+
+<article class="chapter" data-part="Enterprise AI Platform">
   <div class="ch-head">
-    <span class="ch-n">23</span>
+    <span class="ch-n">29</span>
     <h2 class="ch-t">계층 1·2 — 기존 시스템을 그대로 두고 하나로 잇기</h2>
     <span class="ch-part">Enterprise AI Platform</span>
-    <a class="ch-link" href="#s23" aria-label="이 섹션 링크 복사">#</a>
+    <a class="ch-link" href="#s29" aria-label="이 섹션 링크 복사">#</a>
   </div>
   <div class="sheet">
     <div class="slide">
@@ -2226,7 +1379,7 @@ body.sb-collapsed .sb-toggle{display:block}
             </div>
           </div>
         </div>
-        <div class="s-foot"><span>Part 3 · 매핑</span><span class="pg">23 / 36</span></div>
+        <div class="s-foot"><span>Part 3 · 매핑</span><span class="pg"></span></div>
       </div>
     </div>
   </div>
@@ -2248,12 +1401,13 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
-<article class="chapter" id="s24" data-n="24" data-part="Enterprise AI Platform">
+
+<article class="chapter" data-part="Enterprise AI Platform">
   <div class="ch-head">
-    <span class="ch-n">24</span>
+    <span class="ch-n">30</span>
     <h2 class="ch-t">계층 3 — 데이터를 회사의 의미로 바꾸는 곳</h2>
     <span class="ch-part">Enterprise AI Platform</span>
-    <a class="ch-link" href="#s24" aria-label="이 섹션 링크 복사">#</a>
+    <a class="ch-link" href="#s30" aria-label="이 섹션 링크 복사">#</a>
   </div>
   <div class="sheet">
     <div class="slide">
@@ -2283,7 +1437,7 @@ body.sb-collapsed .sb-toggle{display:block}
             IQ는 GA·리전이 확정되면 <b>단계적으로 보완</b>합니다.
           </div>
         </div>
-        <div class="s-foot"><span>Part 3 · 매핑</span><span class="pg">24 / 36</span></div>
+        <div class="s-foot"><span>Part 3 · 매핑</span><span class="pg"></span></div>
       </div>
     </div>
   </div>
@@ -2305,12 +1459,13 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
-<article class="chapter" id="s25" data-n="25" data-part="Enterprise AI Platform">
+
+<article class="chapter" data-part="Enterprise AI Platform">
   <div class="ch-head">
-    <span class="ch-n">25</span>
+    <span class="ch-n">31</span>
     <h2 class="ch-t">계층 4 — 현업과 개발자가 각자의 방식으로 만든다</h2>
     <span class="ch-part">Enterprise AI Platform</span>
-    <a class="ch-link" href="#s25" aria-label="이 섹션 링크 복사">#</a>
+    <a class="ch-link" href="#s31" aria-label="이 섹션 링크 복사">#</a>
   </div>
   <div class="sheet">
     <div class="slide">
@@ -2343,7 +1498,7 @@ body.sb-collapsed .sb-toggle{display:block}
             두 도구는 <b>서로 호출</b>합니다 — 현업이 만든 에이전트가 개발자가 만든 에이전트를 불러 <b>멀티에이전트</b>로 확장됩니다.
           </div>
         </div>
-        <div class="s-foot"><span>Part 3 · 매핑</span><span class="pg">25 / 36</span></div>
+        <div class="s-foot"><span>Part 3 · 매핑</span><span class="pg"></span></div>
       </div>
     </div>
   </div>
@@ -2364,12 +1519,13 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
-<article class="chapter" id="s26" data-n="26" data-part="Enterprise AI Platform">
+
+<article class="chapter" data-part="Enterprise AI Platform">
   <div class="ch-head">
-    <span class="ch-n">26</span>
+    <span class="ch-n">32</span>
     <h2 class="ch-t">계층 5·6 — 개인에서 전사로, 일하는 곳에서 바로</h2>
     <span class="ch-part">Enterprise AI Platform</span>
-    <a class="ch-link" href="#s26" aria-label="이 섹션 링크 복사">#</a>
+    <a class="ch-link" href="#s32" aria-label="이 섹션 링크 복사">#</a>
   </div>
   <div class="sheet">
     <div class="slide">
@@ -2411,7 +1567,7 @@ body.sb-collapsed .sb-toggle{display:block}
             </div>
           </div>
         </div>
-        <div class="s-foot"><span>Part 3 · 매핑</span><span class="pg">26 / 36</span></div>
+        <div class="s-foot"><span>Part 3 · 매핑</span><span class="pg"></span></div>
       </div>
     </div>
   </div>
@@ -2429,12 +1585,13 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
-<article class="chapter" id="s27" data-n="27" data-part="Enterprise AI Platform">
+
+<article class="chapter" data-part="Enterprise AI Platform">
   <div class="ch-head">
-    <span class="ch-n">27</span>
+    <span class="ch-n">33</span>
     <h2 class="ch-t">세로 두 축 — 개발 체계와 거버넌스를 채우는 것</h2>
     <span class="ch-part">Enterprise AI Platform</span>
-    <a class="ch-link" href="#s27" aria-label="이 섹션 링크 복사">#</a>
+    <a class="ch-link" href="#s33" aria-label="이 섹션 링크 복사">#</a>
   </div>
   <div class="sheet">
     <div class="slide">
@@ -2479,7 +1636,7 @@ body.sb-collapsed .sb-toggle{display:block}
             </div>
           </div>
         </div>
-        <div class="s-foot"><span>Part 3 · 매핑</span><span class="pg">27 / 36</span></div>
+        <div class="s-foot"><span>Part 3 · 매핑</span><span class="pg"></span></div>
       </div>
     </div>
   </div>
@@ -2497,12 +1654,13 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
-<article class="chapter" id="s28" data-n="28" data-part="Enterprise AI Platform">
+
+<article class="chapter" data-part="Enterprise AI Platform">
   <div class="ch-head">
-    <span class="ch-n">28</span>
+    <span class="ch-n">34</span>
     <h2 class="ch-t">통합의 가치 — 통합은 플랫폼이, 여러분은 비즈니스만</h2>
     <span class="ch-part">Enterprise AI Platform</span>
-    <a class="ch-link" href="#s28" aria-label="이 섹션 링크 복사">#</a>
+    <a class="ch-link" href="#s34" aria-label="이 섹션 링크 복사">#</a>
   </div>
   <div class="sheet">
     <div class="slide">
@@ -2541,7 +1699,7 @@ body.sb-collapsed .sb-toggle{display:block}
             <b>통합에 쓸 시간을 비즈니스 성과에 씁니다.</b>
           </div>
         </div>
-        <div class="s-foot"><span>Part 3 · 결론</span><span class="pg">28 / 36</span></div>
+        <div class="s-foot"><span>Part 3 · 결론</span><span class="pg"></span></div>
       </div>
     </div>
   </div>
@@ -2559,12 +1717,13 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
-<article class="chapter" id="s29" data-n="29" data-part="실현 · 다음 단계">
+
+<article class="chapter" id="s41" data-n="41" data-part="실현 · 다음 단계">
   <div class="ch-head">
-    <span class="ch-n">29</span>
+    <span class="ch-n">41</span>
     <h2 class="ch-t">PART 4 — 실현 · 다음 단계</h2>
     <span class="ch-part">실현 · 다음 단계</span>
-    <a class="ch-link" href="#s29" aria-label="이 섹션 링크 복사">#</a>
+    <a class="ch-link" href="#s41" aria-label="이 섹션 링크 복사">#</a>
   </div>
   <div class="sheet">
     <div class="slide dark">
@@ -2582,7 +1741,7 @@ body.sb-collapsed .sb-toggle{display:block}
         <span>함께 생각해볼 질문</span>
       </div>
     </div>
-    <div class="s-foot"><span>Part 4 · 실현</span><span class="pg">29 / 36</span></div>
+    <div class="s-foot"><span>Part 4 · 실현</span><span class="pg"></span></div>
   </div>
     </div>
   </div>
@@ -2595,12 +1754,13 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
-<article class="chapter" id="s30" data-n="30" data-part="실현 · 다음 단계">
+
+<article class="chapter" id="s42" data-n="42" data-part="실현 · 다음 단계">
   <div class="ch-head">
-    <span class="ch-n">30</span>
+    <span class="ch-n">42</span>
     <h2 class="ch-t">역할별 여정 — 누가 이 플랫폼을 사용하는가</h2>
     <span class="ch-part">실현 · 다음 단계</span>
-    <a class="ch-link" href="#s30" aria-label="이 섹션 링크 복사">#</a>
+    <a class="ch-link" href="#s42" aria-label="이 섹션 링크 복사">#</a>
   </div>
   <div class="sheet">
     <div class="slide">
@@ -2629,7 +1789,7 @@ body.sb-collapsed .sb-toggle{display:block}
         <b>헷갈리기 쉬운 부분:</b> <span class="nowrap">현업·시민 개발자</span> → <b class="nowrap">Microsoft Copilot Studio</b>, <span class="nowrap">개발자·데이터 과학자</span> → <b class="nowrap">Microsoft Foundry</b>. 두 도구는 <b>상호 운용</b>되며 많은 고객이 <b>둘 다</b> 씁니다.
       </div>
     </div>
-    <div class="s-foot"><span>Part 4 · 실현</span><span class="pg">30 / 36</span></div>
+    <div class="s-foot"><span>Part 4 · 실현</span><span class="pg"></span></div>
   </div>
     </div>
   </div>
@@ -2647,12 +1807,13 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
-<article class="chapter" id="s31" data-n="31" data-part="실현 · 다음 단계">
+
+<article class="chapter" id="s43" data-n="43" data-part="실현 · 다음 단계">
   <div class="ch-head">
-    <span class="ch-n">31</span>
+    <span class="ch-n">43</span>
     <h2 class="ch-t">시나리오 6개 요약 — Quick Win 후보</h2>
     <span class="ch-part">실현 · 다음 단계</span>
-    <a class="ch-link" href="#s31" aria-label="이 섹션 링크 복사">#</a>
+    <a class="ch-link" href="#s43" aria-label="이 섹션 링크 복사">#</a>
   </div>
   <div class="sheet">
     <div class="slide">
@@ -2676,7 +1837,7 @@ body.sb-collapsed .sb-toggle{display:block}
         </tbody>
       </table>
     </div>
-    <div class="s-foot"><span>Part 4 · 실현</span><span class="pg">31 / 36</span></div>
+    <div class="s-foot"><span>Part 4 · 실현</span><span class="pg"></span></div>
   </div>
     </div>
   </div>
@@ -2699,12 +1860,13 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
-<article class="chapter" id="s32" data-n="32" data-part="실현 · 다음 단계">
+
+<article class="chapter" id="s44" data-n="44" data-part="실현 · 다음 단계">
   <div class="ch-head">
-    <span class="ch-n">32</span>
+    <span class="ch-n">44</span>
     <h2 class="ch-t">시나리오 #1 상세 — 코딩 없이 빠르게 나만의 AI Agent</h2>
     <span class="ch-part">실현 · 다음 단계</span>
-    <a class="ch-link" href="#s32" aria-label="이 섹션 링크 복사">#</a>
+    <a class="ch-link" href="#s44" aria-label="이 섹션 링크 복사">#</a>
   </div>
   <div class="sheet">
     <div class="slide dark">
@@ -2734,7 +1896,7 @@ body.sb-collapsed .sb-toggle{display:block}
         <div class="card"><div class="cn">IMPROVE</div><h3 class="sm">지속적 개선</h3><p>사용 피드백으로 개선·버전업</p></div>
       </div>
     </div>
-    <div class="s-foot"><span>Part 4 · 실현</span><span class="pg">32 / 36</span></div>
+    <div class="s-foot"><span>Part 4 · 실현</span><span class="pg"></span></div>
   </div>
     </div>
   </div>
@@ -2751,7 +1913,8 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
-<article class="chapter" id="s33" data-n="33" data-part="실현 · 다음 단계">
+
+<article class="chapter" data-part="실현 · 다음 단계">
   <div class="ch-head">
     <span class="ch-n">33</span>
     <h2 class="ch-t">무엇부터, 어떤 순서로 시작할까</h2>
@@ -2809,7 +1972,7 @@ body.sb-collapsed .sb-toggle{display:block}
             </div>
           </div>
         </div>
-        <div class="s-foot"><span>Part 4 · 실현</span><span class="pg">33 / 36</span></div>
+        <div class="s-foot"><span>Part 4 · 실현</span><span class="pg"></span></div>
       </div>
     </div>
   </div>
@@ -2828,12 +1991,13 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
-<article class="chapter" id="s34" data-n="34" data-part="실현 · 다음 단계">
+
+<article class="chapter" id="s47" data-n="47" data-part="실현 · 다음 단계">
   <div class="ch-head">
-    <span class="ch-n">34</span>
+    <span class="ch-n">47</span>
     <h2 class="ch-t">핵심 요약 (Key Takeaways)</h2>
     <span class="ch-part">실현 · 다음 단계</span>
-    <a class="ch-link" href="#s34" aria-label="이 섹션 링크 복사">#</a>
+    <a class="ch-link" href="#s47" aria-label="이 섹션 링크 복사">#</a>
   </div>
   <div class="sheet">
     <div class="slide dark">
@@ -2862,7 +2026,7 @@ body.sb-collapsed .sb-toggle{display:block}
           <div class="d">승인이 나야 <b>전사로 확산됩니다</b> <span class="svc">Entra ID · Purview · Defender · Agent 365</span></div></div></div>
       </div>
     </div>
-    <div class="s-foot"><span>Part 4 · 실현</span><span class="pg">34 / 36</span></div>
+    <div class="s-foot"><span>Part 4 · 실현</span><span class="pg"></span></div>
   </div>
     </div>
   </div>
@@ -2883,12 +2047,13 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
-<article class="chapter" id="s35" data-n="35" data-part="실현 · 다음 단계">
+
+<article class="chapter" id="s48" data-n="48" data-part="실현 · 다음 단계">
   <div class="ch-head">
-    <span class="ch-n">35</span>
+    <span class="ch-n">48</span>
     <h2 class="ch-t">Why Build AI on Azure? — 한 문장으로</h2>
     <span class="ch-part">실현 · 다음 단계</span>
-    <a class="ch-link" href="#s35" aria-label="이 섹션 링크 복사">#</a>
+    <a class="ch-link" href="#s48" aria-label="이 섹션 링크 복사">#</a>
   </div>
   <div class="sheet">
     <div class="slide dark">
@@ -2912,7 +2077,7 @@ body.sb-collapsed .sb-toggle{display:block}
         그리고 그 전 계층을 <b>하나의 신뢰 체계</b>가 관통합니다 — 주권·보안·거버넌스·비용을 <b>한곳에서 통제</b>하면서.
       </div>
     </div>
-    <div class="s-foot"><span>Part 4 · 실현</span><span class="pg">35 / 36</span></div>
+    <div class="s-foot"><span>Part 4 · 실현</span><span class="pg"></span></div>
   </div>
     </div>
   </div>
@@ -2925,12 +2090,13 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
-<article class="chapter" id="s36" data-n="36" data-part="실현 · 다음 단계">
+
+<article class="chapter" id="s49" data-n="49" data-part="실현 · 다음 단계">
   <div class="ch-head">
-    <span class="ch-n">36</span>
+    <span class="ch-n">49</span>
     <h2 class="ch-t">함께 생각해볼 질문 · 제안하는 다음 단계</h2>
     <span class="ch-part">실현 · 다음 단계</span>
-    <a class="ch-link" href="#s36" aria-label="이 섹션 링크 복사">#</a>
+    <a class="ch-link" href="#s49" aria-label="이 섹션 링크 복사">#</a>
   </div>
   <div class="sheet">
     <div class="slide">
@@ -2970,7 +2136,7 @@ body.sb-collapsed .sb-toggle{display:block}
         </div>
       </div>
     </div>
-    <div class="s-foot"><span>Why Build AI on Azure?</span><span class="pg">36 / 36</span></div>
+    <div class="s-foot"><span>Why Build AI on Azure?</span><span class="pg"></span></div>
   </div>
     </div>
   </div>
@@ -2985,182 +2151,3 @@ body.sb-collapsed .sb-toggle{display:block}
     </div>
   </aside>
 </article>
-</main>
-
-<button class="to-top" id="toTop" aria-label="맨 위로">↑</button>
-
-<script>
-/* ===========================================================
-   1. 시트 스케일링
-   슬라이드는 1920×1080으로 작성되어 있으므로, 시트 너비에 맞춰
-   전체를 한 번의 transform으로 축소합니다. (내부 레이아웃 불변)
-   =========================================================== */
-const sheets = Array.from(document.querySelectorAll('.sheet'));
-function fitSheets(){
-  sheets.forEach(sh => {
-    const slide = sh.firstElementChild;
-    const f = sh.clientWidth / 1920;
-    slide.style.transform = 'scale(' + f + ')';
-  });
-}
-fitSheets();
-window.addEventListener('resize', fitSheets);
-if (window.ResizeObserver && sheets[0]) new ResizeObserver(fitSheets).observe(sheets[0].parentElement);
-document.fonts && document.fonts.ready.then(fitSheets);
-
-/* ===========================================================
-   2. 등장 애니메이션 — 화면에 들어올 때 .visible 부여
-   =========================================================== */
-const io = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { rootMargin: '0px 0px -12% 0px', threshold: 0.12 });
-document.querySelectorAll('.sheet .slide').forEach(s => io.observe(s));
-
-/* ===========================================================
-   3. 스크롤 스파이 — 현재 섹션을 목차에서 하이라이트
-   =========================================================== */
-const chapters = Array.from(document.querySelectorAll('.chapter'));
-const links    = Array.from(document.querySelectorAll('.nav-link'));
-const navBox   = document.getElementById('sbNav');
-const linkOf   = id => links.find(a => a.dataset.target === id);
-let activeId = null;
-
-function syncSpy(){
-  const line = window.innerHeight * 0.34;
-  let cur = chapters[0];
-  for (const c of chapters){
-    if (c.getBoundingClientRect().top <= line) cur = c; else break;
-  }
-  if (!cur || cur.id === activeId) return;
-  activeId = cur.id;
-  links.forEach(a => a.classList.remove('active'));
-  const a = linkOf(cur.id);
-  if (a){
-    a.classList.add('active');
-    const ar = a.getBoundingClientRect(), nr = navBox.getBoundingClientRect();
-    if (ar.top < nr.top + 8 || ar.bottom > nr.bottom - 8){
-      navBox.scrollTop += (ar.top - nr.top) - navBox.clientHeight / 2 + ar.height;
-    }
-  }
-}
-
-function syncProgress(){
-  const h = document.documentElement.scrollHeight - window.innerHeight;
-  const p = h > 0 ? (window.scrollY / h) * 100 : 0;
-  document.getElementById('topProg').style.width = p + '%';
-  document.getElementById('toTop').classList.toggle('show', window.scrollY > 700);
-}
-
-let ticking = false;
-window.addEventListener('scroll', () => {
-  if (ticking) return;
-  ticking = true;
-  requestAnimationFrame(() => { syncSpy(); syncProgress(); ticking = false; });
-}, {passive:true});
-syncSpy(); syncProgress();
-
-/* ===========================================================
-   4. 슬라이드 설명
-   두 가지 조작이 함께 있다.
-     · 사이드바 버튼 / N 키 — 설명란 전체 표시·숨김 (기존 동작)
-     · 각 설명 헤더의 토글  — 그 장표의 설명만 접기·펼치기
-   둘은 독립적이라, 전체를 껐다 켜도 장표별 접힘 상태는 그대로 남는다.
-   =========================================================== */
-const notesBtn = document.getElementById('notesBtn');
-if (notesBtn){
-  notesBtn.addEventListener('click', () => {
-    const hidden = document.body.classList.toggle('notes-hidden');
-    notesBtn.classList.toggle('on', !hidden);
-    setTimeout(syncProgress, 60);
-  });
-}
-
-const notes = Array.from(document.querySelectorAll('.note'));
-
-function setNote(note, open){
-  note.classList.toggle('collapsed', !open);
-  const head = note.querySelector('.note-head');
-  if (!head) return;
-  head.setAttribute('aria-expanded', open ? 'true' : 'false');
-  const label = head.querySelector('.note-toggle-t');
-  if (label) label.textContent = open ? '접기' : '펼치기';
-}
-
-notes.forEach((note, i) => {
-  const head = note.querySelector('.note-head');
-  if (!head || head.querySelector('.note-toggle')) return;
-  const body = note.querySelector('.note-body');
-  if (body && !body.id) body.id = 'note-' + String(i + 1).padStart(2, '0');
-
-  const btn = document.createElement('span');
-  btn.className = 'note-toggle';
-  btn.innerHTML = '<span class="note-toggle-t">접기</span><i class="note-caret" aria-hidden="true"></i>';
-  head.appendChild(btn);
-
-  head.setAttribute('role', 'button');
-  head.setAttribute('tabindex', '0');
-  head.setAttribute('aria-expanded', 'true');
-  head.setAttribute('title', '이 장표의 설명 접기 / 펼치기');
-  if (body) head.setAttribute('aria-controls', body.id);
-
-  const toggle = () => { setNote(note, note.classList.contains('collapsed')); syncProgress(); };
-  head.addEventListener('click', toggle);
-  head.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar'){ e.preventDefault(); toggle(); }
-  });
-});
-
-/* ===========================================================
-   5. 섹션 단위 이동 · 모바일 서랍
-   =========================================================== */
-function goto(delta){
-  const line = window.innerHeight * 0.34;
-  let i = 0;
-  chapters.forEach((c, k) => { if (c.getBoundingClientRect().top <= line + 2) i = k; });
-  const t = chapters[Math.max(0, Math.min(i + delta, chapters.length - 1))];
-  if (t) t.scrollIntoView({behavior:'smooth', block:'start'});
-}
-
-document.addEventListener('keydown', (e) => {
-  const tag = (e.target.tagName || '').toLowerCase();
-  if (tag === 'input' || tag === 'textarea') return;
-  if (e.key === 'j' || e.key === 'J'){ e.preventDefault(); goto(1); }
-  if (e.key === 'k' || e.key === 'K'){ e.preventDefault(); goto(-1); }
-  if (e.key === 'n' || e.key === 'N'){ if (notesBtn) notesBtn.click(); }
-  if (e.key === 'm' || e.key === 'M'){
-    if (isDesktop()) setCollapsed(!document.body.classList.contains('sb-collapsed'));
-    else document.body.classList.toggle('sb-open');
-  }
-});
-
-document.getElementById('toTop').addEventListener('click',
-  () => window.scrollTo({top:0, behavior:'smooth'}));
-
-const sbToggle = document.getElementById('sbToggle');
-const sbClose  = document.getElementById('sbClose');
-const sbScrim  = document.getElementById('sbScrim');
-const SB_KEY   = 'wbaoa-sidebar-collapsed';
-const isDesktop = () => window.innerWidth > 1100;
-
-/* 접힘 상태는 다음 방문에도 유지됩니다 */
-function setCollapsed(v){
-  document.body.classList.toggle('sb-collapsed', v);
-  try { localStorage.setItem(SB_KEY, v ? '1' : '0'); } catch(e){}
-  setTimeout(() => { fitSheets(); syncProgress(); }, 330);
-}
-try { if (localStorage.getItem(SB_KEY) === '1') document.body.classList.add('sb-collapsed'); } catch(e){}
-fitSheets();
-
-sbToggle.addEventListener('click', () => {
-  if (isDesktop()) setCollapsed(false);
-  else document.body.classList.toggle('sb-open');
-});
-sbClose.addEventListener('click', () => {
-  if (isDesktop()) setCollapsed(true);
-  else document.body.classList.remove('sb-open');
-});
-sbScrim.addEventListener('click', () => document.body.classList.remove('sb-open'));
-links.forEach(a => a.addEventListener('click', () => document.body.classList.remove('sb-open')));
-</script>
-</body>
-</html>
