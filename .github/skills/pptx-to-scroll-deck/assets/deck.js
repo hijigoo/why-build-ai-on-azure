@@ -68,10 +68,21 @@ window.addEventListener('scroll', () => {
 syncSpy(); syncProgress();
 
 /* ===========================================================
-   4. 슬라이드 설명 — 장표마다 개별로 접고 편다
-   전체 on/off 버튼 대신, 각 설명 헤더에 토글 버튼을 하나씩 붙인다.
-   (N 키는 전체를 한 번에 여닫는 보조 단축키로만 남겨둔다)
+   4. 슬라이드 설명
+   두 가지 조작이 함께 있다.
+     · 사이드바 버튼 / N 키 — 설명란 전체 표시·숨김 (기존 동작)
+     · 각 설명 헤더의 토글  — 그 장표의 설명만 접기·펼치기
+   둘은 독립적이라, 전체를 껐다 켜도 장표별 접힘 상태는 그대로 남는다.
    =========================================================== */
+const notesBtn = document.getElementById('notesBtn');
+if (notesBtn){
+  notesBtn.addEventListener('click', () => {
+    const hidden = document.body.classList.toggle('notes-hidden');
+    notesBtn.classList.toggle('on', !hidden);
+    setTimeout(syncProgress, 60);
+  });
+}
+
 const notes = Array.from(document.querySelectorAll('.note'));
 
 function setNote(note, open){
@@ -107,13 +118,6 @@ notes.forEach((note, i) => {
   });
 });
 
-/* 하나라도 펼쳐져 있으면 전부 접고, 전부 접혀 있으면 전부 편다 */
-function toggleAllNotes(){
-  const anyOpen = notes.some(n => !n.classList.contains('collapsed'));
-  notes.forEach(n => setNote(n, !anyOpen));
-  setTimeout(syncProgress, 60);
-}
-
 /* ===========================================================
    5. 섹션 단위 이동 · 모바일 서랍
    =========================================================== */
@@ -130,7 +134,7 @@ document.addEventListener('keydown', (e) => {
   if (tag === 'input' || tag === 'textarea') return;
   if (e.key === 'j' || e.key === 'J'){ e.preventDefault(); goto(1); }
   if (e.key === 'k' || e.key === 'K'){ e.preventDefault(); goto(-1); }
-  if (e.key === 'n' || e.key === 'N'){ toggleAllNotes(); }
+  if (e.key === 'n' || e.key === 'N'){ if (notesBtn) notesBtn.click(); }
   if (e.key === 'm' || e.key === 'M'){
     if (isDesktop()) setCollapsed(!document.body.classList.contains('sb-collapsed'));
     else document.body.classList.toggle('sb-open');

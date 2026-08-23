@@ -55,6 +55,9 @@ __SPRITE__
     <div class="sb-title">__SBTITLE__</div>
     <div class="sb-sub">__SUBTITLE__</div>
   </div>
+  <div class="sb-tools">
+    <button class="sb-btn on" id="notesBtn" title="슬라이드 설명 표시/숨김 (N)">슬라이드 설명</button>
+  </div>
   <div class="sb-nav" id="sbNav">
 __NAV__
   </div>
