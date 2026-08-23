@@ -65,6 +65,27 @@ Copilot CLI에서 스킬을 호출하고 무엇을 만들지 알려주면 됩니
 
 이때 내용은 **공식 문서를 조회해 최신 정보로** 채웁니다. 제품명과 GA/Preview 상태는 기억에 의존하지 않고 확인합니다.
 
+### 같은 디자인, 세 가지 스킬
+
+`markdown-to-scroll-deck`의 디자인 시스템(딥네이비+코발트 테마·공식 아이콘·GA/Preview 배지)을 공유하는
+**세 개의 스킬**이 이 저장소에 함께 있습니다. 입력과 출력만 다릅니다.
+
+| 스킬 | 입력 → 출력 | 언제 쓰나 |
+|---|---|---|
+| [`markdown-to-scroll-deck`](./.github/skills/markdown-to-scroll-deck/) | Markdown → 스크롤형 **HTML** | 링크로 공유하고 스스로 정독하는 웹 문서 |
+| [`pptx-to-scroll-deck`](./.github/skills/pptx-to-scroll-deck/) | 기존 **.pptx** → 스크롤형 **HTML** | 예전 파워포인트를 같은 톤의 웹 문서로 재구성 |
+| [`markdown-to-pptx`](./.github/skills/markdown-to-pptx/) | Markdown → **PowerPoint(.pptx)** | 발표자 노트가 있는 PowerPoint 덱이 필요할 때 |
+
+```
+/pptx-to-scroll-deck  기존_제안서.pptx 를 스크롤 덱으로 만들어줘
+/markdown-to-pptx     why-build-ai-on-azure.md 를 pptx 발표 덱으로 만들어줘
+```
+
+`pptx-to-scroll-deck`은 원본 슬라이드의 텍스트·표·발표자 노트를 뽑아 재조판하고,
+`markdown-to-pptx`는 원고를 슬라이드 데이터 스펙으로 옮겨 프로젝트 표준 디자인의 .pptx를 생성합니다.
+세 스킬 모두 **제품명·GA/Preview 상태를 공식 문서로 재확인**하는 원칙을 공유합니다.
+
+
 ### 동작 방식
 
 HTML 문서 전체를 직접 쓰지 않습니다. 슬라이드 조각만 만들고 나머지는 빌더가 조립합니다.
@@ -167,5 +188,7 @@ why-build-ai-on-azure-onepage.html        메인 덱 — Why Build AI on Azure? 
 why-build-ai-on-azure.md                  메인 덱 원고 (Mermaid 다이어그램 20개)
 build.js                                  PPTX 생성기
 samples/foundry-network-isolation/        샘플 — Foundry 네트워크 격리 (19장)
-.github/skills/markdown-to-scroll-deck/   스킬 본체
+.github/skills/markdown-to-scroll-deck/   스킬 — Markdown → 스크롤형 HTML
+.github/skills/pptx-to-scroll-deck/       스킬 — .pptx → 스크롤형 HTML
+.github/skills/markdown-to-pptx/          스킬 — Markdown → PowerPoint(.pptx)
 ```

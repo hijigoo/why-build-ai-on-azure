@@ -1,0 +1,19 @@
+{
+  "name": "markdown-to-pptx",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Deck data spec → .pptx generator (Why Build AI on Azure design system)",
+  "bin": {
+    "build-pptx": "scripts/build-pptx.js"
+  },
+  "scripts": {
+    "build": "node scripts/build-pptx.js examples/deck.data.js"
+  },
+  "dependencies": {
+    "pptxgenjs": "^4.0.1",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "react-icons": "^5.7.0",
+    "sharp": "^0.35.3"
+  }
+}
