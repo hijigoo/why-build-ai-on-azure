@@ -68,15 +68,55 @@ window.addEventListener('scroll', () => {
 syncSpy(); syncProgress();
 
 /* ===========================================================
-   4. 슬라이드 설명 토글 · 섹션 단위 이동 · 모바일 서랍
+   4. 슬라이드 설명 — 장표마다 개별로 접고 편다
+   전체 on/off 버튼 대신, 각 설명 헤더에 토글 버튼을 하나씩 붙인다.
+   (N 키는 전체를 한 번에 여닫는 보조 단축키로만 남겨둔다)
    =========================================================== */
-const notesBtn = document.getElementById('notesBtn');
-notesBtn.addEventListener('click', () => {
-  const hidden = document.body.classList.toggle('notes-hidden');
-  notesBtn.classList.toggle('on', !hidden);
-  setTimeout(syncProgress, 60);
+const notes = Array.from(document.querySelectorAll('.note'));
+
+function setNote(note, open){
+  note.classList.toggle('collapsed', !open);
+  const head = note.querySelector('.note-head');
+  if (!head) return;
+  head.setAttribute('aria-expanded', open ? 'true' : 'false');
+  const label = head.querySelector('.note-toggle-t');
+  if (label) label.textContent = open ? '접기' : '펼치기';
+}
+
+notes.forEach((note, i) => {
+  const head = note.querySelector('.note-head');
+  if (!head || head.querySelector('.note-toggle')) return;
+  const body = note.querySelector('.note-body');
+  if (body && !body.id) body.id = 'note-' + String(i + 1).padStart(2, '0');
+
+  const btn = document.createElement('span');
+  btn.className = 'note-toggle';
+  btn.innerHTML = '<span class="note-toggle-t">접기</span><i class="note-caret" aria-hidden="true"></i>';
+  head.appendChild(btn);
+
+  head.setAttribute('role', 'button');
+  head.setAttribute('tabindex', '0');
+  head.setAttribute('aria-expanded', 'true');
+  head.setAttribute('title', '이 장표의 설명 접기 / 펼치기');
+  if (body) head.setAttribute('aria-controls', body.id);
+
+  const toggle = () => { setNote(note, note.classList.contains('collapsed')); syncProgress(); };
+  head.addEventListener('click', toggle);
+  head.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar'){ e.preventDefault(); toggle(); }
+  });
 });
 
+/* 하나라도 펼쳐져 있으면 전부 접고, 전부 접혀 있으면 전부 편다 */
+function toggleAllNotes(){
+  const anyOpen = notes.some(n => !n.classList.contains('collapsed'));
+  notes.forEach(n => setNote(n, !anyOpen));
+  setTimeout(syncProgress, 60);
+}
+
+/* ===========================================================
+   5. 섹션 단위 이동 · 모바일 서랍
+   =========================================================== */
 function goto(delta){
   const line = window.innerHeight * 0.34;
   let i = 0;
@@ -90,7 +130,7 @@ document.addEventListener('keydown', (e) => {
   if (tag === 'input' || tag === 'textarea') return;
   if (e.key === 'j' || e.key === 'J'){ e.preventDefault(); goto(1); }
   if (e.key === 'k' || e.key === 'K'){ e.preventDefault(); goto(-1); }
-  if (e.key === 'n' || e.key === 'N'){ notesBtn.click(); }
+  if (e.key === 'n' || e.key === 'N'){ toggleAllNotes(); }
   if (e.key === 'm' || e.key === 'M'){
     if (isDesktop()) setCollapsed(!document.body.classList.contains('sb-collapsed'));
     else document.body.classList.toggle('sb-open');

@@ -44,9 +44,6 @@
     <div class="sb-title">문서 제목<br>두 줄까지</div>
     <div class="sb-sub">한 줄 부제</div>
   </div>
-  <div class="sb-tools">
-    <button class="sb-btn on" id="notesBtn" title="슬라이드 설명 표시/숨김 (N)">슬라이드 설명</button>
-  </div>
   <div class="sb-nav" id="sbNav">
     <!-- 파트별 목차 (아래 참고) -->
   </div>
@@ -132,6 +129,10 @@
 </article>
 ```
 
+`.note-head`는 그대로 두면 된다. `deck.js`가 로드될 때 **장표별 접기 버튼**을
+헤더 오른쪽에 자동으로 붙이고, 클릭·키보드 조작과 `aria-expanded`까지 걸어준다.
+설명을 접은 채로 시작하고 싶은 장이 있으면 `class="note collapsed"`로 쓴다.
+
 ### 어두운 슬라이드
 
 파트 표지나 강조 장에 쓴다. `.slide dark` + 장식용 원.
@@ -187,12 +188,27 @@
 
 ---
 
+## 한글 줄바꿈
+
+`deck.css`가 `html`에 `word-break:keep-all`을 걸어 **한글 단어가 중간에서 잘리지 않는다.**
+줄바꿈은 어절(띄어쓰기) 경계에서만 일어난다. 별도로 할 일은 없다.
+
+띄어쓰기가 들어 있지만 **한 덩어리로 읽혀야 하는 구**만 예외적으로 묶어준다.
+
+```html
+<span class="nowrap">Microsoft Foundry</span>  <!-- 제품명 -->
+<span class="nowrap">4~6주</span>              <!-- 수치 + 단위 -->
+```
+
+---
+
 ## 조작 (deck.js가 제공)
 
-| 키 | 동작 |
+| 조작 | 동작 |
 |---|---|
+| 설명 헤더의 `접기` 버튼 클릭 | **그 장표의 설명만** 접기·펼치기 (버튼은 `deck.js`가 자동 주입) |
 | `J` / `K` | 다음 / 이전 섹션 |
-| `N` | 설명란 전체 표시·숨김 |
+| `N` | 모든 설명을 한 번에 접기·펼치기 (보조 단축키) |
 | `M` | 목차 접기·펼치기 (접힘 상태는 localStorage에 저장) |
 
 이 외에 스크롤 스파이, 읽기 진행 바, 시트 자동 스케일링, 모바일 서랍 전환이 자동으로 붙는다.
