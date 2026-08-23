@@ -276,6 +276,9 @@ svg {
 .card .cn{font-family:var(--f-mono);font-size:18px;letter-spacing:.22em;color:var(--cobalt);
   margin-bottom:16px}
 .card h3{font-size:33px;font-weight:800;color:var(--navy);letter-spacing:-.03em;line-height:1.26}
+/* 카드 제목 안의 강조. .hl 은 원래 .s-title 전용이라 카드에서는 먹지 않았다 */
+.card h3 .hl{color:var(--cobalt)}
+.dark .card h3 .hl,.card.solid h3 .hl{color:var(--cobalt-soft)}
 .card h3.sm{font-size:29px}
 .card p{margin-top:13px;font-size:24px;line-height:1.54;color:var(--muted);letter-spacing:-.015em}
 .card p b{color:var(--navy);font-weight:700}
