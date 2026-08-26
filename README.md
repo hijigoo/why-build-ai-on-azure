@@ -25,7 +25,7 @@
 
 ---
 
-## 이 덱을 만든 스킬 — `markdown-to-scroll-deck`
+## 이 덱을 만든 스킬 — `deep-navy-md-to-html`
 
 이 덱은 손으로 HTML을 짠 것이 아니라, **Copilot CLI 스킬**로 만들었습니다.
 Markdown 원고를 **세로 스크롤형 HTML 슬라이드 문서**로 바꿔 주는 스킬입니다.
@@ -56,43 +56,45 @@ Microsoft·Azure 제품을 다루는 **한국어 엔터프라이즈 기술 자�
 Copilot CLI에서 스킬을 호출하고 무엇을 만들지 알려주면 됩니다.
 
 ```
-/markdown-to-scroll-deck  <원고.md 경로> 를 스크롤 덱으로 만들어줘
+/deep-navy-md-to-html  <원고.md 경로> 를 스크롤 덱으로 만들어줘
 ```
 
 원고 파일이 없어도 됩니다. **주제만 말하면 원고부터 작성합니다.**
 
 ```
-/markdown-to-scroll-deck  Azure Foundry 네트워크 격리에 대한 덱을 만들어줘
+/deep-navy-md-to-html  Azure Foundry 네트워크 격리에 대한 덱을 만들어줘
 ```
 
 이때 내용은 **공식 문서를 조회해 최신 정보로** 채웁니다. 제품명과 GA/Preview 상태는 기억에 의존하지 않고 확인합니다.
 
 ### 같은 디자인, 세 가지 스킬
 
-`markdown-to-scroll-deck`의 디자인 시스템(딥네이비+코발트 테마·공식 아이콘·GA/Preview 배지)을 공유하는
+**Deep Navy** 테마(딥네이비+코발트·공식 아이콘·GA/Preview 배지)를 공유하는
 **세 개의 스킬**이 이 저장소에 함께 있습니다. 입력과 출력만 다릅니다.
+
+이름은 `<테마>-<입력>-to-<출력>` 규칙을 따르므로, 이름만 보면 무엇을 넣어 무엇이 나오는지 알 수 있습니다.
 
 | 스킬 | 입력 → 출력 | 언제 쓰나 |
 |---|---|---|
-| [`markdown-to-scroll-deck`](./.github/skills/markdown-to-scroll-deck/) | Markdown → 스크롤형 **HTML** | 링크로 공유하고 스스로 정독하는 웹 문서 |
-| [`pptx-to-scroll-deck`](./.github/skills/pptx-to-scroll-deck/) | 기존 **.pptx** → 스크롤형 **HTML** | 예전 파워포인트를 같은 톤의 웹 문서로 재구성 |
-| [`markdown-to-pptx`](./.github/skills/markdown-to-pptx/) | Markdown → **PowerPoint(.pptx)** | 발표자 노트가 있는 PowerPoint 덱이 필요할 때 |
+| [`deep-navy-md-to-html`](./.github/skills/deep-navy-md-to-html/) | Markdown → 스크롤형 **HTML** | 링크로 공유하고 스스로 정독하는 웹 문서 |
+| [`deep-navy-pptx-to-html`](./.github/skills/deep-navy-pptx-to-html/) | 기존 **.pptx** → 스크롤형 **HTML** | 예전 파워포인트를 같은 톤의 웹 문서로 재구성 |
+| [`deep-navy-md-to-pptx`](./.github/skills/deep-navy-md-to-pptx/) | Markdown → **PowerPoint(.pptx)** | 발표자 노트가 있는 PowerPoint 덱이 필요할 때 |
 
 ```
-/pptx-to-scroll-deck  기존_제안서.pptx 를 스크롤 덱으로 만들어줘
-/markdown-to-pptx     why-build-ai-on-azure.md 를 pptx 발표 덱으로 만들어줘
+/deep-navy-pptx-to-html  기존_제안서.pptx 를 스크롤 덱으로 만들어줘
+/deep-navy-md-to-pptx    why-build-ai-on-azure.md 를 pptx 발표 덱으로 만들어줘
 ```
 
-`pptx-to-scroll-deck`은 원본 슬라이드의 텍스트·표·발표자 노트를 뽑아 재조판하고,
-`markdown-to-pptx`는 원고를 슬라이드 데이터 스펙으로 옮겨 프로젝트 표준 디자인의 .pptx를 생성합니다.
+`deep-navy-pptx-to-html`은 원본 슬라이드의 텍스트·표·발표자 노트를 뽑아 재조판하고,
+`deep-navy-md-to-pptx`는 원고를 슬라이드 데이터 스펙으로 옮겨 같은 톤의 .pptx를 생성합니다.
 세 스킬 모두 **제품명·GA/Preview 상태를 공식 문서로 재확인**하는 원칙을 공유합니다.
 
 세 스킬 모두 디자인을 `assets/` 폴더에 담고 다녀서, **스킬 폴더만 복사해도 결과물이 같습니다.**
 
 | 스킬 | 디자인 자산 |
 |---|---|
-| `markdown-to-scroll-deck` · `pptx-to-scroll-deck` | `assets/deck.css` · `assets/deck.js` · `assets/icon-sprite.html` |
-| `markdown-to-pptx` | `assets/theme.js` · `assets/icons/*.svg` |
+| `deep-navy-md-to-html` · `deep-navy-pptx-to-html` | `assets/deck.css` · `assets/deck.js` · `assets/icon-sprite.html` |
+| `deep-navy-md-to-pptx` | `assets/theme.js` · `assets/icons/*.svg` |
 
 테마를 바꾸려면 스크립트가 아니라 이 자산 파일만 고치면 됩니다.
 
@@ -115,7 +117,7 @@ scripts/build.py 실행
 
 ```bash
 # 조각 → 완성 문서
-python3 .github/skills/markdown-to-scroll-deck/scripts/build.py slides.html \
+python3 .github/skills/deep-navy-md-to-html/scripts/build.py slides.html \
   -o 결과.html \
   --title "문서 제목 — 부제" \
   --h1 "본문 큰 제목" \
@@ -125,8 +127,8 @@ python3 .github/skills/markdown-to-scroll-deck/scripts/build.py slides.html \
   --meta "19 Sections|약 15분|v1.0"
 
 # 검증 — 내용 넘침은 눈으로 안 보이므로 반드시 실행
-bash .github/skills/markdown-to-scroll-deck/scripts/serve.sh 결과.html
-node .github/skills/markdown-to-scroll-deck/scripts/verify.js http://localhost:8749/결과.html --density
+bash .github/skills/deep-navy-md-to-html/scripts/serve.sh 결과.html
+node .github/skills/deep-navy-md-to-html/scripts/verify.js http://localhost:8749/결과.html --density
 ```
 
 검증은 내용 넘침, 16:9 유지, 아이콘 참조 누락, 콘솔 에러, 슬라이드별 글자 수를 확인합니다.
@@ -136,7 +138,7 @@ node .github/skills/markdown-to-scroll-deck/scripts/verify.js http://localhost:8
 
 | 파일 | 언제 보나 |
 |---|---|
-| [`SKILL.md`](./.github/skills/markdown-to-scroll-deck/SKILL.md) | 진입점 — 워크플로·글쓰기 기준·자주 밟는 지뢰 |
+| [`SKILL.md`](./.github/skills/deep-navy-md-to-html/SKILL.md) | 진입점 — 워크플로·글쓰기 기준·자주 밟는 지뢰 |
 | `templates/slide-patterns.html` | 슬라이드를 만들 때 — 10가지 패턴을 여기서 복사 |
 | `components.md` | 컴포넌트 변형·밀도 기준이 필요할 때 |
 | `icons.md` | 아이콘을 넣거나 추가할 때 |
@@ -156,7 +158,7 @@ node .github/skills/markdown-to-scroll-deck/scripts/verify.js http://localhost:8
 이 저장소의 메인 덱(위 [온라인으로 바로 보기](#온라인으로-바로-보기))입니다. 기존 Markdown 원고에서 출발했습니다.
 
 ```
-/markdown-to-scroll-deck  why-build-ai-on-azure.md 를 스크롤 덱으로 만들어줘
+/deep-navy-md-to-html  why-build-ai-on-azure.md 를 스크롤 덱으로 만들어줘
 ```
 
 - 온라인: [원페이지 ↗](https://hijigoo.github.io/why-build-ai-on-azure/why-build-ai-on-azure-onepage.html)
@@ -168,7 +170,7 @@ Foundry를 사설 네트워크 경계 안에서 운영할 때의 선택지와 �
 **원고 파일 없이 주제만 주고** 스킬이 공식 문서를 조회해 원고부터 작성했습니다.
 
 ```
-/markdown-to-scroll-deck  Microsoft Foundry 네트워크 격리에 대한 덱을 만들어줘
+/deep-navy-md-to-html  Microsoft Foundry 네트워크 격리에 대한 덱을 만들어줘
 ```
 
 - 온라인: [완성 문서 ↗](https://hijigoo.github.io/why-build-ai-on-azure/samples/foundry-network-isolation/foundry-network-isolation.html)
@@ -182,7 +184,7 @@ Foundry를 사설 네트워크 경계 안에서 운영할 때의 선택지와 �
 발표자 코칭이 섞인 기존 원고를 **독자가 읽는 해설로 바꿔** 옮겼습니다.
 
 ```
-/markdown-to-scroll-deck  samples/github-offering/copilot-offering.md 를 스크롤 덱으로 만들어줘
+/deep-navy-md-to-html  samples/github-offering/copilot-offering.md 를 스크롤 덱으로 만들어줘
 ```
 
 - 온라인: [완성 문서 ↗](https://hijigoo.github.io/why-build-ai-on-azure/samples/github-offering/copilot-offering.html)
@@ -200,7 +202,7 @@ Foundry를 사설 네트워크 경계 안에서 운영할 때의 선택지와 �
 세 문서 모두 **`slides.html`을 고치고 `build.py`로 다시 빌드**합니다.
 
 ```bash
-python3 .github/skills/markdown-to-scroll-deck/scripts/build.py slides.html \
+python3 .github/skills/deep-navy-md-to-html/scripts/build.py slides.html \
   -o why-build-ai-on-azure-onepage.html \
   --title "Why Build AI on Azure? — 원페이지" \
   --sb-title "Why Build AI<br>on Azure?" \
@@ -238,7 +240,8 @@ why-build-ai-on-azure.md                  메인 덱 원고
 scripts/gen-eap-diagram.py                아키텍처 다이어그램 생성기 (일반/제품 2종)
 build.js                                  PPTX 생성기
 samples/foundry-network-isolation/        샘플 — Foundry 네트워크 격리 (19장)
-.github/skills/markdown-to-scroll-deck/   스킬 — Markdown → 스크롤형 HTML
-.github/skills/pptx-to-scroll-deck/       스킬 — .pptx → 스크롤형 HTML
-.github/skills/markdown-to-pptx/          스킬 — Markdown → PowerPoint(.pptx)
+samples/github-offering/                  샘플 — GitHub Copilot Offering (19장)
+.github/skills/deep-navy-md-to-html/      스킬 — Markdown → 스크롤형 HTML
+.github/skills/deep-navy-pptx-to-html/    스킬 — .pptx → 스크롤형 HTML
+.github/skills/deep-navy-md-to-pptx/      스킬 — Markdown → PowerPoint(.pptx)
 ```

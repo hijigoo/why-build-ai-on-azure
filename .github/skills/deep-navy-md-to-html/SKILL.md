@@ -1,6 +1,6 @@
 ---
-name: markdown-to-scroll-deck
-description: Markdown 원고를 세로 스크롤형 HTML 슬라이드 문서로 변환합니다. 각 슬라이드는 고정 16:9 무대로 발표 자료처럼 보이고, 상세 설명은 슬라이드 바로 아래 설명란으로 분리되며 왼쪽에 접이식 목차가 붙습니다. Microsoft·Azure 제품을 다루는 한국어 엔터프라이즈 기술 자료(고객 제안, 아키텍처 소개, 도입 가이드)에 최적화되어 있습니다. 사용자가 마크다운 문서를 슬라이드/발표자료/원페이지 문서로 만들어 달라고 하거나, Azure·Microsoft 관련 주제로 발표 자료를 만들어 달라고 할 때 사용합니다.
+name: deep-navy-md-to-html
+description: Markdown 원고를 Deep Navy 테마의 세로 스크롤형 HTML 문서로 변환합니다. 각 슬라이드는 고정 16:9 무대로 발표 자료처럼 보이지만, 상세 설명이 슬라이드 바로 아래 접이식 설명란으로 분리되고 왼쪽에 목차가 붙어 링크로 공유하고 혼자 정독하는 웹 문서가 됩니다. 딥네이비+코발트 테마, Azure·Microsoft 공식 아이콘, GA/Preview 배지를 갖춰 한국어 엔터프라이즈 기술 자료(고객 제안, 아키텍처 소개, 도입 가이드)에 최적화되어 있습니다. 사용자가 마크다운 문서를 스크롤 덱·원페이지 문서로 만들어 달라고 하거나, Azure·Microsoft 주제로 읽는 기술 자료를 요청할 때 사용합니다. 같은 테마의 자매 스킬: deep-navy-pptx-to-html(기존 pptx를 같은 문서로 재구성), deep-navy-md-to-pptx(같은 톤을 PowerPoint 로 출력).
 ---
 
 # Markdown to Scroll Deck
@@ -152,7 +152,7 @@ base64 인라인 이미지는 파일로 빼서 `<img src>`로 참조한다.
 ## Phase 3 — 빌드
 
 ```bash
-python3 .github/skills/markdown-to-scroll-deck/scripts/build.py slides.html \
+python3 .github/skills/deep-navy-md-to-html/scripts/build.py slides.html \
   -o 결과.html \
   --title "문서 제목 — 부제" \
   --sb-title "사이드바 제목<br>두 줄까지" \
@@ -176,8 +176,8 @@ CSS·JS·아이콘 스프라이트·사이드바 목차·페이지 번호가 자
 **넘침은 스크린샷으로 안 보인다.** 반드시 스크립트로 잡는다.
 
 ```bash
-bash .github/skills/markdown-to-scroll-deck/scripts/serve.sh 결과.html
-node .github/skills/markdown-to-scroll-deck/scripts/verify.js http://localhost:8749/결과.html --density
+bash .github/skills/deep-navy-md-to-html/scripts/serve.sh 결과.html
+node .github/skills/deep-navy-md-to-html/scripts/verify.js http://localhost:8749/결과.html --density
 ```
 
 확인 항목 — 내용 넘침(0이어야 함), 16:9 유지, 아이콘 참조 누락, 콘솔 에러, 슬라이드별 글자 수.

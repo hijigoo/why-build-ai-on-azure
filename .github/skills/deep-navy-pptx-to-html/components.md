@@ -192,7 +192,7 @@
 
 ```bash
 # 슬라이드별 글자 수 확인 (verify.js가 함께 출력한다)
-node .github/skills/markdown-to-scroll-deck/scripts/verify.js <url> --density
+node .github/skills/deep-navy-pptx-to-html/scripts/verify.js <url> --density
 ```
 
 넘칠 때 순서:

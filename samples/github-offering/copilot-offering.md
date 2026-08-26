@@ -9,12 +9,12 @@
 > ```
 >
 > ```bash
-> python3 ../../.github/skills/markdown-to-scroll-deck/scripts/build.py slides.html \
+> python3 ../../.github/skills/deep-navy-md-to-html/scripts/build.py slides.html \
 >   -o copilot-offering.html --title "..." --h1 "..." --kicker "..."
 > ```
 >
 > **기준일: 2026-08-26** · 출처 `docs.github.com` · `code.visualstudio.com`
-> 빌드·검증 방법은 [`samples/README.md`](../README.md), 디자인 규칙은 [`markdown-to-scroll-deck` 스킬](../../.github/skills/markdown-to-scroll-deck/SKILL.md)
+> 빌드·검증 방법은 [`samples/README.md`](../README.md), 디자인 규칙은 [`deep-navy-md-to-html` 스킬](../../.github/skills/deep-navy-md-to-html/SKILL.md)
 
 ---
 

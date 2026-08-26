@@ -1,6 +1,6 @@
 ---
-name: markdown-to-pptx
-description: 마크다운 원고를 PowerPoint(.pptx) 발표 덱으로 변환합니다. 원고를 슬라이드 데이터 스펙으로 옮긴 뒤, Why Build AI on Azure 덱과 동일한 디자인 시스템(딥네이비+코발트 테마, 공식 아이콘, GA/Preview 배지, 4구간 진행 표시줄, 발표자 노트)으로 .pptx 를 생성합니다. markdown-to-scroll-deck 과 같은 톤·색·아이콘을 PowerPoint 형식으로 뽑고 싶을 때 사용합니다. 사용자가 마크다운/원고를 pptx·파워포인트·발표 덱으로 만들어 달라고 하거나, Azure·Microsoft 주제의 PowerPoint 발표 자료를 요청할 때 사용합니다.
+name: deep-navy-md-to-pptx
+description: 마크다운 원고를 Deep Navy 테마의 PowerPoint(.pptx) 발표 덱으로 변환합니다. 원고를 슬라이드 데이터 스펙으로 옮긴 뒤, 딥네이비+코발트 테마·공식 아이콘 43종·GA/Preview 배지·4구간 진행 표시줄·발표자 노트를 갖춘 .pptx 를 생성합니다. 브라우저가 아니라 PowerPoint 파일로 배포하거나 현장에서 발표해야 할 때 사용합니다. 사용자가 마크다운·원고를 pptx·파워포인트·발표 덱으로 만들어 달라고 하거나, Azure·Microsoft 주제의 PowerPoint 자료를 요청할 때 사용합니다. 같은 테마의 자매 스킬: deep-navy-md-to-html(같은 원고를 읽는 웹 문서로), deep-navy-pptx-to-html(만든 pptx 를 다시 웹 문서로).
 ---
 
 # Markdown to PPTX
@@ -11,7 +11,7 @@ description: 마크다운 원고를 PowerPoint(.pptx) 발표 덱으로 변환합
 > **디자인은 `Why Build AI on Azure` 덱(루트 `build.js`)과 동일하다.** 팔레트·헬퍼·
 > 슬라이드 레이아웃을 그대로 보존한다. 이 스킬은 `build.js` 를 콘텐츠 무관 제너레이터로
 > 일반화한 것이라, 완성품의 색·타이포·아이콘·진행 표시줄이 그 덱과 똑같이 나온다.
-> (스크롤형 HTML 이 필요하면 `markdown-to-scroll-deck` 을 쓴다. 이 스킬은 .pptx 전용.)
+> (스크롤형 HTML 이 필요하면 `deep-navy-md-to-html` 을 쓴다. 이 스킬은 .pptx 전용.)
 
 ## 이 스킬의 범위
 
@@ -64,7 +64,7 @@ deck.data.js  (슬라이드 데이터 스펙)
 ## 준비 (한 번)
 
 ```bash
-cd .github/skills/markdown-to-pptx
+cd .github/skills/deep-navy-md-to-pptx
 npm install        # pptxgenjs (필수) + sharp (선택, 자동 설치)
 ```
 
@@ -136,7 +136,7 @@ module.exports = {
 ## Phase 2 — 빌드
 
 ```bash
-cd .github/skills/markdown-to-pptx
+cd .github/skills/deep-navy-md-to-pptx
 DECK_VERSION=v1 node scripts/build-pptx.js path/to/deck.data.js
 # → v1-<file>.pptx  (발표자 노트 포함)
 ```

@@ -1,6 +1,6 @@
 ---
-name: pptx-to-scroll-deck
-description: 기존 PowerPoint(.pptx) 발표 자료를 세로 스크롤형 HTML 슬라이드 문서로 변환합니다. 원본 슬라이드의 텍스트·표·발표자 노트를 뽑아내 고정 16:9 무대의 스크롤 덱으로 재구성하고, 발표자 노트는 각 슬라이드 아래 설명란으로 옮기며 왼쪽에 접이식 목차가 붙습니다. markdown-to-scroll-deck 과 완전히 동일한 디자인 시스템(딥네이비+코발트 테마, 공식 아이콘, GA/Preview 배지)을 사용합니다. 사용자가 pptx/파워포인트/발표자료를 웹 문서·스크롤 문서·원페이지로 바꿔 달라고 할 때 사용합니다.
+name: deep-navy-pptx-to-html
+description: 기존 PowerPoint(.pptx) 발표 자료를 Deep Navy 테마의 세로 스크롤형 HTML 문서로 재구성합니다. 원본 슬라이드의 텍스트·표·발표자 노트를 뽑아내 고정 16:9 무대로 다시 조판하고, 발표자 노트는 각 슬라이드 아래 접이식 설명란으로 옮기며 왼쪽에 목차가 붙습니다. deep-navy-md-to-html 과 완전히 동일한 디자인 자산(딥네이비+코발트 테마, 공식 아이콘, GA/Preview 배지)을 사용하므로 결과물이 같은 톤으로 나옵니다. 사용자가 pptx·파워포인트·발표자료를 웹 문서·스크롤 문서·원페이지로 바꿔 달라고 할 때 사용합니다. 같은 테마의 자매 스킬: deep-navy-md-to-html(마크다운 원고에서 시작), deep-navy-md-to-pptx(반대 방향으로 PowerPoint 생성).
 ---
 
 # PPTX to Scroll Deck
@@ -10,7 +10,7 @@ description: 기존 PowerPoint(.pptx) 발표 자료를 세로 스크롤형 HTML 
 읽는 사람은 위에서 아래로 스크롤하고, 각 장은 발표 슬라이드처럼 독립적으로 보인다.
 원본의 발표자 노트는 각 슬라이드 아래 **설명란**으로 내려간다.
 
-> **디자인은 `markdown-to-scroll-deck` 과 100% 동일하다.** 이 스킬은 입력만 다르다
+> **디자인은 `deep-navy-md-to-html` 과 100% 동일하다.** 이 스킬은 입력만 다르다
 > (원고 대신 .pptx). 산출 파이프라인(`assets/`·`build.py`·`verify.js`·패턴)은 그 스킬과
 > **글자 하나 다르지 않게** 공유하므로, 완성품의 모양·조작·톤이 똑같이 나온다.
 
@@ -66,7 +66,7 @@ scripts/build.py 실행
 ### 1) 구조와 텍스트 뽑기
 
 ```bash
-python3 .github/skills/pptx-to-scroll-deck/scripts/pptx-extract.py 원본.pptx \
+python3 .github/skills/deep-navy-pptx-to-html/scripts/pptx-extract.py 원본.pptx \
   --img-dir images --json /tmp/deck.json
 ```
 
@@ -157,7 +157,7 @@ pdftoppm -jpeg -r 90 /tmp/원본.pdf /tmp/src   # /tmp/src-01.jpg ...
 ## Phase 3 — 빌드
 
 ```bash
-python3 .github/skills/pptx-to-scroll-deck/scripts/build.py slides.html \
+python3 .github/skills/deep-navy-pptx-to-html/scripts/build.py slides.html \
   -o 결과.html \
   --title "문서 제목 — 부제" \
   --sb-title "사이드바 제목<br>두 줄까지" \
@@ -181,8 +181,8 @@ CSS·JS·아이콘 스프라이트·사이드바 목차·페이지 번호가 자
 **넘침은 스크린샷으로 안 보인다.** 반드시 스크립트로 잡는다.
 
 ```bash
-bash .github/skills/pptx-to-scroll-deck/scripts/serve.sh 결과.html
-node .github/skills/pptx-to-scroll-deck/scripts/verify.js http://localhost:8749/결과.html --density
+bash .github/skills/deep-navy-pptx-to-html/scripts/serve.sh 결과.html
+node .github/skills/deep-navy-pptx-to-html/scripts/verify.js http://localhost:8749/결과.html --density
 ```
 
 확인 항목 — 내용 넘침(0이어야 함), 16:9 유지, 아이콘 참조 누락, 콘솔 에러, 슬라이드별 글자 수.
@@ -347,4 +347,4 @@ Foundry IQ <span class="badge ga">일부 GA</span>
 | [components.md](components.md) | 컴포넌트 변형·밀도 기준이 필요할 때 |
 | [icons.md](icons.md) | 아이콘을 넣거나 추가할 때 |
 | [structure.md](structure.md) | 빌더 없이 직접 조립하거나 셸을 바꿔야 할 때 |
-| `scripts/build.py` · `scripts/verify.js` · `assets/` | 빌드·검증·디자인 시스템 (markdown-to-scroll-deck 과 동일) |
+| `scripts/build.py` · `scripts/verify.js` · `assets/` | 빌드·검증·디자인 시스템 (deep-navy-md-to-html 과 동일) |

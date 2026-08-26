@@ -1,6 +1,6 @@
 # 샘플 덱
 
-`markdown-to-scroll-deck` 스킬로 만든 예시 문서 모음입니다.
+`deep-navy-md-to-html` 스킬로 만든 예시 문서 모음입니다.
 스킬의 워크플로와 결과물이 어떤 모습인지 확인하는 용도입니다.
 
 | 폴더 | 주제 | 분량 |
@@ -23,12 +23,12 @@
 `slides.html`을 고친 뒤 다시 빌드하면 완성 문서가 갱신됩니다.
 
 ```bash
-python3 ../../.github/skills/markdown-to-scroll-deck/scripts/build.py slides.html \
+python3 ../../.github/skills/deep-navy-md-to-html/scripts/build.py slides.html \
   -o <주제>.html --title "..." --h1 "..." --kicker "..."
 ```
 
 빌드 후에는 검증을 거칩니다. 내용 넘침은 화면으로 보이지 않아 스크립트로 잡아야 합니다.
 
 ```bash
-node ../../.github/skills/markdown-to-scroll-deck/scripts/verify.js <url> --density
+node ../../.github/skills/deep-navy-md-to-html/scripts/verify.js <url> --density
 ```

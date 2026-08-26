@@ -1,4 +1,4 @@
-// deck.data.js — markdown-to-pptx 예시 덱 스펙
+// deck.data.js — deep-navy-md-to-pptx 예시 덱 스펙
 // build-pptx.js 가 이 파일을 require 해서 .pptx 를 만든다.
 //   node ../scripts/build-pptx.js deck.data.js   →  v1-why-build-ai-on-azure.pptx
 //

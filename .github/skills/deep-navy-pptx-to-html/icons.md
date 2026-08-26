@@ -133,7 +133,7 @@ find . -iname "*search*" -name "*.svg" | head
 아래 스크립트가 심볼별로 id를 격리해준다.
 
 ```bash
-python3 .github/skills/markdown-to-scroll-deck/scripts/make-symbol.py \
+python3 .github/skills/deep-navy-pptx-to-html/scripts/make-symbol.py \
   az-newicon /path/to/icon.svg >> assets/icon-sprite-add.html
 ```
 
@@ -142,7 +142,7 @@ python3 .github/skills/markdown-to-scroll-deck/scripts/make-symbol.py \
 ### 3. 확인
 
 ```bash
-node .github/skills/markdown-to-scroll-deck/scripts/verify.js <url>
+node .github/skills/deep-navy-pptx-to-html/scripts/verify.js <url>
 ```
 
 `missing icon refs`가 0인지 본다. 참조가 깨져도 화면에는 빈 자리로만 보이므로 눈으로는 못 잡는다.
