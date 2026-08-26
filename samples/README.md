@@ -1,17 +1,17 @@
 # 샘플 덱
 
-`deep-navy-md-to-html` 스킬로 만든 예시 문서 모음입니다.
+스킬로 만든 예시 문서 모음입니다.
 스킬의 워크플로와 결과물이 어떤 모습인지 확인하는 용도입니다.
 
-| 폴더 | 주제 | 분량 |
-|---|---|---|
-| [`foundry-network-isolation/`](./foundry-network-isolation/) | Microsoft Foundry 네트워크 격리 | 19장 |
-| [`github-offering/`](./github-offering/) | GitHub Copilot Offering — 모델 · 에이전트 · 도구 · 엔터프라이즈 | 19장 |
+| 폴더 | 주제 | 분량 | 만든 스킬 |
+|---|---|---|---|
+| [`foundry-network-isolation/`](./foundry-network-isolation/) | Microsoft Foundry 네트워크 격리 | 19장 | `deep-navy-md-to-html` |
+| [`github-offering/`](./github-offering/) | GitHub Copilot Offering — 모델 · 에이전트 · SDLC · 거버넌스 · 도입 | 21장 | `blue-accent-md-to-html` |
 
-저장소 루트의 **Why Build AI on Azure?**(36장)도 같은 스킬로 만든 문서입니다.
+저장소 루트의 **Why Build AI on Azure?**(36장)는 `deep-navy-md-to-html` 로 만든 문서입니다.
 스킬 소개와 사용법은 [최상위 README](../README.md)를 참고하세요.
 
-## 각 폴더의 구성
+## Deep Navy 샘플의 구성
 
 ```
 <주제>/
@@ -32,3 +32,15 @@ python3 ../../.github/skills/deep-navy-md-to-html/scripts/build.py slides.html \
 ```bash
 node ../../.github/skills/deep-navy-md-to-html/scripts/verify.js <url> --density
 ```
+
+## Blue Accent 샘플의 구성
+
+`github-offering/` 은 원고에서 HTML 을 바로 만들고, 그 HTML 을 PPTX 로 옮기는 구성입니다.
+중간 조각 파일 없이 원고가 곧 소스입니다.
+
+```
+copilot-offering.md  →  copilot-offering.html  →  .pptx
+  (원고)                 (blue-accent-md-to-html)   (blue-accent-html-to-pptx)
+```
+
+발표자 노트는 HTML 의 `.slide-notes` 에 들어 있고, PPTX 로 옮길 때 그대로 넘어갑니다.

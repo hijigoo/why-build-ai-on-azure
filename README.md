@@ -177,19 +177,19 @@ Foundry를 사설 네트워크 경계 안에서 운영할 때의 선택지와 �
 - 소스: [`samples/foundry-network-isolation/`](./samples/foundry-network-isolation/)
 - 인바운드(공용 접근 정책·프라이빗 엔드포인트·DNS) → 아웃바운드(BYO 가상 네트워크와 관리형 가상 네트워크의 대비·방화벽) → 도구와 제약(도구별 지원 현황·배포 전 체크리스트) 순으로 구성했습니다.
 
-### 3. GitHub Copilot Offering — 19장
+### 3. GitHub Copilot Offering — 21장
 
-개발 리더와 플랫폼팀을 위한 자료입니다. 기능을 나열하는 대신 **네 개 축**으로 나눠,
+개발 리더와 플랫폼팀을 위한 자료입니다. 기능을 나열하는 대신 **다섯 개 축**으로 나눠,
 각 축에서 무엇을 고를 수 있고 무엇이 GitHub Enterprise Cloud 전제인지를 구분했습니다.
-발표자 코칭이 섞인 기존 원고를 **독자가 읽는 해설로 바꿔** 옮겼습니다.
+이 샘플만 **Blue Accent** 테마로, 같은 원고에서 HTML 과 PPTX 를 함께 뽑는 구성입니다.
 
 ```
-/deep-navy-md-to-html  samples/github-offering/copilot-offering.md 를 스크롤 덱으로 만들어줘
+/blue-accent-md-to-html  samples/github-offering/copilot-offering.md 로 덱을 만들어줘
 ```
 
 - 온라인: [완성 문서 ↗](https://hijigoo.github.io/why-build-ai-on-azure/samples/github-offering/copilot-offering.html)
 - 소스: [`samples/github-offering/`](./samples/github-offering/)
-- 모델과 에이전트(멀티 모델·멀티 하네스) → 개발자가 쓰는 도구(CLI·VS Code·데스크톱 앱·도달 범위) → 엔터프라이즈(비동기 실행·SDLC 통합·거버넌스·플랜 경계) → 오퍼링 워크샵 순으로 구성했습니다.
+- 모델과 에이전트 → 개발자가 쓰는 도구 → Agentic SDLC → 거버넌스 → 도입 프로그램 순으로 구성했습니다.
 - 원고의 GA/Preview 표기를 그대로 믿지 않고 재검증해, **BYOK 지원 범위**와 **샌드박스 성숙도** 두 건의 오류를 바로잡았습니다.
 
 > 세 샘플 모두 **스킬의 표준 워크플로만으로** 만들었습니다. 원고 작성부터 검증까지 거친 결과물이라,
@@ -199,7 +199,8 @@ Foundry를 사설 네트워크 경계 안에서 운영할 때의 선택지와 �
 
 ## 자료 수정하기
 
-세 문서 모두 **`slides.html`을 고치고 `build.py`로 다시 빌드**합니다.
+Deep Navy 문서(메인 덱 · Foundry 샘플)는 **`slides.html`을 고치고 `build.py`로 다시 빌드**합니다.
+Blue Accent 샘플(`samples/github-offering/`)은 원고에서 HTML 을 바로 만들므로 이 절차가 적용되지 않습니다.
 
 ```bash
 python3 .github/skills/deep-navy-md-to-html/scripts/build.py slides.html \
@@ -240,7 +241,7 @@ why-build-ai-on-azure.md                  메인 덱 원고
 scripts/gen-eap-diagram.py                아키텍처 다이어그램 생성기 (일반/제품 2종)
 build.js                                  PPTX 생성기
 samples/foundry-network-isolation/        샘플 — Foundry 네트워크 격리 (19장)
-samples/github-offering/                  샘플 — GitHub Copilot Offering (19장)
+samples/github-offering/                  샘플 — GitHub Copilot Offering (21장, Blue Accent)
 .github/skills/deep-navy-md-to-html/      스킬 — Markdown → 스크롤형 HTML
 .github/skills/deep-navy-pptx-to-html/    스킬 — .pptx → 스크롤형 HTML
 .github/skills/deep-navy-md-to-pptx/      스킬 — Markdown → PowerPoint(.pptx)
