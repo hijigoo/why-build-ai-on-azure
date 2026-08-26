@@ -175,14 +175,29 @@ Foundry를 사설 네트워크 경계 안에서 운영할 때의 선택지와 �
 - 소스: [`samples/foundry-network-isolation/`](./samples/foundry-network-isolation/)
 - 인바운드(공용 접근 정책·프라이빗 엔드포인트·DNS) → 아웃바운드(BYO 가상 네트워크와 관리형 가상 네트워크의 대비·방화벽) → 도구와 제약(도구별 지원 현황·배포 전 체크리스트) 순으로 구성했습니다.
 
-> 두 샘플 모두 **스킬의 표준 워크플로만으로** 만들었습니다. 원고 작성부터 검증까지 거친 결과물이라,
+### 3. GitHub Copilot Offering — 19장
+
+개발 리더와 플랫폼팀을 위한 자료입니다. 기능을 나열하는 대신 **네 개 축**으로 나눠,
+각 축에서 무엇을 고를 수 있고 무엇이 GitHub Enterprise Cloud 전제인지를 구분했습니다.
+발표자 코칭이 섞인 기존 원고를 **독자가 읽는 해설로 바꿔** 옮겼습니다.
+
+```
+/markdown-to-scroll-deck  samples/github-offering/copilot-offering.md 를 스크롤 덱으로 만들어줘
+```
+
+- 온라인: [완성 문서 ↗](https://hijigoo.github.io/why-build-ai-on-azure/samples/github-offering/copilot-offering.html)
+- 소스: [`samples/github-offering/`](./samples/github-offering/)
+- 모델과 에이전트(멀티 모델·멀티 하네스) → 개발자가 쓰는 도구(CLI·VS Code·데스크톱 앱·도달 범위) → 엔터프라이즈(비동기 실행·SDLC 통합·거버넌스·플랜 경계) → 오퍼링 워크샵 순으로 구성했습니다.
+- 원고의 GA/Preview 표기를 그대로 믿지 않고 재검증해, **BYOK 지원 범위**와 **샌드박스 성숙도** 두 건의 오류를 바로잡았습니다.
+
+> 세 샘플 모두 **스킬의 표준 워크플로만으로** 만들었습니다. 원고 작성부터 검증까지 거친 결과물이라,
 > 새 덱을 만들 때 참고 예시로 쓸 수 있습니다.
 
 ---
 
 ## 자료 수정하기
 
-두 문서 모두 **`slides.html`을 고치고 `build.py`로 다시 빌드**합니다.
+세 문서 모두 **`slides.html`을 고치고 `build.py`로 다시 빌드**합니다.
 
 ```bash
 python3 .github/skills/markdown-to-scroll-deck/scripts/build.py slides.html \
