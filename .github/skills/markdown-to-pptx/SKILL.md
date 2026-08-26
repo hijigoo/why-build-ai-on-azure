@@ -20,15 +20,28 @@ description: 마크다운 원고를 PowerPoint(.pptx) 발표 덱으로 변환합
 
 그래서 이런 것들이 이미 들어 있다:
 
-- 딥네이비 + 코발트의 **엔터프라이즈 톤** 팔레트(`C`)
-- Azure·Microsoft·GitHub **공식 아이콘 44종**(react-icons 래스터화)
+- 딥네이비 + 코발트의 **엔터프라이즈 톤** 팔레트(`assets/theme.js`)
+- Azure·Microsoft·GitHub **공식 아이콘 43종**(`assets/icons/*.svg` 로 동봉)
 - **GA / Preview 성숙도 배지**(초록 / 골드 pill)
 - 상단 **4구간 "you are here" 진행 표시줄**
 - 슬라이드별 **발표자 노트(스피커 노트)** 주입
 - 표지·간지·카드·표·흐름·스택·2단·이미지·마무리 **11가지 슬라이드 레이아웃**
 
 **맞지 않는 경우** — 강한 브랜드 아이덴티티가 필요한 덱, 비-Microsoft 제품 중심,
-영어권·캐주얼 톤. 이럴 땐 색만 `C` 토큰에서 바꾸거나 사용자에게 알린다.
+영어권·캐주얼 톤. 이럴 땐 색만 `assets/theme.js` 에서 바꾸거나 사용자에게 알린다.
+
+## 디자인은 assets/ 에 있다
+
+스크롤덱 스킬이 `assets/deck.css` + `assets/icon-sprite.html` 로 디자인을 들고 다니듯,
+이 스킬은 다음 두 자산으로 디자인을 들고 다닌다. **스킬 폴더만 복사해도 결과물이 같다.**
+
+| 자산 | 역할 | 스크롤덱 대응 |
+|---|---|---|
+| `assets/theme.js` | 팔레트·폰트·무대 규격·아이콘 톤·진행 표시줄 구간 수 | `assets/deck.css` |
+| `assets/icons/*.svg` | 아이콘 43종(`currentColor` 로 재색상 가능) | `assets/icon-sprite.html` |
+
+`scripts/build-pptx.js` 는 레이아웃만 조립하고 색·폰트·아이콘은 전부 assets 에서 읽는다.
+**테마를 바꾸려면 `assets/theme.js` 만 고친다.** 스크립트는 건드릴 필요가 없다.
 
 ## 작업 방식 (중요)
 
@@ -52,11 +65,16 @@ deck.data.js  (슬라이드 데이터 스펙)
 
 ```bash
 cd .github/skills/markdown-to-pptx
-npm install        # pptxgenjs · react · react-dom · react-icons · sharp
+npm install        # pptxgenjs (필수) + sharp (선택, 자동 설치)
 ```
 
-> 프로젝트 루트에 이미 같은 의존성이 설치돼 있으면(이 리포처럼) node 가 상위
-> `node_modules` 를 찾으므로 별도 설치 없이 루트에서 실행해도 된다.
+아이콘 SVG 는 `assets/icons/` 에 동봉돼 있으므로 react-icons 같은 런타임 의존이 없다.
+
+- **sharp 있음** — SVG 를 PNG 로 래스터화해 넣는다(호환성 최상, 기본값).
+- **sharp 없음** — SVG 를 그대로 넣는다. PowerPoint 2016+ 에서 정상 표시되고,
+  경고를 한 줄 출력한다. 어느 쪽이든 **아이콘이 조용히 빠지는 일은 없다.**
+
+의존성이 없으면 스택 트레이스 대신 설치 명령을 알려주고 종료한다.
 
 ---
 
@@ -193,13 +211,14 @@ pdftoppm -jpeg -r 100 /tmp/qa/v1-<file>.pdf /tmp/qa/s   # /tmp/qa/s-01.jpg ...
 
 | 증상 | 원인 / 해결 |
 |---|---|
-| `Cannot find module 'pptxgenjs'` | `npm install` 안 함. 스킬 폴더에서 설치하거나 루트 `node_modules` 아래에서 실행 |
-| 아이콘이 안 나옴 | react-icons/sharp 미설치 → 아이콘 없이 진행됨(경고 출력). `npm install` 로 활성화 |
+| `Cannot find module 'pptxgenjs'` | `npm install` 안 함. 안내 메시지의 명령 그대로 실행 |
+| 아이콘이 안 나옴 | `assets/icons/` 를 빼고 복사했다. 스킬 폴더는 **assets 포함 통째로** 옮긴다 |
+| `아이콘 'xxx' 이 없습니다` 경고 | 스펙의 `icon` 키 오타. 경고에 사용 가능한 목록이 출력된다 |
 | 카드 글자가 넘침 | 원고 문단을 그대로 넣었다. 핵심만 남기고 부연은 `note` 로 |
 | 2단·카드가 허전함 | 내용 대비 항목이 적다. 항목을 늘리거나 다른 kind 로 |
 | 성숙도·제품명이 틀림 | 원고를 그대로 믿었다. Phase 0 에서 공식 문서로 확인 |
 | 슬라이드/노트 수 불일치 | `note` 는 슬라이드별 스펙에 넣는다(자동 매칭). `divider` 는 노트 없어도 됨 |
-| 색을 바꾸고 싶다 | `build-pptx.js` 상단 `C` 팔레트만 수정(PATTERNS.md 색상 표) |
+| 색을 바꾸고 싶다 | `assets/theme.js` 의 `palette` 만 수정(PATTERNS.md 색상 표) |
 
 ---
 
@@ -212,7 +231,10 @@ pdftoppm -jpeg -r 100 /tmp/qa/v1-<file>.pdf /tmp/qa/s   # /tmp/qa/s-01.jpg ...
 
 | 파일 | 언제 |
 |---|---|
-| `scripts/build-pptx.js` | 제너레이터(디자인 시스템). 색 교체 외엔 건드리지 않는다 |
+| `assets/theme.js` | **색·폰트·무대 규격.** 테마를 바꾸려면 여기만 고친다 |
+| `assets/icons/*.svg` | 아이콘 43종. 아이콘을 추가하려면 여기에 SVG 를 넣는다 |
+| [assets/icons.md](assets/icons.md) | 아이콘 키 목록과 고르는 기준 |
+| `scripts/build-pptx.js` | 제너레이터(레이아웃 조립). 건드리지 않는다 |
 | [PATTERNS.md](PATTERNS.md) | 슬라이드 kind 별 필드·아이콘 키·색상 토큰 |
 | [examples/deck.data.js](examples/deck.data.js) | 실동작 스펙 예시 — **여기서 복사해 시작** |
-| `package.json` | 의존성 5종 (`npm install`) |
+| `package.json` | pptxgenjs(필수) + sharp(선택) |

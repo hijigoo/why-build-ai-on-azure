@@ -2,84 +2,125 @@
 //
 //   node build-pptx.js <deck.data.js>
 //
-// 이 제너레이터는 프로젝트 루트 build.js 의 디자인 시스템(팔레트 C · 헬퍼 ·
-// 슬라이드 레이아웃)을 그대로 보존하고, 콘텐츠만 데이터 스펙에서 주입한다.
+// 디자인은 전부 assets/ 에 있다:
+//   assets/theme.js   — 색·폰트·무대 규격 (스크롤덱의 deck.css 에 대응)
+//   assets/icons/*.svg — 아이콘 43종 (스크롤덱의 icon-sprite.html 에 대응)
+// 이 스크립트는 assets 를 읽어 레이아웃만 조립한다. 콘텐츠는 데이터 스펙에서 온다.
 // 슬라이드 종류(kind)는 PATTERNS.md 참고. 스펙 예시는 examples/deck.data.js.
 //
-// 의존성: pptxgenjs, react, react-dom, react-icons, sharp  (npm install)
+// 필수 의존성: pptxgenjs   / 선택: sharp (SVG→PNG 래스터화, 호환성 최상)
 
+const fs = require("fs");
 const path = require("path");
-const pptxgen = require("pptxgenjs");
 
-// react-icons + sharp 는 아이콘 래스터화에만 쓴다. 없으면 아이콘 없이 진행.
-let React, ReactDOMServer, sharp, fa, ICONS_OK = true;
-try {
-  React = require("react");
-  ReactDOMServer = require("react-dom/server");
-  sharp = require("sharp");
-  fa = require("react-icons/fa");
-} catch (e) {
-  ICONS_OK = false;
-  console.warn("[build-pptx] 아이콘 의존성 없음 — 아이콘 없이 생성합니다. (npm install 로 활성화)");
+const SKILL_DIR = path.join(__dirname, "..");
+const ASSETS = path.join(SKILL_DIR, "assets");
+const ICON_DIR = path.join(ASSETS, "icons");
+
+// ---------- 사전 점검: 없는 걸 조용히 넘기지 않는다 ----------
+function die(msg) {
+  console.error("\n[build-pptx] " + msg + "\n");
+  process.exit(1);
 }
 
-// ---------- Palette (build.js 와 동일) ----------
-const C = {
-  DARK: "0F2547", NAVY: "1A3D6D", MID: "2F5B93", SKY: "7AA5D6",
-  ICE: "DBE7F6", ICE2: "EEF4FB", BG: "F5F8FC",
-  ACCENT: "4F8FB6", ACCENT2: "6FA9CC", GOLD: "F5B841", GREEN: "2E9E6B",
-  TEXT: "1B2A41", MUTED: "5F708A", LINE: "D4E0F0", WHITE: "FFFFFF", SUBLT: "C7D8EC",
-};
-const FONT = "Apple SD Gothic Neo";
-const FONTL = "Apple SD Gothic Neo";
-const PW = 13.333, PH = 7.5;
+let pptxgen;
+try {
+  pptxgen = require("pptxgenjs");
+} catch (e) {
+  die(
+    "pptxgenjs 를 찾을 수 없습니다. 스킬 폴더에서 의존성을 설치하세요:\n" +
+    "    cd " + SKILL_DIR + " && npm install"
+  );
+}
+
+// ---------- 테마 (assets/theme.js) ----------
+let THEME;
+try {
+  THEME = require(path.join(ASSETS, "theme.js"));
+} catch (e) {
+  die("assets/theme.js 를 읽을 수 없습니다. 스킬 자산이 손상되었습니다.\n    " + e.message);
+}
+const C = THEME.palette;
+const FONT = THEME.font.body;
+const FONTL = THEME.font.heading;
+const PW = THEME.stage.w, PH = THEME.stage.h;
+const PARTS = THEME.progress.parts;
 
 let pptx, CUR_PART = 0, PAGE = 0, DECK;
 
 function shadow(opts) {
-  return Object.assign({ type: "outer", color: "1A2A44", opacity: 0.22, blur: 8, offset: 3, angle: 90 }, opts || {});
+  return Object.assign({}, THEME.shadow, opts || {});
 }
 
-// ---------- Icons ----------
-const ICONSET = ICONS_OK ? {
-  brain: fa.FaBrain, robot: fa.FaRobot, db: fa.FaDatabase, shield: fa.FaShieldAlt,
-  layers: fa.FaLayerGroup, code: fa.FaCode, users: fa.FaUsers, chart: fa.FaChartLine,
-  lock: fa.FaLock, cloud: fa.FaCloud, cogs: fa.FaCogs, diagram: fa.FaProjectDiagram,
-  check: fa.FaCheckCircle, bulb: fa.FaLightbulb, sitemap: fa.FaSitemap, clipboard: fa.FaClipboardCheck,
-  route: fa.FaRoute, cubes: fa.FaCubes, magic: fa.FaMagic, comments: fa.FaComments,
-  server: fa.FaServer, key: fa.FaKey, usershield: fa.FaUserShield, search: fa.FaSearch,
-  tools: fa.FaTools, bolt: fa.FaBolt, flask: fa.FaFlask, eye: fa.FaEye,
-  github: fa.FaGithub, microsoft: fa.FaMicrosoft, building: fa.FaBuilding, handshake: fa.FaHandshake,
-  clock: fa.FaClock, warn: fa.FaExclamationTriangle, compass: fa.FaCompass, rocket: fa.FaRocket,
-  balance: fa.FaBalanceScale, plug: fa.FaPlug, star: fa.FaStar, question: fa.FaQuestion,
-  windows: fa.FaWindows, stream: fa.FaStream, network: fa.FaNetworkWired,
-} : {};
-const IC = {}; // filled in buildIcons()
+// ---------- 아이콘 (assets/icons/*.svg) ----------
+// SVG 를 벤더링해 두었으므로 react-icons 런타임 의존이 없다.
+// sharp 가 있으면 PNG 로 래스터화(원본 덱과 픽셀 동일), 없으면 SVG 를 그대로 넣는다.
+// 어느 쪽이든 아이콘은 반드시 들어간다 — 디자인이 조용히 빠지는 일은 없다.
+let sharp = null;
+try { sharp = require("sharp"); } catch (e) { /* SVG 임베드로 대체 */ }
 
-async function iconPng(Icon, hex, size) {
-  size = size || 256;
-  let svg = ReactDOMServer.renderToStaticMarkup(React.createElement(Icon, { size }));
-  svg = svg.replace(/currentColor/g, "#" + hex);
-  if (!/width=/.test(svg)) svg = svg.replace("<svg", `<svg width="${size}" height="${size}"`);
-  const buf = await sharp(Buffer.from(svg), { density: 300 }).resize(size, size).png().toBuffer();
-  return "image/png;base64," + buf.toString("base64");
+const IC = {};       // "cloud_w" → dataURI
+let ICON_KEYS = [];  // 사용 가능한 아이콘 이름
+
+function loadIconSources() {
+  if (!fs.existsSync(ICON_DIR)) {
+    die("assets/icons 폴더가 없습니다. 아이콘 없이는 덱 디자인이 재현되지 않습니다.\n" +
+        "    스킬 폴더를 복사할 때 assets/ 를 통째로 가져왔는지 확인하세요.");
+  }
+  const files = fs.readdirSync(ICON_DIR).filter(f => f.endsWith(".svg"));
+  if (!files.length) die("assets/icons 에 SVG 아이콘이 하나도 없습니다.");
+  const src = {};
+  for (const f of files) src[f.replace(/\.svg$/, "")] = fs.readFileSync(path.join(ICON_DIR, f), "utf8");
+  ICON_KEYS = Object.keys(src).sort();
+  return src;
+}
+
+function tintSvg(svg, hex) {
+  let out = svg.replace(/currentColor/g, "#" + hex);
+  if (!/width=/.test(out)) out = out.replace("<svg", '<svg width="256" height="256"');
+  return out;
+}
+
+async function svgToDataURI(svg) {
+  if (sharp) {
+    const buf = await sharp(Buffer.from(svg), { density: 300 }).resize(256, 256).png().toBuffer();
+    return "image/png;base64," + buf.toString("base64");
+  }
+  return "image/svg+xml;base64," + Buffer.from(svg).toString("base64");
 }
 
 async function buildIcons() {
-  if (!ICONS_OK) return;
+  const src = loadIconSources();
+  const tones = THEME.iconTones;
   const jobs = [];
-  for (const k of Object.keys(ICONSET)) {
-    jobs.push(iconPng(ICONSET[k], "FFFFFF").then(d => IC[k + "_w"] = d));
-    jobs.push(iconPng(ICONSET[k], C.NAVY).then(d => IC[k + "_n"] = d));
-    jobs.push(iconPng(ICONSET[k], C.MID).then(d => IC[k + "_m"] = d));
-    jobs.push(iconPng(ICONSET[k], C.ACCENT).then(d => IC[k + "_a"] = d));
+  for (const key of ICON_KEYS) {
+    for (const [tone, colorName] of Object.entries(tones)) {
+      const hex = C[colorName];
+      if (!hex) die(`theme.js iconTones.${tone} 이 가리키는 팔레트 색 '${colorName}' 이 없습니다.`);
+      jobs.push(
+        svgToDataURI(tintSvg(src[key], hex)).then(d => { IC[key + "_" + tone] = d; })
+      );
+    }
   }
   await Promise.all(jobs);
+  if (!sharp) {
+    console.warn("[build-pptx] sharp 없음 — 아이콘을 SVG 로 삽입합니다. " +
+                 "PowerPoint 2016+ 에서 정상 표시되며, 최상의 호환성은 `npm install sharp`.");
+  }
 }
-// icon("cloud","w") → dataURI or null (graceful if missing)
+
+// icon("cloud","w") → dataURI. 없는 이름은 조용히 넘기지 않고 알려준다.
+const WARNED = new Set();
 function icon(name, tone) {
   if (!name) return null;
-  return IC[name + "_" + (tone || "n")] || null;
+  const k = name + "_" + (tone || "n");
+  if (IC[k]) return IC[k];
+  if (!WARNED.has(name)) {
+    WARNED.add(name);
+    console.warn(`[build-pptx] 아이콘 '${name}' 이 assets/icons 에 없습니다. ` +
+                 `사용 가능: ${ICON_KEYS.join(", ")}`);
+  }
+  return null;
 }
 
 // ---------- Slide helpers (build.js 와 동일) ----------
@@ -92,10 +133,10 @@ function footer(slide, dark) {
 
 function contentBG(slide) {
   slide.background = { color: C.BG };
-  const gap = 0.05, segW = (PW - 3 * gap) / 4;
-  for (let i = 0; i < 4; i++) {
+  const gap = THEME.progress.gap, segW = (PW - (PARTS - 1) * gap) / PARTS;
+  for (let i = 0; i < PARTS; i++) {
     const on = (i + 1) === CUR_PART;
-    slide.addShape(pptx.ShapeType.rect, { x: i * (segW + gap), y: 0, w: segW, h: 0.075, fill: { color: on ? C.ACCENT : C.ICE } });
+    slide.addShape(pptx.ShapeType.rect, { x: i * (segW + gap), y: 0, w: segW, h: THEME.progress.height, fill: { color: on ? C.ACCENT : C.ICE } });
   }
 }
 

@@ -113,7 +113,8 @@ cover: { icon:"cloud", kicker:"...", title:"...", subtitle:"...", subtitle2:"...
 
 ## 아이콘 키
 
-`build.js` 아이콘 세트를 그대로 쓴다(react-icons/fa 래스터화). 의미가 맞을 때만 넣는다.
+아이콘은 `assets/icons/*.svg` 로 동봉돼 있다(43종). 의미가 맞을 때만 넣는다.
+전체 목록·분류·추가 방법은 [assets/icons.md](assets/icons.md).
 
 ```
 brain robot db shield layers code users chart lock cloud cogs diagram
@@ -129,7 +130,8 @@ windows stream network
 
 ## 색상 토큰 (교체하려면)
 
-`build-pptx.js` 상단 `C` 객체가 팔레트다. 여기만 바꾸면 덱 전체 톤이 바뀐다.
+`assets/theme.js` 의 `palette` 가 팔레트다. 여기만 바꾸면 덱 전체 톤이 바뀐다.
+아이콘도 `currentColor` 라 새 팔레트 색으로 자동 재색상된다.
 
 | 키 | 값 | 용도 |
 |---|---|---|
@@ -140,3 +142,6 @@ windows stream network
 | `GREEN` | `2E9E6B` | GA 배지 |
 | `GOLD` | `F5B841` | Preview 배지 |
 | `BG` | `F5F8FC` | 본문 슬라이드 배경 |
+
+같은 파일에서 폰트(`font.body`/`font.heading`)와 진행 표시줄 구간 수(`progress.parts`)도
+바꿀 수 있다. 구간 수를 바꾸면 슬라이드 스펙의 `part` 값 범위도 함께 맞춘다.

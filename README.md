@@ -87,6 +87,15 @@ Copilot CLI에서 스킬을 호출하고 무엇을 만들지 알려주면 됩니
 `markdown-to-pptx`는 원고를 슬라이드 데이터 스펙으로 옮겨 프로젝트 표준 디자인의 .pptx를 생성합니다.
 세 스킬 모두 **제품명·GA/Preview 상태를 공식 문서로 재확인**하는 원칙을 공유합니다.
 
+세 스킬 모두 디자인을 `assets/` 폴더에 담고 다녀서, **스킬 폴더만 복사해도 결과물이 같습니다.**
+
+| 스킬 | 디자인 자산 |
+|---|---|
+| `markdown-to-scroll-deck` · `pptx-to-scroll-deck` | `assets/deck.css` · `assets/deck.js` · `assets/icon-sprite.html` |
+| `markdown-to-pptx` | `assets/theme.js` · `assets/icons/*.svg` |
+
+테마를 바꾸려면 스크립트가 아니라 이 자산 파일만 고치면 됩니다.
+
 
 ### 동작 방식
 
