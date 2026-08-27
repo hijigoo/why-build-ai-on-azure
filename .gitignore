@@ -13,3 +13,4 @@ node_modules/
 package-lock.json
 slide-*.jpg
 *.pdf
+samples/github-offering/build/anim-manifest.json

@@ -39,8 +39,10 @@ node ../../.github/skills/deep-navy-md-to-html/scripts/verify.js <url> --density
 중간 조각 파일 없이 원고가 곧 소스입니다.
 
 ```
-copilot-offering.md  →  copilot-offering.html  →  .pptx
-  (원고)                 (blue-accent-md-to-html)   (blue-accent-html-to-pptx)
+copilot-offering.md  →  copilot-offering.html  →  copilot-offering.pptx
+  (원고)                 (blue-accent-md-to-html)   (build/ 파이프라인)
 ```
 
 발표자 노트는 HTML 의 `.slide-notes` 에 들어 있고, PPTX 로 옮길 때 그대로 넘어갑니다.
+PPTX 빌드는 [`github-offering/build/README.md`](./github-offering/build/) 를 참고하세요 —
+애니메이션 주입과 노트 줄바꿈 복원까지 **세 단계를 순서대로** 실행해야 합니다.
