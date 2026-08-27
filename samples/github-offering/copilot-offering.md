@@ -5,7 +5,7 @@
 >
 > ```
 > copilot-offering.md  →  copilot-offering-v35.html  →  copilot-offering.pptx
->   (원고 · 여기)            (blue-accent-md-to-html)     (blue-accent-html-to-pptx)
+>   (원고 · 여기)            (white-cobalt-md-to-html)     (white-cobalt-html-to-pptx)
 > ```
 >
 > 발표자 노트는 HTML 의 `.slide-notes` 에서 빌드 시점에 읽어 PPTX 노트로 넘깁니다.

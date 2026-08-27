@@ -67,12 +67,13 @@ Copilot CLI에서 스킬을 호출하고 무엇을 만들지 알려주면 됩니
 
 이때 내용은 **공식 문서를 조회해 최신 정보로** 채웁니다. 제품명과 GA/Preview 상태는 기억에 의존하지 않고 확인합니다.
 
-### 같은 디자인, 세 가지 스킬
+### 두 가지 테마, 다섯 가지 스킬
 
-**Deep Navy** 테마(딥네이비+코발트·공식 아이콘·GA/Preview 배지)를 공유하는
-**세 개의 스킬**이 이 저장소에 함께 있습니다. 입력과 출력만 다릅니다.
-
+이 저장소에는 **테마 두 종류**의 덱 스킬이 함께 있습니다.
 이름은 `<테마>-<입력>-to-<출력>` 규칙을 따르므로, 이름만 보면 무엇을 넣어 무엇이 나오는지 알 수 있습니다.
+
+**Deep Navy** — 웜 페이퍼 지면(`#F4F2ED`) + 딥네이비(`#0E2340`) + 코발트 강조.
+세로로 **스크롤하며 읽는 문서**입니다. 좌측 목차와 장표별 설명란이 붙습니다.
 
 | 스킬 | 입력 → 출력 | 언제 쓰나 |
 |---|---|---|
@@ -80,21 +81,34 @@ Copilot CLI에서 스킬을 호출하고 무엇을 만들지 알려주면 됩니
 | [`deep-navy-pptx-to-html`](./.github/skills/deep-navy-pptx-to-html/) | 기존 **.pptx** → 스크롤형 **HTML** | 예전 파워포인트를 같은 톤의 웹 문서로 재구성 |
 | [`deep-navy-md-to-pptx`](./.github/skills/deep-navy-md-to-pptx/) | Markdown → **PowerPoint(.pptx)** | 발표자 노트가 있는 PowerPoint 덱이 필요할 때 |
 
+**White Cobalt** — 순백 지면(`#FFFFFF`) + 니어블랙 잉크 + 단일 코발트 강조(`#0F62FE`).
+한 장이 화면을 꽉 채우는 **발표용 슬라이드**입니다. 등장 애니메이션이 PPTX 까지 살아서 넘어갑니다.
+
+| 스킬 | 입력 → 출력 | 언제 쓰나 |
+|---|---|---|
+| [`white-cobalt-md-to-html`](./.github/skills/white-cobalt-md-to-html/) | Markdown → 발표형 **HTML** | 화면에 띄워 발표할 슬라이드 |
+| [`white-cobalt-html-to-pptx`](./.github/skills/white-cobalt-html-to-pptx/) | 발표형 **HTML** → **PowerPoint(.pptx)** | 같은 덱을 PowerPoint 로도 배포할 때 |
+
 ```
-/deep-navy-pptx-to-html  기존_제안서.pptx 를 스크롤 덱으로 만들어줘
-/deep-navy-md-to-pptx    why-build-ai-on-azure.md 를 pptx 발표 덱으로 만들어줘
+/deep-navy-md-to-html      why-build-ai-on-azure.md 를 스크롤 덱으로 만들어줘
+/deep-navy-pptx-to-html    기존_제안서.pptx 를 스크롤 덱으로 만들어줘
+/deep-navy-md-to-pptx      원고를 pptx 발표 덱으로 만들어줘
+/white-cobalt-md-to-html   원고로 발표 슬라이드를 만들어줘
+/white-cobalt-html-to-pptx 이 HTML 덱을 pptx 로 옮겨줘
 ```
 
-`deep-navy-pptx-to-html`은 원본 슬라이드의 텍스트·표·발표자 노트를 뽑아 재조판하고,
-`deep-navy-md-to-pptx`는 원고를 슬라이드 데이터 스펙으로 옮겨 같은 톤의 .pptx를 생성합니다.
-세 스킬 모두 **제품명·GA/Preview 상태를 공식 문서로 재확인**하는 원칙을 공유합니다.
+**어느 쪽을 고르나** — 읽히는 문서면 Deep Navy, 발표하는 슬라이드면 White Cobalt 입니다.
+Deep Navy 는 스크롤과 설명란으로 정보 밀도를 감당하고, White Cobalt 는 한 장에 한 메시지를 크게 놓습니다.
 
-세 스킬 모두 디자인을 `assets/` 폴더에 담고 다녀서, **스킬 폴더만 복사해도 결과물이 같습니다.**
+다섯 스킬 모두 **제품명·GA/Preview 상태를 공식 문서로 재확인**하는 원칙을 공유합니다.
+
+스킬은 디자인을 **자기 폴더 안에** 담고 다녀서, **폴더만 복사해도 결과물이 같습니다.**
 
 | 스킬 | 디자인 자산 |
 |---|---|
 | `deep-navy-md-to-html` · `deep-navy-pptx-to-html` | `assets/deck.css` · `assets/deck.js` · `assets/icon-sprite.html` |
 | `deep-navy-md-to-pptx` | `assets/theme.js` · `assets/icons/*.svg` |
+| `white-cobalt-md-to-html` · `white-cobalt-html-to-pptx` | `templates/deck.html` · `templates/make_deck.js` |
 
 테마를 바꾸려면 스크립트가 아니라 이 자산 파일만 고치면 됩니다.
 
@@ -184,7 +198,7 @@ Foundry를 사설 네트워크 경계 안에서 운영할 때의 선택지와 �
 이 샘플만 **Blue Accent** 테마로, 같은 원고에서 HTML 과 PPTX 를 함께 뽑는 구성입니다.
 
 ```
-/blue-accent-md-to-html  samples/github-offering/copilot-offering.md 로 덱을 만들어줘
+/white-cobalt-md-to-html  samples/github-offering/copilot-offering.md 로 덱을 만들어줘
 ```
 
 - 온라인: [완성 문서 ↗](https://hijigoo.github.io/why-build-ai-on-azure/samples/github-offering/copilot-offering.html)
@@ -245,4 +259,6 @@ samples/github-offering/                  샘플 — GitHub Copilot Offering (21
 .github/skills/deep-navy-md-to-html/      스킬 — Markdown → 스크롤형 HTML
 .github/skills/deep-navy-pptx-to-html/    스킬 — .pptx → 스크롤형 HTML
 .github/skills/deep-navy-md-to-pptx/      스킬 — Markdown → PowerPoint(.pptx)
+.github/skills/white-cobalt-md-to-html/   스킬 — Markdown → 발표형 HTML
+.github/skills/white-cobalt-html-to-pptx/ 스킬 — 발표형 HTML → PowerPoint(.pptx)
 ```

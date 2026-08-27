@@ -6,7 +6,7 @@
 | 폴더 | 주제 | 분량 | 만든 스킬 |
 |---|---|---|---|
 | [`foundry-network-isolation/`](./foundry-network-isolation/) | Microsoft Foundry 네트워크 격리 | 19장 | `deep-navy-md-to-html` |
-| [`github-offering/`](./github-offering/) | GitHub Copilot Offering — 모델 · 에이전트 · SDLC · 거버넌스 · 도입 | 21장 | `blue-accent-md-to-html` |
+| [`github-offering/`](./github-offering/) | GitHub Copilot Offering — 모델 · 에이전트 · SDLC · 거버넌스 · 도입 | 21장 | `white-cobalt-md-to-html` |
 
 저장소 루트의 **Why Build AI on Azure?**(36장)는 `deep-navy-md-to-html` 로 만든 문서입니다.
 스킬 소개와 사용법은 [최상위 README](../README.md)를 참고하세요.
@@ -40,7 +40,7 @@ node ../../.github/skills/deep-navy-md-to-html/scripts/verify.js <url> --density
 
 ```
 copilot-offering.md  →  copilot-offering.html  →  copilot-offering.pptx
-  (원고)                 (blue-accent-md-to-html)   (build/ 파이프라인)
+  (원고)                 (white-cobalt-md-to-html)   (build/ 파이프라인)
 ```
 
 발표자 노트는 HTML 의 `.slide-notes` 에 들어 있고, PPTX 로 옮길 때 그대로 넘어갑니다.

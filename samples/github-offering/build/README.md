@@ -1,7 +1,7 @@
 # PPTX 빌드 파이프라인
 
 `copilot-offering.html` 과 **같은 디자인·같은 애니메이션**의 `.pptx` 를 만드는 스크립트입니다.
-[`blue-accent-html-to-pptx`](https://github.com/) 스킬의 워크플로를 이 덱에 맞춰 구현한 것입니다.
+[`white-cobalt-html-to-pptx`](../../../.github/skills/white-cobalt-html-to-pptx/) 스킬의 워크플로를 이 덱에 맞춰 구현한 것입니다.
 
 ## 빌드
 
